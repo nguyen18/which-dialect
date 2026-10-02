@@ -275,8 +275,12 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
           max: COMPOUND_MAX_COMBINATIONS,
         }).filter((c) => c !== written.join(' '))
         const found = (await Promise.all(combos.map(async (c) => ({ word: c, entries: await ctx.dict.lookup(c) }))))
+          // Names (found through a capitalized headword) only for a misspelled run: "nhat ban" → "Nhật Bản",
+          // but "hoa lan" (orchid, every syllable a word) isn't "Hòa Lan" (the Netherlands).
+          .map((f) => ({ ...f, entries: doubtful ? f.entries : f.entries.filter((e) => e.word === e.word.toLowerCase()) }))
           .filter((f) => f.entries.length)
-          .map((f) => ({ word: f.word, frequency: Math.max(-1, ...f.entries.map((e) => e.frequency ?? -1)) }))
+          // Spelled as the headword: names keep their capitals ("nhat ban" → "Nhật Bản").
+          .map((f) => ({ word: f.entries[0].word.toLowerCase() === f.word ? f.entries[0].word : f.word, frequency: Math.max(-1, ...f.entries.map((e) => e.frequency ?? -1)) }))
           .sort((a, b) => b.frequency - a.frequency)
           .slice(0, 3)
         if (!found.length) continue
