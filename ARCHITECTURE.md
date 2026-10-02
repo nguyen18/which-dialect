@@ -27,6 +27,7 @@ scripts/data-updates.ts      keeps DATA_UPDATES.md (Wiktionary dump dates per la
 scripts/picks.ts             hand-picked words: checks config rows, writes picks.json (npm run build:picks)
 scripts/picks-sheet.ts       review sheet for picks (CSV, or --html review page), --apply / --apply-decisions to turn it into config rows
 scripts/picks-review.html    the review page's template (any language)
+.claude/skills/word-review/  Claude Code skill: /word-review <language> <N> [apply]
 reviews/<lang>-top300.json   drafted picks for a review page (suggestions, confidence, why, example sentences)
 packages/core/               npm "which-dialect": the API (src/index.ts), shared types (src/types.ts),
                              parts of speech (src/pos.ts), translator (src/translate.ts), checker (src/check.ts),
@@ -301,7 +302,8 @@ The owner asked to review the top 300 English words' Vietnamese first choices in
 - **Drafts file** `{ about, rows: [{ english, pos, meaning, picks, confidence: sure|check, why, example: { en, target }, first? }] }`. `reviews/vi-top300.json`: 167 drafts by Claude (116 sure, 51 check), each with an example sentence.
 - **The page** is published as a claude.ai Artifact with `capabilities: { db: {}, user: {} }`. Each decision is a document in the `decisions` collection, id = `m` + 12 hex of sha1(english, pos, meaning), so regenerated pages keep decisions: `{ status: accept | edit | reject, picks: "w1 / w2 (Region)", english, pos, meaning }`. Buttons: **Keep current** (reject), then **Use suggestion** (accept, or edit when the box was changed), in the same order as the Current and Suggested lines.
 - **`--apply-decisions <dir|file.json> [--drafts …]`**: reads the exported decisions (Artifact `read_db` with `out_dir` writes `<dir>/decisions/<id>.json`) and prints `picks` config rows, with the draft's `why` as `note` for accepted ones and `first: true` from the draft.
-- Vietnamese review: https://claude.ai/artifact/FyCtuaGTW73qtZKcETKx75 (owner reviewing, 2026-10-02). Applying it needs picks that are phrases (not headwords; most natural choices: *bữa tối*, *tốt nhất*, *ít hơn*) and picks keyed by the specific gloss of nested senses (*old*: a living being vs. objects share a heading); not built yet.
+- **Skill** `.claude/skills/word-review/SKILL.md`: `/word-review <language> [N] [apply]` runs the whole loop in Claude Code (sheet → drafts → page → publish; `apply` → read decisions → config rows → rebuild). Drafts for a larger N start from a smaller review's file.
+- Vietnamese review (top 300): https://claude.ai/artifact/FyCtuaGTW73qtZKcETKx75 (owner reviewing, 2026-10-02). Applying it needs picks that are phrases (not headwords; most natural choices: *bữa tối*, *tốt nhất*, *ít hơn*) and picks keyed by the specific gloss of nested senses (*old*: a living being vs. objects share a heading); not built yet.
 
 ## Pronoun table (added 2026-09-30)
 

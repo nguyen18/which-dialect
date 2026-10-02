@@ -1,0 +1,36 @@
+---
+name: word-review
+description: Review a which-dialect language's first-choice words for the most common English words, on a spreadsheet-style page (a claude.ai Artifact) where a speaker accepts, edits or rejects drafted picks; then apply the decisions as picks. Use when the user types /word-review <language> <N>, or asks to review a language's everyday words or picks.
+argument-hint: <language> [top N, default 300] [apply]
+---
+
+# Word review
+
+Arguments: `$ARGUMENTS`: a language (code like `vi`, or a name like "Vietnamese": match it to `languages/<code>.ts` by `name`), the number of most common English words to review (default 300), and optionally `apply`. Without `apply`, make or update the review page. With `apply`, turn the saved decisions into picks. Ask only if the language matches no `languages/*.ts`.
+
+Everything runs in the which-dialect repo. Follow the repo's habits: work on a branch off `main` (a worktree if another session is using the checkout), commit when done, push/merge only when the owner says so, keep README/ARCHITECTURE in sync.
+
+## Make the review page
+
+1. **Data.** `packages/<code>/data/meta.json` and `packages/en/data/meta.json` must exist; otherwise `npm run build:data -- en` then `-- <code>` (English first; it takes minutes).
+2. **The sheet.** `npm run picks-sheet -- <code> --top <N> --out <scratchpad>/sheet.csv`: every English word's first meanings (up to 4), the ranking's top 3 words with picks off, Wiktionary's table words, and the current pick. Read **all** of it.
+3. **Drafts.** Write `reviews/<code>-top<N>.json` as `{ "about": "...", "rows": [...] }`. If a review of fewer words exists (`reviews/<code>-top*.json`), start from its rows and only draft meanings it doesn't cover. Each row:
+   - `english`, `pos`, `meaning`: exactly as in the sheet (the start of the meaning is enough to match).
+   - `picks`: the natural everyday words, best first. A region in brackets for regional words (`"heo (Southern)"`). Phrases that aren't dictionary headwords are fine ("bữa tối"); the page marks them.
+   - `confidence`: `"sure"` for clear fixes (the current word is wrong, or bookish where speech differs), `"check"` for judgment calls, regional choices and anything you aren't certain of.
+   - `why`: one line a learner understands: what the suggestion means and what's wrong with the current word.
+   - `example`: `{ "en": ..., "target": ... }`: a short everyday English sentence using **this meaning**, and its translation using the suggested word. The owner relies on these to judge a suggestion, so make them natural, and fix any that read awkwardly.
+   - `first: true` only for an everyday meaning Wiktionary lists late, to bring it to the front.
+
+   Draft only where the current first word is wrong or stiff; leave good rows alone. Skip grammar words (articles, prepositions, conjunctions, pronouns, determiners, particles, numbers): the pronoun table and grammar rules cover them. Also add **extra rows** for everyday meanings the sheet doesn't show because Wiktionary lists them after the first four. Look these up with the English dictionary (`createDictionary({ lang: 'en' })`, a word's `senses`): e.g. *party* the celebration, *great* "excellent", *old* for a person, *full* after eating, meals (*dinner*, *lunch*, *breakfast*), greetings. Use the meaning's specific gloss, so nested senses (a heading plus a sub-gloss) aren't confused.
+4. **The page.** `npm run picks-sheet -- <code> --top <N> --drafts reviews/<code>-top<N>.json --html <scratchpad>/<code>-word-review.html`. Check that the output counts make sense (drafted, matched, extra).
+5. **Publish** with the Artifact tool: `capabilities: { db: {}, user: {} }`, icon `checklist`, a description naming the language and N. If this language already has a review page (search ARCHITECTURE.md's "Review page for picks" section, or `action: "list"`), update that one by its `url` so decisions carry over: row ids are stable hashes of (english, pos, meaning). Read its `decisions` first if the ids could have changed.
+6. Commit the drafts file, and note the page's URL in ARCHITECTURE.md's "Review page for picks" section.
+7. Tell the owner what's drafted (counts, *sure* vs *check*, a few telling examples), give the link, and say: **Keep current** keeps today's word, **Use suggestion** takes the suggested one (or their own words typed in the box). Decisions save as they go. Run `/word-review <language> <N> apply` when done.
+
+## Apply the decisions (`apply`)
+
+1. Find the language's review page URL (ARCHITECTURE.md, or Artifact `action: "list"`). Artifact `read_db` with `collection: "decisions"`, `db_op: "list"`, and `out_dir` set to a scratchpad folder.
+2. `npm run picks-sheet -- <code> --apply-decisions <that folder> --drafts reviews/<code>-top<N>.json` prints `picks` config rows: accepted and edited rows (a draft's `why` becomes the `note` for accepted ones), and `first: true` from the drafts. Rows kept as they are add nothing.
+3. Paste the rows into `languages/<code>.ts` `picks`. The build warns about picks that aren't headwords and about gloss patterns matching several senses. Before the first apply, check that picks support phrases that aren't headwords, and picks keyed by a nested sense's specific gloss (ARCHITECTURE.md says whether these exist yet); build them if not.
+4. Rebuild (`npm run build:data -- <code>`), run the tests and `npm run evaluate`, and spot-check a few reviewed words with the translator. Bump the data package's version (and `which-dialect` if code changed), commit, and report. Publishing follows the repo's publish-on-merge rule: the owner runs `npm publish` in their own terminal (2FA).
