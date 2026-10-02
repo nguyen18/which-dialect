@@ -301,6 +301,8 @@ npm run evaluate                     # translation accuracy on known-correct cas
 npm run build:picks -- vi            # rebuild only a language's hand-picked words (after editing `picks` in languages/vi.ts)
 npm run picks-sheet -- vi            # review sheet (.cache/picks-vi.csv) of the top English words' meanings; -- --words file.txt, -- --top 500
 npm run picks-sheet -- vi --apply sheet.csv   # config rows for the rows whose your_pick is filled in
+npm run picks-sheet -- vi --top 300 --drafts reviews/vi-top300.json --html page.html   # the same rows as a review page
+npm run picks-sheet -- vi --apply-decisions <dir> --drafts reviews/vi-top300.json     # config rows from the page's decisions
 npm run typecheck
 npm run build                        # compile the API to packages/core/dist
 ```
@@ -315,7 +317,7 @@ Generated data isn't committed (it would bloat git history); it's built before p
 4. `npm run build:data -- <code>`, check the results, add a few real-data tests and evaluation cases, and publish.
 5. Optional: [checker](#checking-text) settings (`checker` in `languages/<code>.ts`): `units: 'syllables'` for languages written in syllables (also builds the syllable list for accent suggestions), `maxWordUnits`, the reliable `pronouns` per pronoun-table column, `ambiguousPronouns`, and `politeEndings`, `similarLetters` (groups of letters often confused, for typo suggestions). Without them, the language is read as space-separated words and gets the region check.
 6. Optional: [sentence frames](#sentence-frames): `frames` (how the language says each frame in `languages/frames.ts`) and `frameWords` (the words that change by region, each from a definition or an override with a note). Frames reach other languages through the shared catalog; a new frame goes in the catalog once.
-7. Optional, later: [hand-picked words](#hand-picked-words). A speaker runs `npm run picks-sheet -- <code>`, fills in `your_pick` only where the first choice is wrong, and pastes the `--apply` output into `picks`.
+7. Optional, later: [hand-picked words](#hand-picked-words). A speaker runs `npm run picks-sheet -- <code>`, fills in `your_pick` only where the first choice is wrong, and pastes the `--apply` output into `picks`. Or as a **review page**: draft suggestions for the meanings whose first word is wrong in `reviews/<code>-top300.json` (picks, confidence, why, an example sentence), build the page with `--html`, publish it as a claude.ai Artifact (it saves each decision in its database), and once a speaker has gone through it, export the decisions and turn them into config rows with `--apply-decisions`.
 
 Languages in non-Latin scripts (Chinese, Arabic, Russian, …) will need a script-aware version of `shardKey` first: today files are split by the first two Latin letters.
 
