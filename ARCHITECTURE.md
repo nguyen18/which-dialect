@@ -283,6 +283,14 @@ The owner found "nhat"/Nhật didn't translate to Japan. Audit: no country trans
 - Tests: country names both ways, *Nhật* offered for Japan, *hoàng bào*/*Vinh* not, *Hàn Quốc* → South Korea, variants of *nhat* / *nhat ban* (71 tests).
 - Not done (owner: "focus on the country translations"): nationality phrases, *món Nhật* "Japanese food". Noted in FUTURE_IMPROVEMENTS.md.
 
+## Names written in lowercase (2026-10-02)
+
+The owner's journal tip for "nhat" offered *nhất / nhật / nhạt*, with "No definition found" for *nhật*: the spellchecker suggests lowercase syllables, and `lookup` tried the word as written, then lowercase, never capitalized; only *Nhật* is a headword.
+
+- **`lookup`** falls back to the title-cased word (`nhật` → `Nhật`, `nhật bản` → `Nhật Bản`) when neither the word nor its lowercase form is a headword. So the translator reads *nhật* as Japan, and apps show its definitions.
+- **`variants`** keeps each form only as its own headword: lowercase forms skip entries that are the same word in other case (else *nhật* and *Nhật* both listed); capitalized forms need the exact headword (fake test data has empty `word`s).
+- **Spelling rule (neighbor runs):** a run found through a capitalized headword is suggested spelled as the headword (*nhat ban* → *Nhật Bản*), and only when the run has a misspelled syllable: *hoa lan* (orchid; both syllables words) became *Hòa Lan* (the Netherlands) once lookup could reach names. Checker results on the 1,334 example sentences are otherwise unchanged.
+
 ## Specialist and sexual meanings last; "excited" picks (2026-10-02)
 
 The owner saw Language Helper's tip for "excited": *tích cực* (active, proactive) starred, and "Other meanings" listing "Having an erection" and "Sexually aroused" right after the physics meaning, ahead of the emotional verb "to stir the emotions".

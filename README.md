@@ -210,7 +210,7 @@ Each sentence has `original`, `parts`, `corrected`, `changes` (`{ from, to, why,
 
 One language's dictionary. `baseUrl` defaults to `https://cdn.jsdelivr.net/npm/which-dialect-<lang>@0.1/data`.
 
-- `dictionary.lookup(word)`: all entries for a word, with every sense's definitions, regions, labels, synonyms and variant links (`altOf`).
+- `dictionary.lookup(word)`: all entries for a word, with every sense's definitions, regions, labels, synonyms and variant links (`altOf`). The word as written, else lowercase, else capitalized, so names written in lowercase are found (*nhật* → *Nhật*, Japan; *nhật bản* → *Nhật Bản*).
 - `dictionary.searchEnglish(term, { region?, pos?, exclude?, limit?, allSenses? })`: words for an English term in this language, one per word, best first (no meaning handling: use the translator for that). `allSenses: true` returns every matching sense of those words instead.
 - `dictionary.frames()`: the language's sentence frames and frame words, unfilled (`{ frames, words }`; empty without frames).
 - `dictionary.segment(text)`: the text split into the language's words, longest dictionary match first (up to the checker's `maxWordUnits`, 3 for Vietnamese): `Hôm nay tôi ăn cơm.` → *Hôm nay* · *tôi* · *ăn cơm*, each `{ text, start, end, entries }` (offsets into the NFC text; `entries` empty for words the dictionary doesn't have). Use it to treat a word of several syllables as one, e.g. to show its meaning.

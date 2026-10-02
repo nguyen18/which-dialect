@@ -205,7 +205,10 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
   async function lookup(word: string): Promise<Entry[]> {
     const w = word.trim()
     const [m, data] = await Promise.all([meta(), shard<WordShard>('words', w)])
-    const stored = data?.[w] ?? data?.[w.toLowerCase()] ?? []
+    // The word as written, else lowercase ("Mẹ" → "mẹ"), else capitalized for names written in lowercase
+    // ("nhật" → "Nhật", Japan; "nhật bản" → "Nhật Bản"), which spellchecker suggestions and learners do.
+    const titled = w.toLowerCase().replace(/(^|[\s-])(\p{Ll})/gu, (_, sep: string, c: string) => sep + c.toUpperCase())
+    const stored = data?.[w] ?? data?.[w.toLowerCase()] ?? data?.[titled] ?? []
     return stored.map((e) => ({ ...e, senses: e.senses.map((s) => fromStored(s, m.regions)) }))
   }
 
@@ -244,13 +247,17 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
       // Each form as written in lowercase and capitalized, for names ("nhat" → "Nhật", Japan; "nhat ban" →
       // "Nhật Bản").
       const forms = [...new Set(combos.flatMap((c) => [c, c.replace(/(^|\s)(\S)/gu, (_, sep: string, ch: string) => sep + ch.toUpperCase())]))]
-      // A capitalized form counts when it's its own headword (lookup ignores case) and more than a person's
-      // name (a place, a people), so given names don't crowd out words.
-      const found = (await Promise.all(forms.map(async (c) => ({ word: c, entries: await lookup(c) })))).map((v) =>
-        v.word === v.word.toLowerCase()
-          ? v
-          : { ...v, entries: v.entries.filter((e) => e.word === v.word && e.senses.some((s) => !PERSONAL_NAME.test(s.glosses[0] ?? ''))) },
-      )
+      // Each form counts only as its own headword (lookup also finds other cases: "nhật" finds "Nhật"), and a
+      // capitalized one only when it's more than a person's name (a place, a people), so given names don't
+      // crowd out words.
+      const found = (await Promise.all(forms.map(async (c) => ({ word: c, entries: await lookup(c) })))).map((v) => ({
+        ...v,
+        entries: v.entries.filter((e) =>
+          v.word === v.word.toLowerCase()
+            ? !(e.word !== v.word && e.word.toLowerCase() === v.word)
+            : e.word === v.word && e.senses.some((s) => !PERSONAL_NAME.test(s.glosses[0] ?? '')),
+        ),
+      }))
       const frequency = (v: { word: string; entries: Entry[] }) => {
         const known = v.entries.map((e) => e.frequency).filter((f): f is number => f !== undefined)
         return known.length ? Math.max(...known) : parts.length === 1 ? list[v.word.toLowerCase()] || undefined : undefined

@@ -296,6 +296,9 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     // Names too, capitalized: "nhat" can be Japan, "nhat ban" is.
     assert.ok((await vi.variants('nhat')).some((v) => v.word === 'Nhật'))
     assert.equal((await vi.variants('nhat ban'))[0]?.word, 'Nhật Bản')
+    // Names written in lowercase are found, and suggested with their capitals.
+    assert.ok((await vi.lookup('nhật')).some((e) => e.word === 'Nhật'))
+    assert.deepEqual(await fixes('Tôi muốn đi nhat ban.'), ['nhat ban→Nhật Bản'])
     assert.deepEqual((await vi.variants('muộn', { limit: 3 })).map((v) => v.word), ['muốn', 'mượn', 'muôn'])
   })
 
