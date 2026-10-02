@@ -25,7 +25,9 @@ scripts/build-all.ts         npm run build:data:all: every language, English fir
 scripts/fetch-data.ts        npm run fetch:data: quick start, published data from npm (+ picks rebuilt from configs)
 scripts/data-updates.ts      keeps DATA_UPDATES.md (Wiktionary dump dates per language) current on each build
 scripts/picks.ts             hand-picked words: checks config rows, writes picks.json (npm run build:picks)
-scripts/picks-sheet.ts       review sheet for picks, and --apply to turn it into config rows
+scripts/picks-sheet.ts       review sheet for picks (CSV, or --html review page), --apply / --apply-decisions to turn it into config rows
+scripts/picks-review.html    the review page's template (any language)
+reviews/<lang>-top300.json   drafted picks for a review page (suggestions, confidence, why, example sentences)
 packages/core/               npm "which-dialect": the API (src/index.ts), shared types (src/types.ts),
                              parts of speech (src/pos.ts), translator (src/translate.ts), checker (src/check.ts),
                              text splitting (src/text.ts), sentence frames (src/phrasebook.ts),
@@ -290,6 +292,16 @@ The owner saw Language Helper's tip for "excited": *tích cực* (active, proact
 - Check: the first meaning of the 3,000 most common English words changes for 1 (*fired*, nonsense before and after). *excited*: enthusiastic, to stir the emotions, to arouse feelings, to energize an electromagnet, then higher energy (technical), erection, aroused (sexual), electron (technical). *release*: software first; orgasm and semen last.
 - **vi pick** `excited` (adj, "Having great enthusiasm…"): *hào hứng* (most common, Zipf 3.7; everyday "excited about"), *háo hức* (looking forward), *phấn khích* (thrilled), *hứng khởi*. The ranking had *tích cực* first: its definition shares "great energy, enthusiasm".
 - Labels are visible: Language Helper shows "technical"/"sexual" on those meanings.
+
+## Review page for picks (2026-10-02)
+
+The owner asked to review the top 300 English words' Vietnamese first choices in a spreadsheet-style page, and to keep the page reproducible for every language.
+
+- **`npm run picks-sheet -- <lang> --top 300 --drafts reviews/<lang>-top300.json --html page.html`**: the sheet's rows (each word's first 4 meanings, the ranking's top 3 with picks off, table words, current pick) as a page from `scripts/picks-review.html`. Rows: **draft** (a drafts-file row matches: same English word and pos, the sheet's meaning starts with the draft's), **grammar** (article, prep, conj, particle, pron, det, num), else **fine**. Drafts that match no sheet row (everyday meanings Wiktionary lists late: *party* the celebration, *great* "excellent") become extra rows. Draft words that aren't headwords are listed as phrases.
+- **Drafts file** `{ about, rows: [{ english, pos, meaning, picks, confidence: sure|check, why, example: { en, target }, first? }] }`. `reviews/vi-top300.json`: 167 drafts by Claude (116 sure, 51 check), each with an example sentence.
+- **The page** is published as a claude.ai Artifact with `capabilities: { db: {}, user: {} }`. Each decision is a document in the `decisions` collection, id = `m` + 12 hex of sha1(english, pos, meaning), so regenerated pages keep decisions: `{ status: accept | edit | reject, picks: "w1 / w2 (Region)", english, pos, meaning }`. Buttons: **Keep current** (reject), then **Use suggestion** (accept, or edit when the box was changed), in the same order as the Current and Suggested lines.
+- **`--apply-decisions <dir|file.json> [--drafts …]`**: reads the exported decisions (Artifact `read_db` with `out_dir` writes `<dir>/decisions/<id>.json`) and prints `picks` config rows, with the draft's `why` as `note` for accepted ones and `first: true` from the draft.
+- Vietnamese review: https://claude.ai/artifact/FyCtuaGTW73qtZKcETKx75 (owner reviewing, 2026-10-02). Applying it needs picks that are phrases (not headwords; most natural choices: *bữa tối*, *tốt nhất*, *ít hơn*) and picks keyed by the specific gloss of nested senses (*old*: a living being vs. objects share a heading); not built yet.
 
 ## Pronoun table (added 2026-09-30)
 

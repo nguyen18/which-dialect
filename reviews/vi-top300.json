@@ -1,0 +1,2475 @@
+{
+ "about": "Drafted Vietnamese picks for the 300 most common English words (Claude, 2026-10-02), for review on the page built by: npm run picks-sheet -- vi --top 300 --drafts reviews/vi-top300.json --html <page.html>",
+ "rows": [
+  {
+   "english": "one",
+   "pos": "pron",
+   "meaning": "Any person (applying to people in general).",
+   "picks": [
+    "người ta",
+    "ta"
+   ],
+   "confidence": "check",
+   "why": "\"one (people in general)\" = người ta",
+   "example": {
+    "en": "One never knows.",
+    "target": "Người ta không bao giờ biết trước được."
+   }
+  },
+  {
+   "english": "can",
+   "pos": "verb",
+   "meaning": "To know how to.",
+   "picks": [
+    "biết"
+   ],
+   "confidence": "sure",
+   "why": "\"can (know how to)\" = biết: \"tôi biết bơi\"",
+   "example": {
+    "en": "She can swim.",
+    "target": "Cô ấy biết bơi."
+   }
+  },
+  {
+   "english": "can",
+   "pos": "verb",
+   "meaning": "To be able to.",
+   "picks": [
+    "có thể",
+    "được"
+   ],
+   "confidence": "sure",
+   "why": "\"be able to\" = có thể / được; biết is \"know how\"",
+   "example": {
+    "en": "I can come tomorrow.",
+    "target": "Ngày mai tôi có thể đến."
+   }
+  },
+  {
+   "english": "just",
+   "pos": "adj",
+   "meaning": "Morally right; upright, righteous, equitable; fair.",
+   "picks": [
+    "công bằng"
+   ],
+   "confidence": "sure",
+   "why": "chính alone means \"main/proper\"; \"fair, just\" is công bằng",
+   "example": {
+    "en": "The judge made a just decision.",
+    "target": "Thẩm phán đã đưa ra một quyết định công bằng."
+   }
+  },
+  {
+   "english": "like",
+   "pos": "verb",
+   "meaning": "To prefer and maintain (an action) as a regular habit or activity.",
+   "picks": [
+    "thích"
+   ],
+   "confidence": "sure",
+   "why": "\"like doing\" (a habit) is thích; như means \"as/like (similar)\"",
+   "example": {
+    "en": "I like to run in the morning.",
+    "target": "Tôi thích chạy bộ vào buổi sáng."
+   }
+  },
+  {
+   "english": "like",
+   "pos": "verb",
+   "meaning": "To want, desire. See also would like.",
+   "picks": [
+    "muốn"
+   ],
+   "confidence": "sure",
+   "why": "\"would like\" = muốn; như is the comparison \"like\"",
+   "example": {
+    "en": "I'd like a coffee, please.",
+    "target": "Tôi muốn một ly cà phê."
+   }
+  },
+  {
+   "english": "about",
+   "pos": "prep",
+   "meaning": "Indicates that something will happen very soon; indicates a plan or intention to do something.",
+   "picks": [
+    "sắp"
+   ],
+   "confidence": "sure",
+   "why": "\"about to\" = sắp",
+   "example": {
+    "en": "The movie is about to start.",
+    "target": "Phim sắp bắt đầu rồi."
+   }
+  },
+  {
+   "english": "out",
+   "pos": "adv",
+   "meaning": "Away from the inside or centre.",
+   "picks": [
+    "ra",
+    "ra ngoài"
+   ],
+   "confidence": "check",
+   "why": "\"out (away from inside)\" = ra / ra ngoài",
+   "example": {
+    "en": "Go out and play.",
+    "target": "Ra ngoài chơi đi."
+   }
+  },
+  {
+   "english": "more",
+   "pos": "pron",
+   "meaning": "A greater number or quantity (of something).",
+   "picks": [
+    "thêm",
+    "nhiều hơn"
+   ],
+   "confidence": "check",
+   "why": "\"more\" as a quantity: thêm, nhiều hơn; lượng means \"amount\"",
+   "example": {
+    "en": "I need more.",
+    "target": "Tôi cần thêm."
+   }
+  },
+  {
+   "english": "there",
+   "pos": "noun",
+   "meaning": "That place (previously mentioned or otherwise implied).",
+   "picks": [
+    "chỗ đó",
+    "đó"
+   ],
+   "confidence": "check",
+   "why": "\"there (that place)\" = chỗ đó",
+   "example": {
+    "en": "I've never been there.",
+    "target": "Tôi chưa bao giờ đến chỗ đó."
+   }
+  },
+  {
+   "english": "time",
+   "pos": "noun",
+   "meaning": "A duration of time.",
+   "picks": [
+    "thời gian",
+    "khoảng thời gian"
+   ],
+   "confidence": "sure",
+   "why": "\"a duration of time\" is thời gian",
+   "example": {
+    "en": "We waited for a long time.",
+    "target": "Chúng tôi đã chờ một thời gian dài."
+   }
+  },
+  {
+   "english": "new",
+   "pos": "adj",
+   "meaning": "Current or later, as opposed to former.",
+   "picks": [
+    "mới"
+   ],
+   "confidence": "sure",
+   "why": "\"the new (current) one\" is still mới; tân is Sino-Vietnamese, formal",
+   "example": {
+    "en": "This is my new phone.",
+    "target": "Đây là điện thoại mới của tôi."
+   }
+  },
+  {
+   "english": "new",
+   "pos": "adj",
+   "meaning": "Newborn.",
+   "picks": [
+    "sơ sinh"
+   ],
+   "confidence": "sure",
+   "why": "\"newborn\" = sơ sinh",
+   "example": {
+    "en": "She is holding a new baby.",
+    "target": "Cô ấy đang bế một em bé sơ sinh."
+   }
+  },
+  {
+   "english": "people",
+   "pos": "noun",
+   "meaning": "A person's ancestors, relatives or family.",
+   "picks": [
+    "gia đình",
+    "người nhà"
+   ],
+   "confidence": "sure",
+   "why": "\"my people\" (family) = gia đình / người nhà",
+   "example": {
+    "en": "I'm visiting my people for Tết.",
+    "target": "Tết này tôi về thăm gia đình."
+   }
+  },
+  {
+   "english": "how",
+   "pos": "adv",
+   "meaning": "To what degree or extent.",
+   "picks": [
+    "bao nhiêu"
+   ],
+   "confidence": "check",
+   "why": "\"how (much/many)\" = bao nhiêu; bao alone is literary",
+   "example": {
+    "en": "How old are you?",
+    "target": "Bạn bao nhiêu tuổi?"
+   }
+  },
+  {
+   "english": "how",
+   "pos": "adv",
+   "meaning": "In what manner",
+   "picks": [
+    "như thế nào",
+    "thế nào",
+    "làm sao"
+   ],
+   "confidence": "sure",
+   "why": "\"how (in what way)\" = như thế nào",
+   "example": {
+    "en": "How do you make phở?",
+    "target": "Bạn nấu phở như thế nào?"
+   }
+  },
+  {
+   "english": "some",
+   "pos": "pron",
+   "meaning": "An indefinite quantity.",
+   "picks": [
+    "một ít",
+    "một chút"
+   ],
+   "confidence": "sure",
+   "why": "\"some (amount)\" = một ít / một chút; the ranking gave \"và\" (and)",
+   "example": {
+    "en": "Can I have some water?",
+    "target": "Cho tôi một ít nước được không?"
+   }
+  },
+  {
+   "english": "good",
+   "pos": "adj",
+   "meaning": "Of a person or an animal:",
+   "picks": [
+    "tốt"
+   ],
+   "confidence": "sure",
+   "why": "\"a good person\" = người tốt; hay is \"interesting/good at\"",
+   "example": {
+    "en": "He is a good man.",
+    "target": "Anh ấy là một người tốt."
+   }
+  },
+  {
+   "english": "only",
+   "pos": "adj",
+   "meaning": "Alone in a category.",
+   "picks": [
+    "duy nhất"
+   ],
+   "confidence": "sure",
+   "why": "\"the only one\" = duy nhất",
+   "example": {
+    "en": "She is the only person who knows.",
+    "target": "Cô ấy là người duy nhất biết chuyện."
+   }
+  },
+  {
+   "english": "only",
+   "pos": "adv",
+   "meaning": "Without others or anything further; exclusively.",
+   "picks": [
+    "chỉ"
+   ],
+   "confidence": "sure",
+   "why": "\"only (just)\" = chỉ; the ranking gave không (\"not\")",
+   "example": {
+    "en": "I only have one brother.",
+    "target": "Tôi chỉ có một người anh."
+   }
+  },
+  {
+   "english": "first",
+   "pos": "adj",
+   "meaning": "Preceding all others of a series or kind; the ordinal of one; earliest.",
+   "picks": [
+    "đầu tiên",
+    "thứ nhất"
+   ],
+   "confidence": "sure",
+   "why": "\"first\" = đầu tiên (everyday), thứ nhất (in a list)",
+   "example": {
+    "en": "This is my first trip to Vietnam.",
+    "target": "Đây là chuyến đi đầu tiên của tôi đến Việt Nam."
+   }
+  },
+  {
+   "english": "first",
+   "pos": "adv",
+   "meaning": "For the first time.",
+   "picks": [
+    "lần đầu"
+   ],
+   "confidence": "sure",
+   "why": "\"for the first time\" = lần đầu",
+   "example": {
+    "en": "I tried durian for the first time.",
+    "target": "Lần đầu tôi ăn thử sầu riêng."
+   }
+  },
+  {
+   "english": "know",
+   "pos": "verb",
+   "meaning": "To be acquainted or familiar with; to have encountered.",
+   "picks": [
+    "quen",
+    "quen biết"
+   ],
+   "confidence": "sure",
+   "why": "\"know (someone)\" = quen / quen biết",
+   "example": {
+    "en": "Do you know my sister?",
+    "target": "Bạn có quen chị tôi không?"
+   }
+  },
+  {
+   "english": "see",
+   "pos": "verb",
+   "meaning": "To perceive or detect someone or something with the eyes, or as if by sight.",
+   "picks": [
+    "thấy",
+    "nhìn thấy"
+   ],
+   "confidence": "sure",
+   "why": "\"see\" = thấy; xem is \"watch/look at\"",
+   "example": {
+    "en": "I can see the mountains from here.",
+    "target": "Từ đây tôi thấy được núi."
+   }
+  },
+  {
+   "english": "see",
+   "pos": "verb",
+   "meaning": "To form a mental picture of, to perceive in a certain way.",
+   "picks": [
+    "hình dung",
+    "thấy"
+   ],
+   "confidence": "check",
+   "why": "\"see (in the mind)\" = hình dung",
+   "example": {
+    "en": "I can see you as a teacher.",
+    "target": "Tôi có thể hình dung bạn làm giáo viên."
+   }
+  },
+  {
+   "english": "over",
+   "pos": "adj",
+   "meaning": "Finished; ended; concluded.",
+   "picks": [
+    "xong",
+    "hết"
+   ],
+   "confidence": "sure",
+   "why": "\"it's over\" = xong rồi / hết rồi; đủ means \"enough\"",
+   "example": {
+    "en": "The party is over.",
+    "target": "Bữa tiệc xong rồi."
+   }
+  },
+  {
+   "english": "think",
+   "pos": "verb",
+   "meaning": "To ponder, to go over in one's mind.",
+   "picks": [
+    "suy nghĩ",
+    "nghĩ"
+   ],
+   "confidence": "sure",
+   "why": "\"think (ponder)\" = suy nghĩ; liệu is \"guess/manage\"",
+   "example": {
+    "en": "Let me think about it.",
+    "target": "Để tôi suy nghĩ đã."
+   }
+  },
+  {
+   "english": "think",
+   "pos": "verb",
+   "meaning": "To have (some statement) in one's mind; to say to oneself mentally.",
+   "picks": [
+    "nghĩ"
+   ],
+   "confidence": "sure",
+   "why": "\"think (to oneself)\" = nghĩ",
+   "example": {
+    "en": "I thought, \"What a beautiful day.\"",
+    "target": "Tôi nghĩ: \"Hôm nay đẹp trời quá.\""
+   }
+  },
+  {
+   "english": "think",
+   "pos": "verb",
+   "meaning": "To communicate to oneself in one's mind, to try to find a solution to a problem.",
+   "picks": [
+    "suy nghĩ",
+    "nghĩ"
+   ],
+   "confidence": "sure",
+   "why": "\"think (a problem through)\" = suy nghĩ",
+   "example": {
+    "en": "Think before you answer.",
+    "target": "Hãy suy nghĩ trước khi trả lời."
+   }
+  },
+  {
+   "english": "think",
+   "pos": "verb",
+   "meaning": "To conceive of something or someone",
+   "picks": [
+    "nghĩ",
+    "thấy"
+   ],
+   "confidence": "sure",
+   "why": "\"I think (it's good)\" = tôi nghĩ / tôi thấy",
+   "example": {
+    "en": "I think it's a good idea.",
+    "target": "Tôi nghĩ đó là một ý hay."
+   }
+  },
+  {
+   "english": "want",
+   "pos": "verb",
+   "meaning": "To wish, desire, or demand to see, have the presence of or do business with.",
+   "picks": [
+    "muốn"
+   ],
+   "confidence": "sure",
+   "why": "\"want (to see someone)\" = muốn",
+   "example": {
+    "en": "Your mom wants you.",
+    "target": "Mẹ bạn muốn gặp bạn."
+   }
+  },
+  {
+   "english": "go",
+   "pos": "verb",
+   "meaning": "To start; to begin (an action or process).",
+   "picks": [
+    "bắt đầu"
+   ],
+   "confidence": "sure",
+   "why": "\"go (start)\" = bắt đầu; khởi is literary",
+   "example": {
+    "en": "Ready, set, go!",
+    "target": "Chuẩn bị... bắt đầu!"
+   }
+  },
+  {
+   "english": "well",
+   "pos": "adj",
+   "meaning": "In good health.",
+   "picks": [
+    "khỏe"
+   ],
+   "confidence": "sure",
+   "why": "\"I'm well\" = tôi khỏe; mạnh is \"strong\"",
+   "example": {
+    "en": "I'm well, thank you.",
+    "target": "Tôi khỏe, cảm ơn."
+   }
+  },
+  {
+   "english": "way",
+   "pos": "noun",
+   "meaning": "To do with a place or places.",
+   "picks": [
+    "đường"
+   ],
+   "confidence": "sure",
+   "why": "\"the way (route)\" = đường; ngả is a fork in the road",
+   "example": {
+    "en": "Is this the way to the market?",
+    "target": "Đây có phải đường ra chợ không?"
+   }
+  },
+  {
+   "english": "most",
+   "pos": "adv",
+   "meaning": "To a great extent or degree; highly; very.",
+   "picks": [
+    "rất",
+    "hết sức"
+   ],
+   "confidence": "check",
+   "why": "\"most (very)\" = rất",
+   "example": {
+    "en": "I was most impressed.",
+    "target": "Tôi rất ấn tượng."
+   }
+  },
+  {
+   "english": "most",
+   "pos": "pron",
+   "meaning": "The greater part of a group, especially a group of people.",
+   "picks": [
+    "phần lớn",
+    "hầu hết",
+    "đa số"
+   ],
+   "confidence": "sure",
+   "why": "\"most (of them)\" = phần lớn / hầu hết",
+   "example": {
+    "en": "Most of my friends live in Saigon.",
+    "target": "Phần lớn bạn bè tôi sống ở Sài Gòn."
+   }
+  },
+  {
+   "english": "much",
+   "pos": "adv",
+   "meaning": "To a great extent.",
+   "picks": [
+    "nhiều",
+    "lắm"
+   ],
+   "confidence": "sure",
+   "why": "\"much\" = nhiều / lắm; nhiều nhặn is negative-only",
+   "example": {
+    "en": "I don't eat much.",
+    "target": "Tôi không ăn nhiều."
+   }
+  },
+  {
+   "english": "here",
+   "pos": "noun",
+   "meaning": "This place; this location.",
+   "picks": [
+    "đây",
+    "chỗ này"
+   ],
+   "confidence": "sure",
+   "why": "\"here\" = đây / chỗ này; địa điểm is \"location\" (formal)",
+   "example": {
+    "en": "Come here.",
+    "target": "Lại đây."
+   }
+  },
+  {
+   "english": "really",
+   "pos": "adv",
+   "meaning": "In a way or manner that is real, not unreal.",
+   "picks": [
+    "thật sự",
+    "thực sự"
+   ],
+   "confidence": "sure",
+   "why": "\"really (truly)\" = thật sự; dữ is \"fierce/intense\" (slang)",
+   "example": {
+    "en": "Did that really happen?",
+    "target": "Chuyện đó có thật sự xảy ra không?"
+   }
+  },
+  {
+   "english": "really",
+   "pos": "adv",
+   "meaning": "Actually; in fact; in reality.",
+   "picks": [
+    "thật ra",
+    "thực ra"
+   ],
+   "confidence": "sure",
+   "why": "\"really (in fact)\" = thật ra",
+   "example": {
+    "en": "It's really not that hard.",
+    "target": "Thật ra nó không khó lắm."
+   }
+  },
+  {
+   "english": "really",
+   "pos": "adv",
+   "meaning": "Very (modifying an adjective); very much (modifying a verb).",
+   "picks": [
+    "thật",
+    "rất",
+    "quá"
+   ],
+   "confidence": "check",
+   "why": "\"really (very)\" good = thật / rất",
+   "example": {
+    "en": "This food is really good.",
+    "target": "Món này ngon thật."
+   }
+  },
+  {
+   "english": "too",
+   "pos": "adv",
+   "meaning": "To a high degree, very.",
+   "picks": [
+    "quá"
+   ],
+   "confidence": "sure",
+   "why": "\"too (much)\" = quá; quá thể is an intensified form",
+   "example": {
+    "en": "It's too hot today.",
+    "target": "Hôm nay nóng quá."
+   }
+  },
+  {
+   "english": "off",
+   "pos": "adj",
+   "meaning": "Inoperative, disabled.",
+   "picks": [
+    "tắt"
+   ],
+   "confidence": "sure",
+   "why": "\"off (switched off)\" = tắt; the ranking gave tàn tật (\"disabled\")",
+   "example": {
+    "en": "The lights are off.",
+    "target": "Đèn tắt rồi."
+   }
+  },
+  {
+   "english": "why",
+   "pos": "adv",
+   "meaning": "For what cause, reason, or purpose.",
+   "picks": [
+    "tại sao",
+    "vì sao",
+    "sao"
+   ],
+   "confidence": "sure",
+   "why": "\"why\" = tại sao / vì sao",
+   "example": {
+    "en": "Why are you sad?",
+    "target": "Tại sao bạn buồn?"
+   }
+  },
+  {
+   "english": "why",
+   "pos": "noun",
+   "meaning": "Reason.",
+   "picks": [
+    "lý do"
+   ],
+   "confidence": "sure",
+   "why": "\"the why (reason)\" = lý do",
+   "example": {
+    "en": "I don't know the why of it.",
+    "target": "Tôi không biết lý do."
+   }
+  },
+  {
+   "english": "still",
+   "pos": "adj",
+   "meaning": "Not moving; calm.",
+   "picks": [
+    "yên",
+    "đứng yên"
+   ],
+   "confidence": "check",
+   "why": "\"still (not moving)\" = yên / đứng yên",
+   "example": {
+    "en": "Keep still while I take the photo.",
+    "target": "Đứng yên để tôi chụp hình."
+   }
+  },
+  {
+   "english": "still",
+   "pos": "adj",
+   "meaning": "Uttering no sound; silent.",
+   "picks": [
+    "im lặng",
+    "im"
+   ],
+   "confidence": "sure",
+   "why": "\"still (silent)\" = im lặng",
+   "example": {
+    "en": "The room was still.",
+    "target": "Căn phòng im lặng."
+   }
+  },
+  {
+   "english": "never",
+   "pos": "adv",
+   "meaning": "Not at any other time; not on any other occasion; not previously.",
+   "picks": [
+    "chưa bao giờ",
+    "chưa từng"
+   ],
+   "confidence": "sure",
+   "why": "\"never (before)\" = chưa bao giờ",
+   "example": {
+    "en": "I've never been to Hà Nội.",
+    "target": "Tôi chưa bao giờ đến Hà Nội."
+   }
+  },
+  {
+   "english": "life",
+   "pos": "noun",
+   "meaning": "The state of organisms preceding their death, characterized by biological processes such as metabolism and reproduction and distinguishing…",
+   "picks": [
+    "sự sống",
+    "cuộc sống"
+   ],
+   "confidence": "sure",
+   "why": "\"life (being alive)\" = sự sống; mạng is \"a life (to lose)\"",
+   "example": {
+    "en": "Is there life on Mars?",
+    "target": "Có sự sống trên sao Hỏa không?"
+   }
+  },
+  {
+   "english": "life",
+   "pos": "noun",
+   "meaning": "A living being; the fact of a particular individual being alive. (Chiefly when indicating individuals were lost (died) or saved.)",
+   "picks": [
+    "mạng sống",
+    "sinh mạng"
+   ],
+   "confidence": "sure",
+   "why": "\"lives were lost\" = mạng sống / sinh mạng",
+   "example": {
+    "en": "The flood took many lives.",
+    "target": "Trận lũ đã cướp đi nhiều mạng sống."
+   }
+  },
+  {
+   "english": "life",
+   "pos": "noun",
+   "meaning": "Animation; spirit; vivacity.",
+   "picks": [
+    "sức sống"
+   ],
+   "confidence": "check",
+   "why": "\"full of life\" = đầy sức sống",
+   "example": {
+    "en": "The city is full of life.",
+    "target": "Thành phố tràn đầy sức sống."
+   }
+  },
+  {
+   "english": "life",
+   "pos": "noun",
+   "meaning": "A biography.",
+   "picks": [
+    "cuộc đời"
+   ],
+   "confidence": "check",
+   "why": "\"his life (story)\" = cuộc đời",
+   "example": {
+    "en": "She wrote a book about her life.",
+    "target": "Bà ấy viết một cuốn sách về cuộc đời mình."
+   }
+  },
+  {
+   "english": "world",
+   "pos": "noun",
+   "meaning": "The Earth, especially in a geopolitical or cultural context, or as the physical planet.",
+   "picks": [
+    "trái đất",
+    "thế giới"
+   ],
+   "confidence": "check",
+   "why": "\"the world (the Earth)\" = trái đất / thế giới",
+   "example": {
+    "en": "He traveled around the world.",
+    "target": "Anh ấy đã đi vòng quanh thế giới."
+   }
+  },
+  {
+   "english": "down",
+   "pos": "adv",
+   "meaning": "To or towards what is considered the bottom of something, irrespective of whether this is presently physically lower.",
+   "picks": [
+    "xuống"
+   ],
+   "confidence": "sure",
+   "why": "\"down\" = xuống; xịu is \"sag (of a face)\"",
+   "example": {
+    "en": "Sit down, please.",
+    "target": "Mời bạn ngồi xuống."
+   }
+  },
+  {
+   "english": "great",
+   "pos": "adj",
+   "meaning": "Taking much space; large.",
+   "picks": [
+    "lớn",
+    "to"
+   ],
+   "confidence": "sure",
+   "why": "\"great (large)\" = lớn / to; rộng is \"wide\"",
+   "example": {
+    "en": "A great tree stood by the river.",
+    "target": "Một cái cây lớn đứng bên bờ sông."
+   }
+  },
+  {
+   "english": "great",
+   "pos": "adj",
+   "meaning": "Important, consequential.",
+   "picks": [
+    "vĩ đại",
+    "lớn"
+   ],
+   "confidence": "check",
+   "why": "\"great (important)\" = vĩ đại",
+   "example": {
+    "en": "He was a great leader.",
+    "target": "Ông ấy là một nhà lãnh đạo vĩ đại."
+   }
+  },
+  {
+   "english": "last",
+   "pos": "adj",
+   "meaning": "Most recent, latest, last so far.",
+   "picks": [
+    "trước",
+    "vừa qua"
+   ],
+   "confidence": "sure",
+   "why": "\"last (week)\" = tuần trước",
+   "example": {
+    "en": "I saw her last week.",
+    "target": "Tôi gặp cô ấy tuần trước."
+   }
+  },
+  {
+   "english": "while",
+   "pos": "noun",
+   "meaning": "An uncertain duration of time, a period of time.",
+   "picks": [
+    "lúc",
+    "một lúc"
+   ],
+   "confidence": "check",
+   "why": "\"a while\" = một lúc",
+   "example": {
+    "en": "Wait a while.",
+    "target": "Chờ một lúc nhé."
+   }
+  },
+  {
+   "english": "best",
+   "pos": "adj",
+   "meaning": "Most; largest.",
+   "picks": [
+    "tốt nhất",
+    "nhất"
+   ],
+   "confidence": "sure",
+   "why": "\"best\" = tốt nhất",
+   "example": {
+    "en": "She is my best friend.",
+    "target": "Cô ấy là bạn thân nhất của tôi."
+   }
+  },
+  {
+   "english": "best",
+   "pos": "adj",
+   "meaning": "Most superior; most favorable.",
+   "picks": [
+    "tốt nhất",
+    "nhất"
+   ],
+   "confidence": "sure",
+   "why": "\"best (most favorable)\" = tốt nhất; tối ưu is \"optimal\" (technical)",
+   "example": {
+    "en": "This is the best way.",
+    "target": "Đây là cách tốt nhất."
+   }
+  },
+  {
+   "english": "best",
+   "pos": "adv",
+   "meaning": "To the most advantage; with the most success, cause, profit, benefit, or propriety.",
+   "picks": [
+    "tốt nhất",
+    "nhất"
+   ],
+   "confidence": "sure",
+   "why": "\"best (adverb)\" = tốt nhất",
+   "example": {
+    "en": "He sings best.",
+    "target": "Anh ấy hát hay nhất."
+   }
+  },
+  {
+   "english": "love",
+   "pos": "noun",
+   "meaning": "A deep caring for the existence of another.",
+   "picks": [
+    "tình yêu",
+    "tình thương"
+   ],
+   "confidence": "sure",
+   "why": "\"love\" = tình yêu / tình thương; ái is literary",
+   "example": {
+    "en": "A mother's love for her child.",
+    "target": "Tình thương của mẹ dành cho con."
+   }
+  },
+  {
+   "english": "love",
+   "pos": "noun",
+   "meaning": "A person who is the object of romantic feelings; a darling, a sweetheart, a beloved.",
+   "picks": [
+    "người yêu"
+   ],
+   "confidence": "sure",
+   "why": "\"my love (sweetheart)\" = người yêu",
+   "example": {
+    "en": "Good night, my love.",
+    "target": "Chúc ngủ ngon, người yêu của anh."
+   }
+  },
+  {
+   "english": "man",
+   "pos": "noun",
+   "meaning": "A human, a person regardless of gender or sex, usually an adult.",
+   "picks": [
+    "người"
+   ],
+   "confidence": "sure",
+   "why": "\"man (a person)\" = người",
+   "example": {
+    "en": "Every man should vote.",
+    "target": "Mọi người đều nên đi bầu cử."
+   }
+  },
+  {
+   "english": "long",
+   "pos": "adj",
+   "meaning": "Having great duration.",
+   "picks": [
+    "lâu",
+    "dài"
+   ],
+   "confidence": "sure",
+   "why": "\"a long time\" = lâu",
+   "example": {
+    "en": "We talked for a long time.",
+    "target": "Chúng tôi nói chuyện rất lâu."
+   }
+  },
+  {
+   "english": "long",
+   "pos": "adj",
+   "meaning": "Not short; tall.",
+   "picks": [
+    "cao"
+   ],
+   "confidence": "check",
+   "why": "\"long (tall)\" = cao",
+   "example": {
+    "en": "He's long and thin.",
+    "target": "Anh ấy cao và gầy."
+   }
+  },
+  {
+   "english": "look",
+   "pos": "verb",
+   "meaning": "To appear, to seem.",
+   "picks": [
+    "có vẻ",
+    "trông"
+   ],
+   "confidence": "sure",
+   "why": "\"look (seem)\" = có vẻ",
+   "example": {
+    "en": "It looks like rain.",
+    "target": "Trời có vẻ sắp mưa."
+   }
+  },
+  {
+   "english": "look",
+   "pos": "verb",
+   "meaning": "To give an appearance of being.",
+   "picks": [
+    "trông",
+    "nhìn"
+   ],
+   "confidence": "sure",
+   "why": "\"look (happy)\" = trông (vui)",
+   "example": {
+    "en": "You look tired.",
+    "target": "Trông bạn mệt quá."
+   }
+  },
+  {
+   "english": "look",
+   "pos": "verb",
+   "meaning": "To search for, to try to find.",
+   "picks": [
+    "tìm",
+    "kiếm"
+   ],
+   "confidence": "sure",
+   "why": "\"look for\" = tìm; lùng is \"hunt down\"",
+   "example": {
+    "en": "I'm looking for my keys.",
+    "target": "Tôi đang tìm chìa khóa."
+   }
+  },
+  {
+   "english": "same",
+   "pos": "adj",
+   "meaning": "Similar, alike.",
+   "picks": [
+    "giống",
+    "tương tự"
+   ],
+   "confidence": "sure",
+   "why": "\"the same (alike)\" = giống",
+   "example": {
+    "en": "You two look the same.",
+    "target": "Hai bạn trông giống nhau."
+   }
+  },
+  {
+   "english": "come",
+   "pos": "verb",
+   "meaning": "To move nearer to the point of perspective.",
+   "picks": [
+    "đến",
+    "tới"
+   ],
+   "confidence": "sure",
+   "why": "\"come\" = đến / tới; lại is \"come over (here)\" only",
+   "example": {
+    "en": "Come to my house tomorrow.",
+    "target": "Ngày mai đến nhà tôi nhé."
+   }
+  },
+  {
+   "english": "better",
+   "pos": "verb",
+   "meaning": "To improve.",
+   "picks": [
+    "cải thiện"
+   ],
+   "confidence": "sure",
+   "why": "\"better (improve)\" = cải thiện",
+   "example": {
+    "en": "I want to better my Vietnamese.",
+    "target": "Tôi muốn cải thiện tiếng Việt của mình."
+   }
+  },
+  {
+   "english": "find",
+   "pos": "verb",
+   "meaning": "To locate.",
+   "picks": [
+    "tìm thấy",
+    "thấy"
+   ],
+   "confidence": "sure",
+   "why": "\"find\" = tìm thấy; tìm is \"look for\"",
+   "example": {
+    "en": "I found my phone.",
+    "target": "Tôi tìm thấy điện thoại rồi."
+   }
+  },
+  {
+   "english": "help",
+   "pos": "noun",
+   "meaning": "Action given to provide assistance; aid.",
+   "picks": [
+    "sự giúp đỡ",
+    "giúp đỡ"
+   ],
+   "confidence": "sure",
+   "why": "\"help\" (noun) = sự giúp đỡ; cứu tế is \"relief aid\"",
+   "example": {
+    "en": "Thanks for your help.",
+    "target": "Cảm ơn sự giúp đỡ của bạn."
+   }
+  },
+  {
+   "english": "high",
+   "pos": "adj",
+   "meaning": "Having a specified elevation or height; tall.",
+   "picks": [
+    "cao"
+   ],
+   "confidence": "sure",
+   "why": "\"high (tall)\" = cao",
+   "example": {
+    "en": "The building is very high.",
+    "target": "Tòa nhà rất cao."
+   }
+  },
+  {
+   "english": "own",
+   "pos": "adj",
+   "meaning": "Not shared.",
+   "picks": [
+    "riêng"
+   ],
+   "confidence": "sure",
+   "why": "\"own (not shared)\" = riêng",
+   "example": {
+    "en": "I have my own room.",
+    "target": "Tôi có phòng riêng."
+   }
+  },
+  {
+   "english": "own",
+   "pos": "verb",
+   "meaning": "To admit, concede, grant, allow; not to deny.",
+   "picks": [
+    "thừa nhận"
+   ],
+   "confidence": "sure",
+   "why": "\"own up\" = thừa nhận; thú is \"confess\" (or \"animal\")",
+   "example": {
+    "en": "He owned that he was wrong.",
+    "target": "Anh ấy thừa nhận mình sai."
+   }
+  },
+  {
+   "english": "things",
+   "pos": "noun",
+   "meaning": "One's clothes, furniture, luggage, or possessions collectively; stuff",
+   "picks": [
+    "đồ đạc",
+    "đồ"
+   ],
+   "confidence": "sure",
+   "why": "\"my things\" = đồ đạc / đồ",
+   "example": {
+    "en": "Pack your things.",
+    "target": "Thu dọn đồ đạc đi."
+   }
+  },
+  {
+   "english": "things",
+   "pos": "noun",
+   "meaning": "The general state of affairs in a given context, e.g. one's relationship",
+   "picks": [
+    "mọi chuyện",
+    "mọi việc"
+   ],
+   "confidence": "check",
+   "why": "\"how are things?\" = mọi chuyện thế nào?",
+   "example": {
+    "en": "How are things at home?",
+    "target": "Mọi chuyện ở nhà thế nào?"
+   }
+  },
+  {
+   "english": "thing",
+   "pos": "noun",
+   "meaning": "An individual object or distinct entity.",
+   "picks": [
+    "thứ",
+    "đồ",
+    "vật"
+   ],
+   "confidence": "sure",
+   "why": "\"a thing (object)\" = thứ / đồ; việc is \"a task\"",
+   "example": {
+    "en": "What is this thing?",
+    "target": "Cái thứ này là gì?"
+   }
+  },
+  {
+   "english": "thing",
+   "pos": "noun",
+   "meaning": "Possessions or equipment; stuff; gear.",
+   "picks": [
+    "đồ đạc",
+    "đồ"
+   ],
+   "confidence": "sure",
+   "why": "\"things (stuff)\" = đồ đạc",
+   "example": {
+    "en": "Don't touch my things.",
+    "target": "Đừng đụng vào đồ của tôi."
+   }
+  },
+  {
+   "english": "next",
+   "pos": "adj",
+   "meaning": "Nearest in place or position, having nothing similar intervening; adjoining.",
+   "picks": [
+    "bên cạnh",
+    "kế bên"
+   ],
+   "confidence": "sure",
+   "why": "\"next to\" = bên cạnh",
+   "example": {
+    "en": "The bank is next to the market.",
+    "target": "Ngân hàng ở bên cạnh chợ."
+   }
+  },
+  {
+   "english": "next",
+   "pos": "adj",
+   "meaning": "Nearest in order, succession, or rank; immediately following (or sometimes preceding) in order.",
+   "picks": [
+    "tiếp theo",
+    "sau",
+    "tới"
+   ],
+   "confidence": "sure",
+   "why": "\"next (week)\" = tuần sau / tuần tới; \"the next one\" = tiếp theo",
+   "example": {
+    "en": "See you next week.",
+    "target": "Hẹn gặp lại tuần sau."
+   }
+  },
+  {
+   "english": "found",
+   "pos": "verb",
+   "meaning": "To start (an institution or organization).",
+   "picks": [
+    "thành lập",
+    "sáng lập"
+   ],
+   "confidence": "sure",
+   "why": "\"found (a company)\" = thành lập",
+   "example": {
+    "en": "My grandfather founded this school.",
+    "target": "Ông tôi đã thành lập ngôi trường này."
+   }
+  },
+  {
+   "english": "show",
+   "pos": "verb",
+   "meaning": "To display, convey or exhibit; to have something available for others to see; to direct attention to something.",
+   "picks": [
+    "cho xem",
+    "chỉ",
+    "trưng bày"
+   ],
+   "confidence": "check",
+   "why": "\"show (me)\" = cho (tôi) xem",
+   "example": {
+    "en": "Show me your photos.",
+    "target": "Cho tôi xem hình của bạn."
+   }
+  },
+  {
+   "english": "big",
+   "pos": "adj",
+   "meaning": "Popular.",
+   "picks": [
+    "nổi tiếng",
+    "được ưa chuộng"
+   ],
+   "confidence": "check",
+   "why": "\"big (popular)\" = nổi tiếng",
+   "example": {
+    "en": "That band is big in Korea.",
+    "target": "Ban nhạc đó rất nổi tiếng ở Hàn Quốc."
+   }
+  },
+  {
+   "english": "sure",
+   "pos": "adv",
+   "meaning": "Without doubt, certainly.",
+   "picks": [
+    "chắc chắn",
+    "tất nhiên"
+   ],
+   "confidence": "sure",
+   "why": "\"sure (certainly)\" = chắc chắn",
+   "example": {
+    "en": "She will sure win.",
+    "target": "Cô ấy chắc chắn sẽ thắng."
+   }
+  },
+  {
+   "english": "sure",
+   "pos": "intj",
+   "meaning": "Yes; of course.",
+   "picks": [
+    "được",
+    "ừ",
+    "chắc chắn rồi"
+   ],
+   "confidence": "check",
+   "why": "\"Sure!\" = được / ừ",
+   "example": {
+    "en": "Can you help me? Sure!",
+    "target": "Bạn giúp tôi được không? Được!"
+   }
+  },
+  {
+   "english": "family",
+   "pos": "noun",
+   "meaning": "A group of people who are closely related to one another (by blood, marriage or adoption); kin; in particular, a set of parents and their c…",
+   "picks": [
+    "gia đình"
+   ],
+   "confidence": "sure",
+   "why": "\"family\" = gia đình; họ is \"surname/clan\"",
+   "example": {
+    "en": "I live with my family.",
+    "target": "Tôi sống với gia đình."
+   }
+  },
+  {
+   "english": "family",
+   "pos": "noun",
+   "meaning": "An extended family: a group of people who are related to one another by blood or marriage.",
+   "picks": [
+    "họ hàng"
+   ],
+   "confidence": "sure",
+   "why": "\"extended family\" = họ hàng",
+   "example": {
+    "en": "All my family came to the wedding.",
+    "target": "Họ hàng tôi đều đến dự đám cưới."
+   }
+  },
+  {
+   "english": "family",
+   "pos": "noun",
+   "meaning": "A (close-knit) group of people related by blood, friendship, marriage, law, or custom, especially if they live or work together.",
+   "picks": [
+    "gia đình"
+   ],
+   "confidence": "sure",
+   "why": "\"family (close group)\" = gia đình",
+   "example": {
+    "en": "My coworkers are like family.",
+    "target": "Đồng nghiệp tôi như gia đình vậy."
+   }
+  },
+  {
+   "english": "keep",
+   "pos": "verb",
+   "meaning": "To continue in (a course or mode of action); to not intermit or fall from; to uphold or maintain.",
+   "picks": [
+    "tiếp tục",
+    "giữ"
+   ],
+   "confidence": "check",
+   "why": "\"keep (doing)\" = tiếp tục",
+   "example": {
+    "en": "Keep walking.",
+    "target": "Cứ tiếp tục đi."
+   }
+  },
+  {
+   "english": "keep",
+   "pos": "verb",
+   "meaning": "To remain faithful to a given promise or word.",
+   "picks": [
+    "giữ"
+   ],
+   "confidence": "sure",
+   "why": "\"keep (a promise)\" = giữ (lời hứa); vẹn is \"intact\"",
+   "example": {
+    "en": "She always keeps her promises.",
+    "target": "Cô ấy luôn giữ lời hứa."
+   }
+  },
+  {
+   "english": "might",
+   "pos": "noun",
+   "meaning": "Power, strength, force, or influence held by a person or group.",
+   "picks": [
+    "sức mạnh",
+    "quyền lực"
+   ],
+   "confidence": "check",
+   "why": "\"might (power)\" = sức mạnh",
+   "example": {
+    "en": "With all his might, he pushed the car.",
+    "target": "Anh ấy dùng hết sức mạnh để đẩy xe."
+   }
+  },
+  {
+   "english": "please",
+   "pos": "verb",
+   "meaning": "To make happy or satisfy; to give pleasure to.",
+   "picks": [
+    "làm vui lòng",
+    "làm hài lòng"
+   ],
+   "confidence": "check",
+   "why": "\"please (someone)\" = làm vui lòng",
+   "example": {
+    "en": "It's hard to please everyone.",
+    "target": "Khó mà làm vui lòng tất cả mọi người."
+   }
+  },
+  {
+   "english": "please",
+   "pos": "intj",
+   "meaning": "Used as an affirmative to an offer.",
+   "picks": [
+    "làm ơn",
+    "xin",
+    "vui lòng"
+   ],
+   "confidence": "sure",
+   "why": "\"please\" (asking) = làm ơn / vui lòng",
+   "example": {
+    "en": "Please help me.",
+    "target": "Làm ơn giúp tôi."
+   }
+  },
+  {
+   "english": "free",
+   "pos": "adj",
+   "meaning": "Obtainable without any payment.",
+   "picks": [
+    "miễn phí"
+   ],
+   "confidence": "sure",
+   "why": "\"free (no cost)\" = miễn phí; the ranking gave giải (\"release\")",
+   "example": {
+    "en": "The drinks are free.",
+    "target": "Nước uống miễn phí."
+   }
+  },
+  {
+   "english": "left",
+   "pos": "noun",
+   "meaning": "The left side or direction.",
+   "picks": [
+    "bên trái"
+   ],
+   "confidence": "sure",
+   "why": "\"the left\" = bên trái",
+   "example": {
+    "en": "Turn to the left.",
+    "target": "Rẽ bên trái."
+   }
+  },
+  {
+   "english": "number",
+   "pos": "noun",
+   "meaning": "Quantity of countable things.",
+   "picks": [
+    "số lượng",
+    "số"
+   ],
+   "confidence": "check",
+   "why": "\"a number of\" = số lượng",
+   "example": {
+    "en": "The number of students is growing.",
+    "target": "Số lượng học sinh đang tăng."
+   }
+  },
+  {
+   "english": "number",
+   "pos": "noun",
+   "meaning": "A telephone number.",
+   "picks": [
+    "số điện thoại",
+    "số"
+   ],
+   "confidence": "sure",
+   "why": "\"(phone) number\" = số điện thoại",
+   "example": {
+    "en": "What's your number?",
+    "target": "Số điện thoại của bạn là gì?"
+   }
+  },
+  {
+   "english": "lot",
+   "pos": "noun",
+   "meaning": "A large quantity or number; a great deal.",
+   "picks": [
+    "nhiều",
+    "rất nhiều"
+   ],
+   "confidence": "sure",
+   "why": "\"a lot\" = nhiều / rất nhiều; số is \"number/fate\"",
+   "example": {
+    "en": "I have a lot of homework.",
+    "target": "Tôi có rất nhiều bài tập."
+   }
+  },
+  {
+   "english": "real",
+   "pos": "adj",
+   "meaning": "Genuine, not artificial, counterfeit, or fake.",
+   "picks": [
+    "thật",
+    "xịn"
+   ],
+   "confidence": "check",
+   "why": "\"real (genuine)\" = thật; xịn is slang",
+   "example": {
+    "en": "Is this real leather?",
+    "target": "Đây có phải da thật không?"
+   }
+  },
+  {
+   "english": "called",
+   "pos": "adj",
+   "meaning": "Having been called.",
+   "picks": [
+    "gọi là",
+    "tên là"
+   ],
+   "confidence": "check",
+   "why": "\"called (named)\" = gọi là / tên là",
+   "example": {
+    "en": "What's this called in Vietnamese?",
+    "target": "Cái này tiếng Việt gọi là gì?"
+   }
+  },
+  {
+   "english": "thought",
+   "pos": "noun",
+   "meaning": "A representation created in the mind without the use of one's faculties of vision, sound, smell, touch, or taste; an instance of thinking.",
+   "picks": [
+    "suy nghĩ",
+    "ý nghĩ"
+   ],
+   "confidence": "sure",
+   "why": "\"a thought\" = suy nghĩ / ý nghĩ; tư duy is \"thinking (abstract)\"",
+   "example": {
+    "en": "That's a nice thought.",
+    "target": "Đó là một suy nghĩ hay."
+   }
+  },
+  {
+   "english": "thought",
+   "pos": "noun",
+   "meaning": "A way of thinking (associated with a group, nation, region or idea).",
+   "picks": [
+    "tư tưởng",
+    "tư duy"
+   ],
+   "confidence": "check",
+   "why": "\"(a school of) thought\" = tư tưởng",
+   "example": {
+    "en": "Buddhist thought",
+    "target": "Tư tưởng Phật giáo"
+   }
+  },
+  {
+   "english": "done",
+   "pos": "adj",
+   "meaning": "Ready, fully cooked.",
+   "picks": [
+    "chín"
+   ],
+   "confidence": "sure",
+   "why": "\"done (cooked)\" = chín; sẵn is \"ready\"",
+   "example": {
+    "en": "Is the rice done?",
+    "target": "Cơm chín chưa?"
+   }
+  },
+  {
+   "english": "public",
+   "pos": "adj",
+   "meaning": "Able to be known or seen by everyone; happening without concealment; open to general view.",
+   "picks": [
+    "công khai"
+   ],
+   "confidence": "sure",
+   "why": "\"public (not hidden)\" = công khai; chung is \"shared\"",
+   "example": {
+    "en": "He made a public apology.",
+    "target": "Anh ấy đã công khai xin lỗi."
+   }
+  },
+  {
+   "english": "top",
+   "pos": "noun",
+   "meaning": "The highest or uppermost part of something.",
+   "picks": [
+    "đỉnh",
+    "phần trên"
+   ],
+   "confidence": "check",
+   "why": "\"the top\" = đỉnh (of a mountain) / phần trên",
+   "example": {
+    "en": "We climbed to the top of the mountain.",
+    "target": "Chúng tôi leo lên đỉnh núi."
+   }
+  },
+  {
+   "english": "business",
+   "pos": "noun",
+   "meaning": "A person's occupation, work, or trade.",
+   "picks": [
+    "công việc",
+    "nghề"
+   ],
+   "confidence": "sure",
+   "why": "\"what's your business (job)\" = công việc / nghề",
+   "example": {
+    "en": "What business are you in?",
+    "target": "Bạn làm công việc gì?"
+   }
+  },
+  {
+   "english": "business",
+   "pos": "noun",
+   "meaning": "Commercial, industrial, or professional activity.",
+   "picks": [
+    "kinh doanh",
+    "buôn bán"
+   ],
+   "confidence": "sure",
+   "why": "\"business (trade)\" = kinh doanh / buôn bán",
+   "example": {
+    "en": "Business is slow this month.",
+    "target": "Tháng này buôn bán chậm."
+   }
+  },
+  {
+   "english": "care",
+   "pos": "noun",
+   "meaning": "Close attention; concern; responsibility.",
+   "picks": [
+    "sự quan tâm",
+    "sự chăm sóc"
+   ],
+   "confidence": "check",
+   "why": "\"care (attention)\" = sự quan tâm",
+   "example": {
+    "en": "Thank you for your care.",
+    "target": "Cảm ơn sự quan tâm của bạn."
+   }
+  },
+  {
+   "english": "care",
+   "pos": "noun",
+   "meaning": "Worry.",
+   "picks": [
+    "lo lắng",
+    "lo âu"
+   ],
+   "confidence": "sure",
+   "why": "\"care (worry)\" = lo lắng",
+   "example": {
+    "en": "She doesn't have a care in the world.",
+    "target": "Cô ấy chẳng có gì phải lo lắng."
+   }
+  },
+  {
+   "english": "care",
+   "pos": "noun",
+   "meaning": "Maintenance, upkeep.",
+   "picks": [
+    "chăm sóc",
+    "bảo dưỡng"
+   ],
+   "confidence": "sure",
+   "why": "\"care (upkeep)\" = chăm sóc",
+   "example": {
+    "en": "Skin care",
+    "target": "Chăm sóc da"
+   }
+  },
+  {
+   "english": "start",
+   "pos": "noun",
+   "meaning": "The beginning of an activity.",
+   "picks": [
+    "khởi đầu",
+    "bắt đầu"
+   ],
+   "confidence": "sure",
+   "why": "\"the start\" = khởi đầu / bắt đầu",
+   "example": {
+    "en": "It was a good start.",
+    "target": "Đó là một khởi đầu tốt."
+   }
+  },
+  {
+   "english": "start",
+   "pos": "noun",
+   "meaning": "A sudden involuntary movement.",
+   "picks": [
+    "giật mình"
+   ],
+   "confidence": "check",
+   "why": "\"a start (a jump)\" = giật mình",
+   "example": {
+    "en": "I woke up with a start.",
+    "target": "Tôi giật mình tỉnh dậy."
+   }
+  },
+  {
+   "english": "start",
+   "pos": "verb",
+   "meaning": "To begin, commence, initiate.",
+   "picks": [
+    "bắt đầu"
+   ],
+   "confidence": "sure",
+   "why": "\"start\" = bắt đầu; khởi is literary",
+   "example": {
+    "en": "Class starts at 8.",
+    "target": "Lớp học bắt đầu lúc 8 giờ."
+   }
+  },
+  {
+   "english": "anything",
+   "pos": "pron",
+   "meaning": "Any object, act, state, event, or fact whatsoever; a thing of any kind; something or other.",
+   "picks": [
+    "bất cứ thứ gì",
+    "gì"
+   ],
+   "confidence": "check",
+   "why": "\"anything\" = bất cứ thứ gì / (không) gì",
+   "example": {
+    "en": "Do you need anything?",
+    "target": "Bạn có cần gì không?"
+   }
+  },
+  {
+   "english": "nothing",
+   "pos": "pron",
+   "meaning": "An absence of anything, including empty space, brightness, darkness, matter, or a vacuum.",
+   "picks": [
+    "không có gì",
+    "hư không"
+   ],
+   "confidence": "sure",
+   "why": "\"nothing\" = không có gì; the ranking gave a vulgar word first",
+   "example": {
+    "en": "There is nothing in the box.",
+    "target": "Không có gì trong hộp cả."
+   }
+  },
+  {
+   "english": "change",
+   "pos": "verb",
+   "meaning": "To make something into something else.",
+   "picks": [
+    "biến",
+    "thay đổi"
+   ],
+   "confidence": "check",
+   "why": "\"change (into)\" = biến (thành)",
+   "example": {
+    "en": "The caterpillar changed into a butterfly.",
+    "target": "Con sâu biến thành con bướm."
+   }
+  },
+  {
+   "english": "bad",
+   "pos": "adj",
+   "meaning": "Of low quality.",
+   "picks": [
+    "tệ",
+    "dở",
+    "xấu"
+   ],
+   "confidence": "sure",
+   "why": "\"bad (low quality)\" = tệ / dở",
+   "example": {
+    "en": "This movie is bad.",
+    "target": "Phim này dở quá."
+   }
+  },
+  {
+   "english": "bad",
+   "pos": "adj",
+   "meaning": "Unfavorable; negative; not good.",
+   "picks": [
+    "xấu",
+    "tệ"
+   ],
+   "confidence": "sure",
+   "why": "\"bad (unfavorable)\" = xấu / tệ; âm is \"negative (number)\"",
+   "example": {
+    "en": "I have bad news.",
+    "target": "Tôi có tin xấu."
+   }
+  },
+  {
+   "english": "hard",
+   "pos": "adj",
+   "meaning": "Having a severe property; presenting difficulty.",
+   "picks": [
+    "khó",
+    "khó khăn"
+   ],
+   "confidence": "sure",
+   "why": "\"hard (difficult)\" = khó; gian khổ is \"hardship\"",
+   "example": {
+    "en": "This test is hard.",
+    "target": "Bài kiểm tra này khó quá."
+   }
+  },
+  {
+   "english": "mean",
+   "pos": "verb",
+   "meaning": "To intend.",
+   "picks": [
+    "định",
+    "có ý"
+   ],
+   "confidence": "check",
+   "why": "\"mean (intend)\" = định",
+   "example": {
+    "en": "I didn't mean to hurt you.",
+    "target": "Tôi không định làm bạn buồn."
+   }
+  },
+  {
+   "english": "mean",
+   "pos": "verb",
+   "meaning": "To convey (a meaning).",
+   "picks": [
+    "nghĩa là",
+    "có nghĩa là"
+   ],
+   "confidence": "sure",
+   "why": "\"mean (signify)\" = nghĩa là",
+   "example": {
+    "en": "What does this word mean?",
+    "target": "Từ này nghĩa là gì?"
+   }
+  },
+  {
+   "english": "once",
+   "pos": "adv",
+   "meaning": "One and only one time.",
+   "picks": [
+    "một lần"
+   ],
+   "confidence": "sure",
+   "why": "\"once (one time)\" = một lần",
+   "example": {
+    "en": "I've been there once.",
+    "target": "Tôi đã đến đó một lần."
+   }
+  },
+  {
+   "english": "once",
+   "pos": "conj",
+   "meaning": "As soon as; when; after.",
+   "picks": [
+    "một khi",
+    "khi"
+   ],
+   "confidence": "check",
+   "why": "\"once (as soon as)\" = một khi",
+   "example": {
+    "en": "Once you finish, call me.",
+    "target": "Một khi xong việc thì gọi tôi."
+   }
+  },
+  {
+   "english": "support",
+   "pos": "verb",
+   "meaning": "To help keep from falling.",
+   "picks": [
+    "đỡ",
+    "chống đỡ"
+   ],
+   "confidence": "check",
+   "why": "\"support (hold up)\" = đỡ",
+   "example": {
+    "en": "This beam supports the roof.",
+    "target": "Cây xà này đỡ mái nhà."
+   }
+  },
+  {
+   "english": "support",
+   "pos": "verb",
+   "meaning": "To provide sustenance or maintenance for; to sustain in integrity or livelihood.",
+   "picks": [
+    "nuôi",
+    "nuôi sống"
+   ],
+   "confidence": "check",
+   "why": "\"support (a family)\" = nuôi",
+   "example": {
+    "en": "He supports his whole family.",
+    "target": "Anh ấy nuôi cả gia đình."
+   }
+  },
+  {
+   "english": "include",
+   "pos": "verb",
+   "meaning": "To bring into a group, class, set, or total as a (new) part or member.",
+   "picks": [
+    "bao gồm",
+    "gồm"
+   ],
+   "confidence": "sure",
+   "why": "\"include\" = bao gồm; hàm is \"contain (implicitly)\"",
+   "example": {
+    "en": "The price includes breakfast.",
+    "target": "Giá phòng bao gồm bữa sáng."
+   }
+  },
+  {
+   "english": "include",
+   "pos": "verb",
+   "meaning": "To consider as part of something; to comprehend.",
+   "picks": [
+    "kể cả",
+    "tính cả"
+   ],
+   "confidence": "check",
+   "why": "\"including\" = kể cả",
+   "example": {
+    "en": "Include me in the count.",
+    "target": "Kể cả tôi nữa nhé."
+   }
+  },
+  {
+   "english": "power",
+   "pos": "noun",
+   "meaning": "The ability to do or undergo something.",
+   "picks": [
+    "khả năng",
+    "sức mạnh"
+   ],
+   "confidence": "check",
+   "why": "\"power (ability)\" = khả năng",
+   "example": {
+    "en": "She has the power to fly.",
+    "target": "Cô ấy có khả năng bay."
+   }
+  },
+  {
+   "english": "power",
+   "pos": "noun",
+   "meaning": "The ability to coerce, influence, or control.",
+   "picks": [
+    "quyền lực",
+    "quyền"
+   ],
+   "confidence": "sure",
+   "why": "\"power (control)\" = quyền lực",
+   "example": {
+    "en": "The king had great power.",
+    "target": "Nhà vua có quyền lực rất lớn."
+   }
+  },
+  {
+   "english": "based",
+   "pos": "verb",
+   "meaning": "simple past and past participle of base",
+   "picks": [
+    "dựa trên",
+    "dựa vào"
+   ],
+   "confidence": "check",
+   "why": "\"based on\" = dựa trên",
+   "example": {
+    "en": "The movie is based on a true story.",
+    "target": "Bộ phim dựa trên một câu chuyện có thật."
+   }
+  },
+  {
+   "english": "base",
+   "pos": "noun",
+   "meaning": "Something from which other things extend; a foundation.",
+   "picks": [
+    "nền",
+    "nền tảng"
+   ],
+   "confidence": "check",
+   "why": "\"base (foundation)\" = nền / nền tảng",
+   "example": {
+    "en": "The base of the house is concrete.",
+    "target": "Nền nhà làm bằng bê tông."
+   }
+  },
+  {
+   "english": "believe",
+   "pos": "verb",
+   "meaning": "To opine, think, reckon.",
+   "picks": [
+    "nghĩ",
+    "cho rằng"
+   ],
+   "confidence": "check",
+   "why": "\"I believe (think)\" = tôi nghĩ",
+   "example": {
+    "en": "I believe she's at home.",
+    "target": "Tôi nghĩ cô ấy đang ở nhà."
+   }
+  },
+  {
+   "english": "call",
+   "pos": "verb",
+   "meaning": "To visit.",
+   "picks": [
+    "thăm",
+    "ghé"
+   ],
+   "confidence": "check",
+   "why": "\"call (visit)\" = thăm / ghé",
+   "example": {
+    "en": "I'll call on my grandma tomorrow.",
+    "target": "Ngày mai tôi sẽ ghé thăm bà."
+   }
+  },
+  {
+   "english": "small",
+   "pos": "adj",
+   "meaning": "Young, as a child.",
+   "picks": [
+    "nhỏ",
+    "bé"
+   ],
+   "confidence": "check",
+   "why": "\"small (young)\" = nhỏ / bé; em is \"younger sibling\"",
+   "example": {
+    "en": "When I was small, we lived in Huế.",
+    "target": "Hồi tôi còn nhỏ, nhà tôi sống ở Huế."
+   }
+  },
+  {
+   "english": "small",
+   "pos": "noun",
+   "meaning": "One of several common sizes to which an item may be manufactured, smaller than a medium.",
+   "picks": [
+    "cỡ nhỏ"
+   ],
+   "confidence": "check",
+   "why": "\"a small (size)\" = cỡ nhỏ",
+   "example": {
+    "en": "I'll have a small, please.",
+    "target": "Cho tôi ly cỡ nhỏ."
+   }
+  },
+  {
+   "english": "white",
+   "pos": "adj",
+   "meaning": "Grey, as from old age; having silvery hair; hoary.",
+   "picks": [
+    "bạc",
+    "bạc phơ"
+   ],
+   "confidence": "check",
+   "why": "\"white (hair)\" = tóc bạc",
+   "example": {
+    "en": "Her hair has turned white.",
+    "target": "Tóc bà ấy đã bạc."
+   }
+  },
+  {
+   "english": "job",
+   "pos": "noun",
+   "meaning": "An economic role for which a person is paid.",
+   "picks": [
+    "việc làm",
+    "công việc"
+   ],
+   "confidence": "sure",
+   "why": "\"a job (paid)\" = việc làm / công việc",
+   "example": {
+    "en": "I'm looking for a job.",
+    "target": "Tôi đang tìm việc làm."
+   }
+  },
+  {
+   "english": "side",
+   "pos": "noun",
+   "meaning": "A bounding straight edge of a two-dimensional shape.",
+   "picks": [
+    "cạnh"
+   ],
+   "confidence": "check",
+   "why": "\"side (of a shape)\" = cạnh",
+   "example": {
+    "en": "A triangle has three sides.",
+    "target": "Hình tam giác có ba cạnh."
+   }
+  },
+  {
+   "english": "try",
+   "pos": "verb",
+   "meaning": "To test, to work out.",
+   "picks": [
+    "thử"
+   ],
+   "confidence": "sure",
+   "why": "\"try (test)\" = thử",
+   "example": {
+    "en": "Try this dish.",
+    "target": "Thử món này đi."
+   }
+  },
+  {
+   "english": "actually",
+   "pos": "adv",
+   "meaning": "Currently; at the time.",
+   "picks": [
+    "hiện nay",
+    "hiện tại"
+   ],
+   "confidence": "check",
+   "why": "\"actually (currently)\" = hiện nay",
+   "example": {
+    "en": "He is actually living in Đà Nẵng.",
+    "target": "Hiện nay anh ấy đang sống ở Đà Nẵng."
+   }
+  },
+  {
+   "english": "later",
+   "pos": "adv",
+   "meaning": "At some unspecified time in the future.",
+   "picks": [
+    "sau",
+    "sau này",
+    "lát nữa"
+   ],
+   "confidence": "check",
+   "why": "\"later\" = sau / lát nữa",
+   "example": {
+    "en": "See you later.",
+    "target": "Lát nữa gặp lại nhé."
+   }
+  },
+  {
+   "english": "less",
+   "pos": "adv",
+   "meaning": "Used for constructing syntactic diminutive comparatives of adjectives and adverbs.",
+   "picks": [
+    "kém",
+    "ít hơn"
+   ],
+   "confidence": "check",
+   "why": "\"less (comparison)\" = kém",
+   "example": {
+    "en": "My English is less fluent than yours.",
+    "target": "Tiếng Anh của tôi kém lưu loát hơn bạn."
+   }
+  },
+  {
+   "english": "less",
+   "pos": "det",
+   "meaning": "A smaller amount of; not as much.",
+   "picks": [
+    "ít hơn"
+   ],
+   "confidence": "sure",
+   "why": "\"less\" = ít hơn; the ranking gave nhiều (\"more\"), the opposite",
+   "example": {
+    "en": "Eat less sugar.",
+    "target": "Ăn ít đường hơn."
+   }
+  },
+  {
+   "english": "less",
+   "pos": "noun",
+   "meaning": "A smaller amount or quantity.",
+   "picks": [
+    "ít hơn"
+   ],
+   "confidence": "sure",
+   "why": "\"less (an amount)\" = ít hơn",
+   "example": {
+    "en": "I paid less than you.",
+    "target": "Tôi trả ít hơn bạn."
+   }
+  },
+  {
+   "english": "order",
+   "pos": "noun",
+   "meaning": "The state of being well arranged.",
+   "picks": [
+    "trật tự",
+    "ngăn nắp"
+   ],
+   "confidence": "sure",
+   "why": "\"in order (tidy)\" = trật tự / ngăn nắp",
+   "example": {
+    "en": "Her room is always in order.",
+    "target": "Phòng cô ấy lúc nào cũng ngăn nắp."
+   }
+  },
+  {
+   "english": "service",
+   "pos": "noun",
+   "meaning": "The practice of providing assistance as economic activity.",
+   "picks": [
+    "dịch vụ",
+    "phục vụ"
+   ],
+   "confidence": "sure",
+   "why": "\"service (business)\" = dịch vụ",
+   "example": {
+    "en": "The service here is great.",
+    "target": "Dịch vụ ở đây rất tốt."
+   }
+  },
+  {
+   "english": "country",
+   "pos": "noun",
+   "meaning": "The territory of a nation; a sovereign state or a region once independent and still distinct in institutions, language, etc.",
+   "picks": [
+    "đất nước",
+    "quốc gia"
+   ],
+   "confidence": "check",
+   "why": "\"country\" = đất nước (everyday) / quốc gia (formal)",
+   "example": {
+    "en": "Vietnam is a beautiful country.",
+    "target": "Việt Nam là một đất nước xinh đẹp."
+   }
+  },
+  {
+   "english": "open",
+   "pos": "adj",
+   "meaning": "Physically unobstructed, uncovered, etc.",
+   "picks": [
+    "mở"
+   ],
+   "confidence": "sure",
+   "why": "\"open\" = mở; the ranking gave lật (\"flip over\")",
+   "example": {
+    "en": "The door is open.",
+    "target": "Cửa đang mở."
+   }
+  },
+  {
+   "english": "season",
+   "pos": "noun",
+   "meaning": "A period of the year when something particular happens.",
+   "picks": [
+    "mùa"
+   ],
+   "confidence": "sure",
+   "why": "\"season (time of year)\" = mùa",
+   "example": {
+    "en": "Mango season",
+    "target": "Mùa xoài"
+   }
+  },
+  {
+   "english": "shit",
+   "pos": "noun",
+   "meaning": "Stuff, things.",
+   "picks": [
+    "đồ",
+    "đồ đạc"
+   ],
+   "confidence": "check",
+   "why": "\"shit (stuff)\" = đồ đạc (neutral)",
+   "example": {
+    "en": "Get your shit and let's go.",
+    "target": "Lấy đồ đi rồi mình đi."
+   }
+  },
+  {
+   "english": "shit",
+   "pos": "noun",
+   "meaning": "Nonsense; bullshit.",
+   "picks": [
+    "nhảm nhí",
+    "vớ vẩn"
+   ],
+   "confidence": "check",
+   "why": "\"bullshit (nonsense)\" = nhảm nhí",
+   "example": {
+    "en": "That's bullshit.",
+    "target": "Nhảm nhí."
+   }
+  },
+  {
+   "english": "thank",
+   "pos": "verb",
+   "meaning": "To express appreciation or gratitude toward (someone or something).",
+   "picks": [
+    "cảm ơn",
+    "cám ơn"
+   ],
+   "confidence": "sure",
+   "why": "\"thank\" = cảm ơn (more common now) / cám ơn",
+   "example": {
+    "en": "Thank your grandma for the gift.",
+    "target": "Cảm ơn bà về món quà đi con."
+   }
+  },
+  {
+   "english": "party",
+   "pos": "noun",
+   "meaning": "A social gathering, usually of invited guests",
+   "picks": [
+    "tiệc",
+    "bữa tiệc"
+   ],
+   "confidence": "sure",
+   "why": "The everyday \"party\" is tiệc; Wiktionary lists the legal \"party (side)\" first",
+   "example": {
+    "en": "Are you coming to my party?",
+    "target": "Bạn có đến bữa tiệc của tôi không?"
+   },
+   "first": true
+  },
+  {
+   "english": "great",
+   "pos": "adj",
+   "meaning": "Very good; excellent; wonderful; fantastic.",
+   "picks": [
+    "tuyệt",
+    "tuyệt vời",
+    "hay"
+   ],
+   "confidence": "sure",
+   "why": "\"That's great!\" = tuyệt / tuyệt vời; listed 4th after \"large\"",
+   "example": {
+    "en": "That's great!",
+    "target": "Tuyệt quá!"
+   },
+   "first": true
+  },
+  {
+   "english": "old",
+   "pos": "adj",
+   "meaning": "Of a living being, having lived for most of the expected years.",
+   "picks": [
+    "già"
+   ],
+   "confidence": "sure",
+   "why": "An old person is già; old things are cũ",
+   "example": {
+    "en": "My grandparents are old.",
+    "target": "Ông bà tôi già rồi."
+   }
+  },
+  {
+   "english": "full",
+   "pos": "adj",
+   "meaning": "Having eaten to satisfaction, having a \"full\" stomach; replete.",
+   "picks": [
+    "no"
+   ],
+   "confidence": "sure",
+   "why": "\"I'm full\" = tôi no rồi",
+   "example": {
+    "en": "I'm full, thanks.",
+    "target": "Tôi no rồi, cảm ơn."
+   }
+  },
+  {
+   "english": "order",
+   "pos": "verb",
+   "meaning": "To request some product or service; to secure by placing an order.",
+   "picks": [
+    "đặt",
+    "gọi"
+   ],
+   "confidence": "sure",
+   "why": "\"order (food)\" = gọi món; \"order (online)\" = đặt hàng",
+   "example": {
+    "en": "Let's order food.",
+    "target": "Mình gọi món đi."
+   }
+  },
+  {
+   "english": "hi",
+   "pos": "intj",
+   "meaning": "A friendly, informal, casual greeting said upon someone's arrival.",
+   "picks": [
+    "chào",
+    "xin chào"
+   ],
+   "confidence": "sure",
+   "why": "\"Hi\" = chào",
+   "example": {
+    "en": "Hi! How are you?",
+    "target": "Chào bạn! Bạn khỏe không?"
+   },
+   "first": true
+  },
+  {
+   "english": "hello",
+   "pos": "intj",
+   "meaning": "A greeting (salutation) said when meeting someone or acknowledging someone's arrival or presence.",
+   "picks": [
+    "xin chào",
+    "chào"
+   ],
+   "confidence": "sure",
+   "why": "\"Hello\" = xin chào",
+   "example": {
+    "en": "Hello, nice to meet you.",
+    "target": "Xin chào, rất vui được gặp bạn."
+   }
+  },
+  {
+   "english": "hello",
+   "pos": "intj",
+   "meaning": "A greeting used when answering the telephone.",
+   "picks": [
+    "a lô",
+    "alô"
+   ],
+   "confidence": "sure",
+   "why": "On the phone: a lô",
+   "example": {
+    "en": "Hello? Who's calling?",
+    "target": "A lô? Ai đó ạ?"
+   }
+  },
+  {
+   "english": "dinner",
+   "pos": "noun",
+   "meaning": "The main meal of the day, often eaten in the evening.",
+   "picks": [
+    "bữa tối",
+    "cơm tối"
+   ],
+   "confidence": "sure",
+   "why": "Your example: \"dinner\" = bữa tối; tiệc is \"a party / banquet\"",
+   "example": {
+    "en": "What's for dinner?",
+    "target": "Bữa tối ăn gì?"
+   }
+  },
+  {
+   "english": "dinner",
+   "pos": "noun",
+   "meaning": "An evening meal.",
+   "picks": [
+    "bữa tối",
+    "cơm tối"
+   ],
+   "confidence": "sure",
+   "why": "\"dinner\" = bữa tối",
+   "example": {
+    "en": "We had dinner at 7.",
+    "target": "Chúng tôi ăn bữa tối lúc 7 giờ."
+   }
+  },
+  {
+   "english": "lunch",
+   "pos": "noun",
+   "meaning": "A light meal usually eaten around midday, notably when not as main meal of the day.",
+   "picks": [
+    "bữa trưa",
+    "cơm trưa"
+   ],
+   "confidence": "sure",
+   "why": "\"lunch\" = bữa trưa",
+   "example": {
+    "en": "Let's have lunch together.",
+    "target": "Mình ăn bữa trưa cùng nhau nhé."
+   }
+  },
+  {
+   "english": "breakfast",
+   "pos": "noun",
+   "meaning": "The first meal of the day, usually eaten in the morning.",
+   "picks": [
+    "bữa sáng",
+    "điểm tâm"
+   ],
+   "confidence": "sure",
+   "why": "\"breakfast\" = bữa sáng (điểm tâm: Southern/formal)",
+   "example": {
+    "en": "I skipped breakfast.",
+    "target": "Tôi bỏ bữa sáng."
+   }
+  }
+ ]
+}
