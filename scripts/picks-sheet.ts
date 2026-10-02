@@ -66,7 +66,12 @@ const arg = (name: string) => {
 const load = (l: string) => async (p: string) => JSON.parse(await readFile(join(ROOT, 'packages', l, 'data', p), 'utf8'))
 
 /** One meaning of an English word, with the target's current words for it. */
-type SheetRow = { english: string; pos: string; meaning: string; ranked: string[]; table: string; current: string }
+type SheetRow = {
+  english: string; pos: string; meaning: string
+  /** The ranking's top words, and the definition of each that matched this meaning. */
+  ranked: string[]; rankedDefs: string[]
+  table: string; current: string
+}
 
 async function sheet(lang: string) {
   const tr = createTranslator({ load })
@@ -96,6 +101,7 @@ async function sheet(lang: string) {
       const row: SheetRow = {
         english: s.lemma, pos: s.pos, meaning: s.glosses[0] ?? '',
         ranked: g.translations.map((t) => t.word),
+        rankedDefs: g.translations.map((t) => t.gloss),
         table: (s.translations?.[lang] ?? []).map((t) => t.word + (t.tags?.length ? ` (${t.tags.join(', ')})` : '')).join(' / '),
         current: current?.picks.map((p) => p.word + (p.tags?.length ? ` (${p.tags.join(', ')})` : '')).join(' / ') ?? '',
       }
@@ -137,6 +143,15 @@ async function reviewPage(lang: string, rows: SheetRow[], wordCount: number, out
   // Picks that aren't headwords (phrases like "bữa tối"), so the reviewer knows.
   const phrases = async (words: string[]) =>
     (await Promise.all(words.map(async (w) => ((await target.lookup(w)).some((e) => e.word === w) ? null : w)))).filter((w) => w !== null)
+  // Each drafted word's main definitions, to compare with the current words' (shown on hover or tap).
+  const defs = async (words: string[]) => {
+    const out: Record<string, string> = {}
+    for (const w of words) {
+      const glosses = (await target.lookup(w)).filter((e) => e.word === w).flatMap((e) => e.senses.map((s) => s.glosses[s.glosses.length - 1]))
+      if (glosses.length) out[w] = [...new Set(glosses)].slice(0, 3).join(' · ')
+    }
+    return out
+  }
   const page: (SheetRow & { id: string; kind: string } & Record<string, unknown>)[] = []
   for (const r of rows) {
     const d = findDraft(r)
@@ -144,14 +159,14 @@ async function reviewPage(lang: string, rows: SheetRow[], wordCount: number, out
     page.push({
       id: rowId(r.english, r.pos, r.meaning), ...r,
       kind: d ? 'draft' : GRAMMAR_POS.has(r.pos) ? 'grammar' : 'fine',
-      ...(d ? { draft: d.picks, conf: d.confidence ?? 'check', why: d.why ?? '', phrases: await phrases(d.picks), ...(d.example ? { example: d.example } : {}) } : {}),
+      ...(d ? { draft: d.picks, defs: await defs(d.picks), conf: d.confidence ?? 'check', why: d.why ?? '', phrases: await phrases(d.picks), ...(d.example ? { example: d.example } : {}) } : {}),
     })
   }
   // Drafts for meanings the sheet doesn't list: everyday meanings Wiktionary lists late.
   for (const d of drafts.filter((x) => !used.has(x))) {
     page.push({
-      id: rowId(d.english, d.pos, d.meaning), english: d.english, pos: d.pos, meaning: d.meaning, ranked: [], table: '', current: '',
-      kind: 'draft', draft: d.picks, conf: d.confidence ?? 'check', why: d.why ?? '', phrases: await phrases(d.picks),
+      id: rowId(d.english, d.pos, d.meaning), english: d.english, pos: d.pos, meaning: d.meaning, ranked: [], rankedDefs: [], table: '', current: '',
+      kind: 'draft', draft: d.picks, defs: await defs(d.picks), conf: d.confidence ?? 'check', why: d.why ?? '', phrases: await phrases(d.picks),
       extra: true, first: Boolean(d.first), ...(d.example ? { example: d.example } : {}),
     })
   }
@@ -164,6 +179,7 @@ async function reviewPage(lang: string, rows: SheetRow[], wordCount: number, out
     __LANG_NAME__: meta.name,
     __LANG__: lang,
     __REGION_EXAMPLE__: regionExample,
+    __APPLY_COMMAND__: `/word-review ${lang} ${wordCount} apply`,
     __ROWS__: JSON.stringify(page).replace(/<\//g, '<\\/'),
   }
   const html = template.replace(/__[A-Z_]+__/g, (k) => fill[k] ?? k)

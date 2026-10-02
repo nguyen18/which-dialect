@@ -44,6 +44,14 @@
 body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
 .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; }
 h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px 20px; flex-wrap: wrap; }
+.apply { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; max-width: 340px; }
+.apply-btn { background: var(--violet); border-color: var(--violet); color: var(--sheet); font-weight: 600; }
+.apply-btn:hover { filter: brightness(1.08); }
+.apply-panel { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+.apply-panel p { margin: 0 0 6px; }
+.apply-panel code { display: block; font-family: var(--font-mono); font-size: 13px; padding: 6px 8px; border-radius: 6px; background: var(--violet-soft); color: var(--violet); user-select: all; overflow-x: auto; white-space: nowrap; }
+@media (max-width: 720px) { .apply { align-items: flex-start; max-width: none; } }
 .lede { color: var(--muted); max-width: 68ch; margin: 10px 0 0; }
 .lede b { color: var(--ink); font-weight: 600; }
 
@@ -82,13 +90,21 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 .now .label, .pick .label { min-width: 74px; }
 .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 .now .vi { color: var(--muted); }
-.drafted .now .vi:first-of-type { text-decoration: line-through; text-decoration-color: var(--violet); text-decoration-thickness: 2px; }
+.drafted .now .label + .def .def-word { text-decoration: line-through; text-decoration-color: var(--violet); text-decoration-thickness: 2px; }
 .vi { font-size: 16px; }
 .arrow { color: var(--violet); font-weight: 700; }
 .pick { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .pick input { font: inherit; font-size: 16px; font-weight: 600; color: var(--violet); flex: 1 1 220px; min-width: 0; padding: 6px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--sheet); }
 .pick input::placeholder { color: var(--muted); font-weight: 400; font-size: 14px; }
 .why { font-size: 14px; }
+.means { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.means .label { min-width: 74px; }
+.def { position: relative; display: inline-flex; align-items: baseline; }
+.def-word { font: inherit; font-size: 16px; color: inherit; background: none; border: 0; padding: 0; cursor: help; text-decoration: underline dotted; text-decoration-color: var(--muted); text-underline-offset: 4px; }
+.def-word.no-def { cursor: default; text-decoration: none; }
+.comma { color: var(--muted); }
+.def-tip { display: none; position: absolute; left: 0; top: calc(100% + 6px); z-index: 4; width: max-content; max-width: min(300px, calc(100vw - 48px)); padding: 8px 10px; border-radius: 8px; background: var(--ink); color: var(--paper); font-size: 13px; line-height: 1.45; font-weight: 400; box-shadow: 0 6px 18px rgb(0 0 0 / .18); }
+.def:hover .def-tip, .def-word:focus-visible + .def-tip, .def.open .def-tip { display: block; }
 .example { display: flex; gap: 8px; align-items: baseline; }
 .example .label { min-width: 74px; }
 .ex-lines { display: flex; flex-direction: column; gap: 2px; padding-left: 10px; border-left: 2px solid var(--violet-soft); }
@@ -115,7 +131,16 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 </style>
 
 <div class="wrap">
-  <h1>__HEADING__</h1>
+  <div class="head">
+    <h1>__HEADING__</h1>
+    <div class="apply">
+      <button class="btn apply-btn" id="apply" type="button">Apply decisions</button>
+      <div class="apply-panel" id="applyPanel" hidden>
+        <p id="applyMsg"></p>
+        <code id="applyCmd">__APPLY_COMMAND__</code>
+      </div>
+    </div>
+  </div>
   <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> makes it the first choice. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>), then press Use suggestion. Your choices save as you go.</p>
   <div id="dbnote" class="note-db" hidden>Your choices can’t be saved in this view, so they’ll only last until you close the page. Open it on claude.ai while signed in to save them.</div>
 
@@ -163,6 +188,31 @@ function matches(r) {
   return [r.english, r.meaning, ...(r.ranked || []), ...(r.draft || []), d?.picks || ''].some((s) => s.toLowerCase().includes(q));
 }
 
+// A target-language word whose definition shows on hover, keyboard focus, or tap (phones have no hover).
+function defWord(w, def, comma) {
+  const wrap = text('span', 'def');
+  const b = text('button', 'vi def-word', w);
+  b.type = 'button';
+  b.lang = LANG;
+  wrap.append(b);
+  if (def) {
+    const tip = text('span', 'def-tip', def);
+    tip.setAttribute('role', 'tooltip');
+    tip.id = 'tip-' + Math.random().toString(36).slice(2, 9);
+    b.setAttribute('aria-describedby', tip.id);
+    wrap.append(tip);
+    b.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = !wrap.classList.contains('open');
+      document.querySelectorAll('.def.open').forEach((x) => x.classList.remove('open'));
+      wrap.classList.toggle('open', open);
+    });
+  } else b.classList.add('no-def');
+  if (comma) wrap.append(text('span', 'comma', ','));
+  return wrap;
+}
+document.addEventListener('click', () => document.querySelectorAll('.def.open').forEach((x) => x.classList.remove('open')));
+
 function rowEl(r) {
   const d = decisions.get(r.id);
   const el = text('article', 'row' + (r.draft ? ' drafted' : ''));
@@ -182,7 +232,7 @@ function rowEl(r) {
   const compare = text('div', 'compare');
   const now = text('div', 'now');
   now.append(text('span', 'label', 'Current'));
-  if (r.ranked?.length) r.ranked.forEach((w, i) => { const s = text('span', 'vi', w + (i < r.ranked.length - 1 ? ',' : '')); s.lang = LANG; now.append(s); });
+  if (r.ranked?.length) r.ranked.forEach((w, i) => now.append(defWord(w, r.rankedDefs?.[i], i < r.ranked.length - 1)));
   else now.append(text('span', 'vi', r.extra ? 'not in the first meanings yet' : '—'));
   compare.append(now);
   body.append(compare);
@@ -203,6 +253,12 @@ function rowEl(r) {
   });
   pick.append(input);
   body.append(pick);
+  if (r.draft?.length) {
+    const means = text('div', 'means');
+    means.append(text('span', 'label', 'Meanings'));
+    r.draft.forEach((w, i) => means.append(defWord(w, r.defs?.[w] || (r.phrases?.includes(w) ? 'A phrase, not a dictionary entry.' : ''), i < r.draft.length - 1)));
+    body.append(means);
+  }
   if (r.example) {
     const ex = text('div', 'example');
     ex.append(text('span', 'label', 'Example'));
@@ -273,6 +329,19 @@ async function decide(r, d) {
     setSave(e?.code === 'invalid_argument' ? 'You can view this sheet but not save to it.' : 'Couldn’t save. Try that row again.', true);
   }
 }
+
+// Apply: the page can't run Claude Code, so it marks the review ready (in the db, for the skill to see) and
+// copies the command that applies it.
+$('apply').addEventListener('click', async () => {
+  const cmd = $('applyCmd').textContent;
+  let copied = false;
+  try { await navigator.clipboard.writeText(cmd); copied = true; } catch {}
+  $('applyMsg').textContent = (copied ? 'Copied. ' : '') + 'Paste this into Claude Code in the which-dialect repo to apply your ' + decisions.size + (decisions.size === 1 ? ' decision:' : ' decisions:');
+  $('applyPanel').hidden = false;
+  if (db) {
+    try { await db.doc('review/status').set({ ready: true, decided: decisions.size, at: new Date().toISOString() }); } catch {}
+  }
+});
 
 document.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', () => {
   state.tab = b.dataset.tab; state.shown = PAGE;
