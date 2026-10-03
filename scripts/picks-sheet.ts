@@ -213,7 +213,7 @@ async function applyDecisions(lang: string, path: string) {
         const dir = existsSync(join(path, 'decisions')) ? join(path, 'decisions') : path
         return (await readdir(dir)).filter((f) => f.endsWith('.json')).map((f) => join(dir, f))
       })()
-  const docs: { status: string; picks?: string; english: string; pos: string; meaning: string }[] = []
+  const docs: { status: string; picks?: string; drop?: string; english: string; pos: string; meaning: string }[] = []
   for (const f of files) {
     const v = JSON.parse(await readFile(f, 'utf8'))
     docs.push(...(Array.isArray(v) ? v : [v.data ?? v]))
@@ -223,11 +223,15 @@ async function applyDecisions(lang: string, path: string) {
   let kept = 0
   for (const d of docs.sort((a, b) => a.english.localeCompare(b.english))) {
     if (d.status === 'reject') kept++
-    if ((d.status !== 'accept' && d.status !== 'edit') || !d.picks?.trim()) continue
+    // Words removed on the page for this meaning (not shown for it once the translator supports `exclude`).
+    const exclude = (d.drop ?? '').split('/').map((w) => w.trim()).filter(Boolean)
+    if ((d.status !== 'accept' && d.status !== 'edit') || (!d.picks?.trim() && !exclude.length)) continue
     const draft = drafts.find((x) => x.english === d.english && x.pos === d.pos && d.meaning.startsWith(x.meaning))
     const first = draft?.first ? ', first: true' : ''
     const note = draft?.why && d.status === 'accept' ? `\n      note: ${JSON.stringify(draft.why)},` : ''
-    out.push(`    {\n      word: ${JSON.stringify(d.english)}, pos: ${JSON.stringify(d.pos)}, gloss: ${glossPattern(d.meaning)}, picks: [${pickLiterals(d.picks).join(', ')}]${first},${note}\n    },`)
+    const picks = d.picks?.trim() ? pickLiterals(d.picks).join(', ') : ''
+    const ex = exclude.length ? `, exclude: ${JSON.stringify(exclude)}` : ''
+    out.push(`    {\n      word: ${JSON.stringify(d.english)}, pos: ${JSON.stringify(d.pos)}, gloss: ${glossPattern(d.meaning)}, picks: [${picks}]${ex}${first},${note}\n    },`)
   }
   console.log(`// ${out.length} picks from ${docs.length} decisions (${kept} kept as they are). Paste into languages/${lang}.ts \`picks\`, then rebuild.`)
   console.log(out.join('\n'))

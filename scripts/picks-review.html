@@ -108,6 +108,10 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 .nudge:hover:not(:disabled) { background: var(--rule); color: var(--ink); }
 .nudge:disabled { opacity: .25; cursor: default; }
 .nudge.drop { font-size: 12px; }
+.removed-row { display: flex; gap: 6px; flex-wrap: wrap; flex-basis: 100%; padding-left: 82px; }
+.chip-word.removed { cursor: default; opacity: .7; background: none; border-style: dashed; }
+.chip-word.removed .chip-text { text-decoration: line-through; color: var(--muted); }
+@media (max-width: 720px) { .removed-row { padding-left: 0; } }
 .sortable-ghost { opacity: .35; }
 .sortable-chosen { box-shadow: 0 4px 12px rgb(0 0 0 / .15); }
 .region { font-size: 11px; font-weight: 600; letter-spacing: .03em; color: var(--violet); background: var(--violet-soft); border-radius: 99px; padding: 0 7px; margin-left: 5px; align-self: center; }
@@ -155,7 +159,7 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
       </div>
     </div>
   </div>
-  <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> moves it to the top; today’s words stay after it, as the “Order” line shows. To change the order, drag the words in that line, or use their ‹ › buttons; ✕ takes a suggested word out. To reorder only today’s words, press Keep current, then rearrange them. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>), then press Use suggestion. Put the general word first: a word tagged for a region goes first only for learners of that region, and learners of general __LANG_NAME__ get the words in the order listed. Your choices save as you go.</p>
+  <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> moves it to the top; today’s words stay after it, as the “Order” line shows. To change the order, drag the words in that line, or use their ‹ › buttons; ✕ takes a word out (a removed current word won’t be shown for this meaning; ↺ brings it back). To reorder only today’s words, press Keep current, then rearrange them. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>), then press Use suggestion. Put the general word first: a word tagged for a region goes first only for learners of that region, and learners of general __LANG_NAME__ get the words in the order listed. Your choices save as you go.</p>
   <div id="dbnote" class="note-db" hidden>Your choices can’t be saved in this view, so they’ll only last until you close the page. Open it on claude.ai while signed in to save them.</div>
 
   <div class="bar">
@@ -260,77 +264,97 @@ function rowEl(r) {
   // A decided row shows the words decided on (the draft may have changed since); a row kept as it is shows
   // none, so its Order line is today's words alone, ready to rearrange.
   input.value = d?.status === 'reject' ? '' : d?.picks || draftText(r);
-  if (r.draft) input.placeholder = 'Keeping the current words. Type words here, or rearrange them below.';
-  input.placeholder = r.draft ? '' : 'Type a better first choice, if any';
+  input.placeholder = r.draft ? 'Keeping the current words. Type words here, or rearrange them below.' : 'Type a better first choice, if any';
   input.setAttribute('aria-label', `First choice for “${r.english}” (${r.pos})`);
   input.addEventListener('change', () => {
     const v = input.value.trim();
     if (!v && !r.draft) return decide(r, null);
-    if (r.draft && v === draftText(r)) return decide(r, { status: 'accept', picks: v });
-    decide(r, { status: 'edit', picks: v });
+    const kept = d?.drop ? { drop: d.drop } : {};
+    if (r.draft && v === draftText(r) && !d?.drop) return decide(r, { status: 'accept', picks: v });
+    decide(r, { status: 'edit', picks: v, ...kept });
   });
   pick.append(input);
   body.append(pick);
   // The resulting order, as chips to rearrange: the picked words first, then today's words in their order
-  // (a pick moves words up; it removes none). Drag a chip (mouse or touch) or use its ‹ › buttons; the box
-  // above follows, and the new order is saved as this row's decision.
+  // (a pick moves words up). Drag a chip (mouse or touch) or use its ‹ › buttons; ✕ takes a word out (a
+  // suggested word leaves the picks; a current word is removed from this meaning, ↺ brings it back). The box
+  // above follows, and the result is saved as this row's decision.
   const order = text('div', 'order');
-  const orderRow = text('div', 'orderRow-row');
+  const orderRow = text('div', 'chips-row');
   orderRow.setAttribute('aria-label', `Word order for “${r.english}”`);
   const parse = (v) => v.split('/').map((p) => p.trim()).filter(Boolean);
   const bareOf = (p) => p.replace(/\s*\([^)]*\)\s*$/, '').trim();
+  let drops = parse(d?.drop || '');
+  const current = () => (r.ranked || []).filter((w) => !drops.includes(w));
   const fullOrder = () => {
     const picked = parse(input.value);
     const taken = new Set(picked.map(bareOf));
-    return [...picked, ...(r.ranked || []).filter((w) => !taken.has(w))];
+    return [...picked, ...current().filter((w) => !taken.has(w))];
   };
   // The picks for an order: its shortest start that, followed by today's other words in their usual order,
-  // gives the whole order (the rest would come anyway). Empty means today's order: keep current.
+  // gives the whole order (the rest would come anyway). No picks and nothing removed means keep current.
   const picksFor = (list) => {
     for (let k = 0; k <= list.length; k++) {
       const start = list.slice(0, k);
       const taken = new Set(start.map(bareOf));
-      const rebuilt = [...start, ...(r.ranked || []).filter((w) => !taken.has(w))];
+      const rebuilt = [...start, ...current().filter((w) => !taken.has(w))];
       if (rebuilt.join('\u0000') === list.join('\u0000')) return start;
     }
     return list;
   };
   const commit = (list) => {
     const picks = picksFor(list);
-    if (!picks.length) return decide(r, r.draft ? { status: 'reject', picks: '' } : null);
     const v = picks.join(' / ');
+    const drop = drops.join(' / ');
     input.value = v;
-    decide(r, { status: r.draft && v === draftText(r) ? 'accept' : 'edit', picks: v });
+    if (!picks.length && !drops.length) return decide(r, r.draft ? { status: 'reject', picks: '' } : null);
+    decide(r, { status: r.draft && v === draftText(r) && !drops.length ? 'accept' : 'edit', picks: v, ...(drops.length ? { drop } : {}) });
+  };
+  const chipFor = (p, i, list, picked) => {
+    const chip = text('span', 'chip-word' + (picked.has(p) ? ' moved' : ''));
+    chip.dataset.pick = p;
+    const left = text('button', 'nudge', '‹'); left.type = 'button'; left.disabled = i === 0;
+    left.setAttribute('aria-label', `Move ${bareOf(p)} earlier`);
+    const right = text('button', 'nudge', '›'); right.type = 'button'; right.disabled = i === list.length - 1;
+    right.setAttribute('aria-label', `Move ${bareOf(p)} later`);
+    const w = text('span', 'chip-text', bareOf(p)); w.lang = LANG;
+    chip.append(left, w);
+    const tag = /\(([^)]*)\)\s*$/.exec(p);
+    if (tag) chip.append(text('span', 'region', tag[1]));
+    chip.append(right);
+    const x = text('button', 'nudge drop', '✕'); x.type = 'button';
+    x.setAttribute('aria-label', picked.has(p) ? `Take ${bareOf(p)} out of the picks` : `Remove ${bareOf(p)} for this meaning`);
+    x.addEventListener('click', () => {
+      // A current word is removed for this meaning; a suggested or typed word just leaves the picks.
+      if (!picked.has(p) && (r.ranked || []).includes(p)) drops = [...drops, p];
+      commit(list.filter((y) => y !== p));
+    });
+    chip.append(x);
+    const move = (to) => { const next = [...list]; next.splice(i, 1); next.splice(to, 0, p); commit(next); };
+    left.addEventListener('click', () => move(i - 1));
+    right.addEventListener('click', () => move(i + 1));
+    return chip;
+  };
+  const removedChip = (w) => {
+    const chip = text('span', 'chip-word removed');
+    const t = text('span', 'chip-text', w); t.lang = LANG;
+    const undo = text('button', 'nudge', '↺'); undo.type = 'button';
+    undo.setAttribute('aria-label', `Bring ${w} back`);
+    undo.addEventListener('click', () => { drops = drops.filter((x) => x !== w); commit(fullOrder()); });
+    chip.append(t, undo);
+    return chip;
   };
   const draw = () => {
     const list = fullOrder();
     const picked = new Set(parse(input.value));
-    order.hidden = list.length < 2 && !picked.size;
-    orderRow.replaceChildren(...list.map((p, i) => {
-      const chip = text('span', 'chip-word' + (picked.has(p) ? ' moved' : ''));
-      chip.dataset.pick = p;
-      const left = text('button', 'nudge', '‹'); left.type = 'button'; left.disabled = i === 0;
-      left.setAttribute('aria-label', `Move ${bareOf(p)} earlier`);
-      const right = text('button', 'nudge', '›'); right.type = 'button'; right.disabled = i === list.length - 1;
-      right.setAttribute('aria-label', `Move ${bareOf(p)} later`);
-      const w = text('span', 'chip-text', bareOf(p)); w.lang = LANG;
-      chip.append(left, w);
-      const tag = /\(([^)]*)\)\s*$/.exec(p);
-      if (tag) chip.append(text('span', 'region', tag[1]));
-      chip.append(right);
-      if (picked.has(p)) {
-        const drop = text('button', 'nudge drop', '✕'); drop.type = 'button';
-        drop.setAttribute('aria-label', `Remove ${bareOf(p)} from the order`);
-        drop.addEventListener('click', () => commit(list.filter((x) => x !== p)));
-        chip.append(drop);
-      }
-      const move = (to) => { const next = [...list]; next.splice(i, 1); next.splice(to, 0, p); commit(next); };
-      left.addEventListener('click', () => move(i - 1));
-      right.addEventListener('click', () => move(i + 1));
-      return chip;
-    }));
+    order.hidden = !list.length && !drops.length;
+    orderRow.replaceChildren(...list.map((p, i) => chipFor(p, i, list, picked)));
+    removedRow.replaceChildren(...drops.map(removedChip));
+    removedRow.hidden = !drops.length;
   };
-  order.append(text('span', 'label', 'Order'), orderRow);
+  const removedRow = text('div', 'removed-row');
+  removedRow.setAttribute('aria-label', 'Removed words');
+  order.append(text('span', 'label', 'Order'), orderRow, removedRow);
   input.addEventListener('input', draw);
   draw();
   if (window.Sortable) {
@@ -373,7 +397,7 @@ function rowEl(r) {
   accept.addEventListener('click', () => {
     const v = input.value.trim();
     if (!v) return;
-    decide(r, { status: r.draft && v === draftText(r) ? 'accept' : 'edit', picks: v });
+    decide(r, { status: r.draft && v === draftText(r) && !d?.drop ? 'accept' : 'edit', picks: v, ...(d?.drop ? { drop: d.drop } : {}) });
   });
   const reject = text('button', 'btn reject', 'Keep current');
   reject.type = 'button';
@@ -409,7 +433,7 @@ function setSave(msg, error) { const s = $('save'); s.textContent = msg; s.class
 
 async function decide(r, d) {
   const before = decisions.get(r.id);
-  if ((d?.status ?? null) === (before?.status ?? null) && (d?.picks ?? '') === (before?.picks ?? '')) return;
+  if ((d?.status ?? null) === (before?.status ?? null) && (d?.picks ?? '') === (before?.picks ?? '') && (d?.drop ?? '') === (before?.drop ?? '')) return;
   if (d) decisions.set(r.id, d); else decisions.delete(r.id);
   const el = document.querySelector(`.row[data-id="${r.id}"]`);
   if (el) el.replaceWith(rowEl(r));
@@ -456,7 +480,7 @@ render();
   if (!db) { $('dbnote').hidden = false; return; }
   db.collection('decisions').onSnapshot((snap) => {
     decisions.clear();
-    for (const doc of snap.docs) { const v = doc.data(); if (v?.status) decisions.set(doc.id, { status: v.status, picks: v.picks || '' }); }
+    for (const doc of snap.docs) { const v = doc.data(); if (v?.status) decisions.set(doc.id, { status: v.status, picks: v.picks || '', ...(v.drop ? { drop: v.drop } : {}) }); }
     // Keep a row the viewer is typing in; redraw the rest.
     if (document.activeElement?.tagName === 'INPUT' && document.activeElement.id.startsWith('pick-')) counts(); else render();
   }, () => setSave('Live updates stopped. Reload to see the latest.', true));
