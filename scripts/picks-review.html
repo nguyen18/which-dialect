@@ -96,10 +96,19 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 .pick input { font: inherit; font-size: 16px; font-weight: 600; color: var(--violet); flex: 1 1 220px; min-width: 0; padding: 6px 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--sheet); }
 .pick input::placeholder { color: var(--muted); font-weight: 400; font-size: 14px; }
 .why { font-size: 14px; }
-.after { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; font-size: 15px; }
-.after .label { min-width: 74px; }
-.after .moved { color: var(--violet); font-weight: 600; }
-.after .kept { color: var(--muted); }
+.order { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.order .label { min-width: 74px; }
+.chips-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip-word { display: inline-flex; align-items: center; gap: 2px; padding: 2px 4px; border: 1px solid var(--rule); border-radius: 8px; background: var(--sheet); cursor: grab; user-select: none; }
+.chip-word.moved { border-color: var(--violet); background: var(--violet-soft); }
+.chip-word.moved .chip-text { color: var(--violet); font-weight: 600; }
+.chip-text { font-size: 15px; padding: 0 2px; }
+.chip-word .region { margin-left: 2px; }
+.nudge { font: inherit; font-size: 15px; line-height: 1; width: 22px; height: 24px; border: 0; border-radius: 6px; background: none; color: var(--muted); cursor: pointer; }
+.nudge:hover:not(:disabled) { background: var(--rule); color: var(--ink); }
+.nudge:disabled { opacity: .25; cursor: default; }
+.sortable-ghost { opacity: .35; }
+.sortable-chosen { box-shadow: 0 4px 12px rgb(0 0 0 / .15); }
 .region { font-size: 11px; font-weight: 600; letter-spacing: .03em; color: var(--violet); background: var(--violet-soft); border-radius: 99px; padding: 0 7px; margin-left: 5px; align-self: center; }
 .means { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .means .label { min-width: 74px; }
@@ -145,7 +154,7 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
       </div>
     </div>
   </div>
-  <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> moves it to the top; today’s words stay below it, as the “After” line shows. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>), then press Use suggestion. Put the general word first: a word tagged for a region goes first only for learners of that region, and learners of general __LANG_NAME__ get the words in the order listed. Your choices save as you go.</p>
+  <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> moves it to the top; today’s words stay after it, as the “Order” line shows. To change the order, drag the words in that line, or use their ‹ › buttons. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>), then press Use suggestion. Put the general word first: a word tagged for a region goes first only for learners of that region, and learners of general __LANG_NAME__ get the words in the order listed. Your choices save as you go.</p>
   <div id="dbnote" class="note-db" hidden>Your choices can’t be saved in this view, so they’ll only last until you close the page. Open it on claude.ai while signed in to save them.</div>
 
   <div class="bar">
@@ -170,6 +179,7 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
   <button class="btn more" id="more" hidden>Show more</button>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
 <script>
 const ROWS = __ROWS__;
 const LANG = '__LANG__';
@@ -258,22 +268,69 @@ function rowEl(r) {
   });
   pick.append(input);
   body.append(pick);
-  // What the list becomes: the picked words first, then today's words in their order (a pick moves words
-  // up; it doesn't remove any).
-  const after = text('div', 'after');
-  const showAfter = () => {
-    const picked = input.value.split('/').map((p) => p.replace(/\([^)]*\)/g, '').trim()).filter(Boolean);
-    after.replaceChildren(text('span', 'label', 'After'));
-    if (!picked.length) { after.hidden = true; return; }
-    after.hidden = false;
-    const rest = (r.ranked || []).filter((w) => !picked.includes(w));
-    [...picked.map((w) => [w, 'moved']), ...rest.map((w) => [w, 'kept'])].forEach(([w, cls], i, all) => {
-      const s = text('span', cls, w + (i < all.length - 1 ? ',' : '')); s.lang = LANG; after.append(s);
-    });
+  // The resulting order, as chips to rearrange: the picked words first, then today's words in their order
+  // (a pick moves words up; it removes none). Drag a chip (mouse or touch) or use its ‹ › buttons; the box
+  // above follows, and the new order is saved as this row's decision.
+  const order = text('div', 'order');
+  const orderRow = text('div', 'orderRow-row');
+  orderRow.setAttribute('aria-label', `Word order for “${r.english}”`);
+  const parse = (v) => v.split('/').map((p) => p.trim()).filter(Boolean);
+  const bareOf = (p) => p.replace(/\s*\([^)]*\)\s*$/, '').trim();
+  const fullOrder = () => {
+    const picked = parse(input.value);
+    const taken = new Set(picked.map(bareOf));
+    return [...picked, ...(r.ranked || []).filter((w) => !taken.has(w))];
   };
-  input.addEventListener('input', showAfter);
-  showAfter();
-  body.append(after);
+  // The picks for an order: its shortest start that, followed by today's other words in their usual order,
+  // gives the whole order (the rest would come anyway). Empty means today's order: keep current.
+  const picksFor = (list) => {
+    for (let k = 0; k <= list.length; k++) {
+      const start = list.slice(0, k);
+      const taken = new Set(start.map(bareOf));
+      const rebuilt = [...start, ...(r.ranked || []).filter((w) => !taken.has(w))];
+      if (rebuilt.join('\u0000') === list.join('\u0000')) return start;
+    }
+    return list;
+  };
+  const commit = (list) => {
+    const picks = picksFor(list);
+    if (!picks.length) return decide(r, r.draft ? { status: 'reject', picks: '' } : null);
+    const v = picks.join(' / ');
+    input.value = v;
+    decide(r, { status: r.draft && v === draftText(r) ? 'accept' : 'edit', picks: v });
+  };
+  const draw = () => {
+    const list = fullOrder();
+    const picked = new Set(parse(input.value));
+    order.hidden = list.length < 2 && !picked.size;
+    orderRow.replaceChildren(...list.map((p, i) => {
+      const chip = text('span', 'chip-word' + (picked.has(p) ? ' moved' : ''));
+      chip.dataset.pick = p;
+      const left = text('button', 'nudge', '‹'); left.type = 'button'; left.disabled = i === 0;
+      left.setAttribute('aria-label', `Move ${bareOf(p)} earlier`);
+      const right = text('button', 'nudge', '›'); right.type = 'button'; right.disabled = i === list.length - 1;
+      right.setAttribute('aria-label', `Move ${bareOf(p)} later`);
+      const w = text('span', 'chip-text', bareOf(p)); w.lang = LANG;
+      chip.append(left, w);
+      const tag = /\(([^)]*)\)\s*$/.exec(p);
+      if (tag) chip.append(text('span', 'region', tag[1]));
+      chip.append(right);
+      const move = (to) => { const next = [...list]; next.splice(i, 1); next.splice(to, 0, p); commit(next); };
+      left.addEventListener('click', () => move(i - 1));
+      right.addEventListener('click', () => move(i + 1));
+      return chip;
+    }));
+  };
+  order.append(text('span', 'label', 'Order'), orderRow);
+  input.addEventListener('input', draw);
+  draw();
+  if (window.Sortable) {
+    window.Sortable.create(orderRow, {
+      animation: 150, filter: '.nudge', preventOnFilter: false, delay: 120, delayOnTouchOnly: true,
+      onEnd: () => commit([...orderRow.children].map((c) => c.dataset.pick)),
+    });
+  }
+  body.append(order);
   if (r.draft?.length) {
     const means = text('div', 'means');
     means.append(text('span', 'label', 'Meanings'));
@@ -342,6 +399,8 @@ function counts() {
 function setSave(msg, error) { const s = $('save'); s.textContent = msg; s.classList.toggle('error', Boolean(error)); }
 
 async function decide(r, d) {
+  const before = decisions.get(r.id);
+  if ((d?.status ?? null) === (before?.status ?? null) && (d?.picks ?? '') === (before?.picks ?? '')) return;
   if (d) decisions.set(r.id, d); else decisions.delete(r.id);
   const el = document.querySelector(`.row[data-id="${r.id}"]`);
   if (el) el.replaceWith(rowEl(r));
