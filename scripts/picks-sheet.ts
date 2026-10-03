@@ -140,13 +140,15 @@ async function reviewPage(lang: string, rows: SheetRow[], wordCount: number, out
   const used = new Set<Draft>()
   const findDraft = (r: { english: string; pos: string; meaning: string }) =>
     drafts.find((d) => !used.has(d) && d.english === r.english && d.pos === r.pos && r.meaning.startsWith(d.meaning))
+  // A pick without its region tag: "thiệt (Southern)" → "thiệt".
+  const bare = (w: string) => w.replace(/\s*\([^)]*\)\s*$/, '').trim()
   // Picks that aren't headwords (phrases like "bữa tối"), so the reviewer knows.
   const phrases = async (words: string[]) =>
-    (await Promise.all(words.map(async (w) => ((await target.lookup(w)).some((e) => e.word === w) ? null : w)))).filter((w) => w !== null)
+    (await Promise.all(words.map(bare).map(async (w) => ((await target.lookup(w)).some((e) => e.word === w) ? null : w)))).filter((w) => w !== null)
   // Each drafted word's main definitions, to compare with the current words' (shown on hover or tap).
   const defs = async (words: string[]) => {
     const out: Record<string, string> = {}
-    for (const w of words) {
+    for (const w of words.map(bare)) {
       const glosses = (await target.lookup(w)).filter((e) => e.word === w).flatMap((e) => e.senses.map((s) => s.glosses[s.glosses.length - 1]))
       if (glosses.length) out[w] = [...new Set(glosses)].slice(0, 3).join(' · ')
     }
@@ -171,7 +173,11 @@ async function reviewPage(lang: string, rows: SheetRow[], wordCount: number, out
     })
   }
   const template = await readFile(join(ROOT, 'scripts', 'picks-review.html'), 'utf8')
-  const regionExample = meta.regions.length > 1 ? `word (${meta.regions[meta.regions.length - 1]}) / word` : 'word / other word'
+  // The first regional pick in the drafts, else a placeholder: "thật / thiệt (Southern)".
+  const tagged = drafts.find((d) => d.picks.some((p) => /\([^)]*\)\s*$/.test(p)))
+  const regionExample = tagged
+    ? [tagged.picks[0], tagged.picks.find((p) => /\([^)]*\)\s*$/.test(p))].join(' / ')
+    : meta.regions.length > 1 ? `word / regional word (${meta.regions[meta.regions.length - 1]})` : 'word / other word'
   const fill: Record<string, string> = {
     __TITLE__: `${meta.name} Everyday Words Review`,
     __HEADING__: `Everyday words: ${meta.name} first choices`,

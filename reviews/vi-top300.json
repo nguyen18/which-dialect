@@ -547,10 +547,11 @@
    "meaning": "This place; this location.",
    "picks": [
     "đây",
-    "chỗ này"
+    "chỗ này",
+    "ni (Central)"
    ],
-   "confidence": "sure",
-   "why": "\"here\" = đây / chỗ này; địa điểm is \"location\" (formal)",
+   "confidence": "check",
+   "why": "\"here\" = đây / chỗ này; địa điểm is \"location\" (formal). Central speech says ni (\"ở ni\").",
    "example": {
     "en": "Come here.",
     "target": "Lại đây."
@@ -562,10 +563,11 @@
    "meaning": "In a way or manner that is real, not unreal.",
    "picks": [
     "thật sự",
-    "thực sự"
+    "thực sự",
+    "thiệt (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"really (truly)\" = thật sự; dữ is \"fierce/intense\" (slang)",
+   "confidence": "check",
+   "why": "\"really (truly)\" = thật sự; dữ is \"fierce/intense\" (slang). Southern speech says thiệt (\"thiệt hả?\").",
    "example": {
     "en": "Did that really happen?",
     "target": "Chuyện đó có thật sự xảy ra không?"
@@ -577,10 +579,11 @@
    "meaning": "Actually; in fact; in reality.",
    "picks": [
     "thật ra",
-    "thực ra"
+    "thực ra",
+    "thiệt ra (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"really (in fact)\" = thật ra",
+   "confidence": "check",
+   "why": "\"really (in fact)\" = thật ra. Southern speech says thiệt ra.",
    "example": {
     "en": "It's really not that hard.",
     "target": "Thật ra nó không khó lắm."
@@ -593,10 +596,11 @@
    "picks": [
     "thật",
     "rất",
-    "quá"
+    "quá",
+    "thiệt (Southern)"
    ],
    "confidence": "check",
-   "why": "\"really (very)\" good = thật / rất",
+   "why": "\"really (very)\" good = thật / rất. Southern speech says thiệt (\"ngon thiệt\").",
    "example": {
     "en": "This food is really good.",
     "target": "Món này ngon thật."
@@ -637,10 +641,11 @@
    "picks": [
     "tại sao",
     "vì sao",
-    "sao"
+    "sao",
+    "răng (Central)"
    ],
-   "confidence": "sure",
-   "why": "\"why\" = tại sao / vì sao",
+   "confidence": "check",
+   "why": "\"why\" = tại sao / vì sao. Central speech says răng (\"răng rứa?\").",
    "example": {
     "en": "Why are you sad?",
     "target": "Tại sao bạn buồn?"
@@ -798,10 +803,11 @@
    "meaning": "Taking much space; large.",
    "picks": [
     "lớn",
-    "to"
+    "to",
+    "bự (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"great (large)\" = lớn / to; rộng is \"wide\"",
+   "confidence": "check",
+   "why": "\"great (large)\" = lớn / to; rộng is \"wide\". Southern speech says bự (casual).",
    "example": {
     "en": "A great tree stood by the river.",
     "target": "Một cái cây lớn đứng bên bờ sông."
@@ -842,11 +848,13 @@
    "pos": "noun",
    "meaning": "An uncertain duration of time, a period of time.",
    "picks": [
+    "một lúc",
     "lúc",
-    "một lúc"
+    "một lát (Northern)",
+    "một chút (Southern)"
    ],
    "confidence": "check",
-   "why": "\"a while\" = một lúc",
+   "why": "\"a while\" = một lúc. Northern speech often says một lát, Southern một chút.",
    "example": {
     "en": "Wait a while.",
     "target": "Chờ một lúc nhé."
@@ -990,10 +998,10 @@
    "meaning": "To give an appearance of being.",
    "picks": [
     "trông",
-    "nhìn"
+    "nhìn (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"look (happy)\" = trông (vui)",
+   "confidence": "check",
+   "why": "\"look (happy)\" = trông (vui). Southern speech says nhìn (\"nhìn mệt quá\").",
    "example": {
     "en": "You look tired.",
     "target": "Trông bạn mệt quá."
@@ -1005,10 +1013,10 @@
    "meaning": "To search for, to try to find.",
    "picks": [
     "tìm",
-    "kiếm"
+    "kiếm (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"look for\" = tìm; lùng is \"hunt down\"",
+   "confidence": "check",
+   "why": "\"look for\" = tìm; lùng is \"hunt down\". Southern speech often says kiếm (\"kiếm chìa khóa\").",
    "example": {
     "en": "I'm looking for my keys.",
     "target": "Tôi đang tìm chìa khóa."
@@ -1035,10 +1043,10 @@
    "meaning": "To move nearer to the point of perspective.",
    "picks": [
     "đến",
-    "tới"
+    "tới (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"come\" = đến / tới; lại is \"come over (here)\" only",
+   "confidence": "check",
+   "why": "\"come\" = đến / tới; lại is \"come over (here)\" only. Southern speech prefers tới.",
    "example": {
     "en": "Come to my house tomorrow.",
     "target": "Ngày mai đến nhà tôi nhé."
@@ -1197,10 +1205,10 @@
    "meaning": "Nearest in place or position, having nothing similar intervening; adjoining.",
    "picks": [
     "bên cạnh",
-    "kế bên"
+    "kế bên (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"next to\" = bên cạnh",
+   "confidence": "check",
+   "why": "\"next to\" = bên cạnh. Southern speech prefers kế bên.",
    "example": {
     "en": "The bank is next to the market.",
     "target": "Ngân hàng ở bên cạnh chợ."
@@ -1244,10 +1252,11 @@
    "picks": [
     "cho xem",
     "chỉ",
-    "trưng bày"
+    "trưng bày",
+    "cho coi (Southern)"
    ],
    "confidence": "check",
-   "why": "\"show (me)\" = cho (tôi) xem",
+   "why": "\"show (me)\" = cho (tôi) xem. Southern speech says cho coi.",
    "example": {
     "en": "Show me your photos.",
     "target": "Cho tôi xem hình của bạn."
@@ -1289,11 +1298,11 @@
    "meaning": "Yes; of course.",
    "picks": [
     "được",
-    "ừ",
-    "chắc chắn rồi"
+    "ừ (Northern)",
+    "ờ (Southern)"
    ],
    "confidence": "check",
-   "why": "\"Sure!\" = được / ừ",
+   "why": "\"Sure!\" = được / ừ. Northern speech says ừ, Southern ờ.",
    "example": {
     "en": "Can you help me? Sure!",
     "target": "Bạn giúp tôi được không? Được!"
@@ -1495,10 +1504,11 @@
    "meaning": "Genuine, not artificial, counterfeit, or fake.",
    "picks": [
     "thật",
-    "xịn"
+    "xịn",
+    "thiệt (Southern)"
    ],
    "confidence": "check",
-   "why": "\"real (genuine)\" = thật; xịn is slang",
+   "why": "\"real (genuine)\" = thật; xịn is slang. Southern speech says thiệt.",
    "example": {
     "en": "Is this real leather?",
     "target": "Đây có phải da thật không?"
@@ -1716,10 +1726,11 @@
    "meaning": "Any object, act, state, event, or fact whatsoever; a thing of any kind; something or other.",
    "picks": [
     "bất cứ thứ gì",
-    "gì"
+    "gì",
+    "chi (Central)"
    ],
    "confidence": "check",
-   "why": "\"anything\" = bất cứ thứ gì / (không) gì",
+   "why": "\"anything\" = bất cứ thứ gì / (không) gì. Central speech says chi.",
    "example": {
     "en": "Do you need anything?",
     "target": "Bạn có cần gì không?"
@@ -1731,10 +1742,11 @@
    "meaning": "An absence of anything, including empty space, brightness, darkness, matter, or a vacuum.",
    "picks": [
     "không có gì",
-    "hư không"
+    "hư không",
+    "không có chi (Central)"
    ],
-   "confidence": "sure",
-   "why": "\"nothing\" = không có gì; the ranking gave a vulgar word first",
+   "confidence": "check",
+   "why": "\"nothing\" = không có gì; the ranking gave a vulgar word first. Central speech says không có chi.",
    "example": {
     "en": "There is nothing in the box.",
     "target": "Không có gì trong hộp cả."
@@ -2001,10 +2013,10 @@
    "meaning": "To visit.",
    "picks": [
     "thăm",
-    "ghé"
+    "ghé (Southern)"
    ],
    "confidence": "check",
-   "why": "\"call (visit)\" = thăm / ghé",
+   "why": "\"call (visit)\" = thăm / ghé. Southern speech prefers ghé (\"ghé nhà bà\").",
    "example": {
     "en": "I'll call on my grandma tomorrow.",
     "target": "Ngày mai tôi sẽ ghé thăm bà."
@@ -2016,10 +2028,10 @@
    "meaning": "Young, as a child.",
    "picks": [
     "nhỏ",
-    "bé"
+    "bé (Northern)"
    ],
    "confidence": "check",
-   "why": "\"small (young)\" = nhỏ / bé; em is \"younger sibling\"",
+   "why": "\"small (young)\" = nhỏ / bé; em is \"younger sibling\". Northern speech often says bé (\"hồi còn bé\").",
    "example": {
     "en": "When I was small, we lived in Huế.",
     "target": "Hồi tôi còn nhỏ, nhà tôi sống ở Huế."
@@ -2119,10 +2131,11 @@
    "picks": [
     "sau",
     "sau này",
-    "lát nữa"
+    "lát nữa (Northern)",
+    "chút nữa (Southern)"
    ],
    "confidence": "check",
-   "why": "\"later\" = sau / lát nữa",
+   "why": "\"later\" = sau / lát nữa. Northern speech says lát nữa, Southern chút nữa.",
    "example": {
     "en": "See you later.",
     "target": "Lát nữa gặp lại nhé."
@@ -2280,10 +2293,10 @@
    "meaning": "To express appreciation or gratitude toward (someone or something).",
    "picks": [
     "cảm ơn",
-    "cám ơn"
+    "cám ơn (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"thank\" = cảm ơn (more common now) / cám ơn",
+   "confidence": "check",
+   "why": "\"thank\" = cảm ơn (more common now) / cám ơn. Southern speech often says cám ơn.",
    "example": {
     "en": "Thank your grandma for the gift.",
     "target": "Cảm ơn bà về món quà đi con."
@@ -2417,10 +2430,11 @@
    "meaning": "The main meal of the day, often eaten in the evening.",
    "picks": [
     "bữa tối",
-    "cơm tối"
+    "cơm tối",
+    "cơm chiều (Southern)"
    ],
-   "confidence": "sure",
-   "why": "Your example: \"dinner\" = bữa tối; tiệc is \"a party / banquet\"",
+   "confidence": "check",
+   "why": "Your example: \"dinner\" = bữa tối; tiệc is \"a party / banquet\". Some Southern speakers say cơm chiều.",
    "example": {
     "en": "What's for dinner?",
     "target": "Bữa tối ăn gì?"
@@ -2432,10 +2446,11 @@
    "meaning": "An evening meal.",
    "picks": [
     "bữa tối",
-    "cơm tối"
+    "cơm tối",
+    "cơm chiều (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"dinner\" = bữa tối",
+   "confidence": "check",
+   "why": "\"dinner\" = bữa tối. Some Southern speakers say cơm chiều.",
    "example": {
     "en": "We had dinner at 7.",
     "target": "Chúng tôi ăn bữa tối lúc 7 giờ."
@@ -2462,10 +2477,10 @@
    "meaning": "The first meal of the day, usually eaten in the morning.",
    "picks": [
     "bữa sáng",
-    "điểm tâm"
+    "điểm tâm (Southern)"
    ],
-   "confidence": "sure",
-   "why": "\"breakfast\" = bữa sáng (điểm tâm: Southern/formal)",
+   "confidence": "check",
+   "why": "\"breakfast\" = bữa sáng (điểm tâm: Southern/formal). điểm tâm is Southern (and a bit formal).",
    "example": {
     "en": "I skipped breakfast.",
     "target": "Tôi bỏ bữa sáng."
