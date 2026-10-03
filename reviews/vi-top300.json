@@ -209,10 +209,11 @@
    "pos": "adv",
    "meaning": "To what degree or extent.",
    "picks": [
-    "bao nhiêu"
+    "bao nhiêu",
+    "nhiêu (Southern)"
    ],
    "confidence": "check",
-   "why": "\"how (much/many)\" = bao nhiêu; bao alone is literary",
+   "why": "\"how (much/many)\" = bao nhiêu; bao alone is literary. Southern casual speech clips it to nhiêu (\"cái này nhiêu?\").",
    "example": {
     "en": "How old are you?",
     "target": "Bạn bao nhiêu tuổi?"
@@ -224,11 +225,13 @@
    "meaning": "In what manner",
    "picks": [
     "như thế nào",
-    "thế nào",
-    "làm sao"
+    "thế nào (Northern)",
+    "làm sao (Southern)",
+    "sao (Southern)",
+    "làm răng (Central)"
    ],
-   "confidence": "sure",
-   "why": "\"how (in what way)\" = như thế nào",
+   "confidence": "check",
+   "why": "\"how (in what way)\" = như thế nào. Northern speech says thế nào, Southern (làm) sao, Central làm răng.",
    "example": {
     "en": "How do you make phở?",
     "target": "Bạn nấu phở như thế nào?"
