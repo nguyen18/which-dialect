@@ -100,6 +100,7 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 .after .label { min-width: 74px; }
 .after .moved { color: var(--violet); font-weight: 600; }
 .after .kept { color: var(--muted); }
+.region { font-size: 11px; font-weight: 600; letter-spacing: .03em; color: var(--violet); background: var(--violet-soft); border-radius: 99px; padding: 0 7px; margin-left: 5px; align-self: center; }
 .means { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .means .label { min-width: 74px; }
 .def { position: relative; display: inline-flex; align-items: baseline; }
@@ -144,7 +145,7 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
       </div>
     </div>
   </div>
-  <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> moves it to the top; today’s words stay below it, as the “After” line shows. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>), then press Use suggestion. Your choices save as you go.</p>
+  <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> moves it to the top; today’s words stay below it, as the “After” line shows. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>), then press Use suggestion. Put the general word first: a word tagged for a region goes first only for learners of that region, and learners of general __LANG_NAME__ get the words in the order listed. Your choices save as you go.</p>
   <div id="dbnote" class="note-db" hidden>Your choices can’t be saved in this view, so they’ll only last until you close the page. Open it on claude.ai while signed in to save them.</div>
 
   <div class="bar">
@@ -245,7 +246,8 @@ function rowEl(r) {
   const input = document.createElement('input');
   input.id = 'pick-' + r.id;
   input.lang = LANG;
-  input.value = d?.status === 'edit' ? d.picks : draftText(r);
+  // A decided row shows the words decided on (the draft may have changed since).
+  input.value = d?.picks || draftText(r);
   input.placeholder = r.draft ? '' : 'Type a better first choice, if any';
   input.setAttribute('aria-label', `First choice for “${r.english}” (${r.pos})`);
   input.addEventListener('change', () => {
@@ -275,7 +277,14 @@ function rowEl(r) {
   if (r.draft?.length) {
     const means = text('div', 'means');
     means.append(text('span', 'label', 'Meanings'));
-    r.draft.forEach((w, i) => means.append(defWord(w, r.defs?.[w] || (r.phrases?.includes(w) ? 'A phrase, not a dictionary entry.' : ''), i < r.draft.length - 1)));
+    r.draft.forEach((pick, i) => {
+      // "thiệt (Southern)": the word, and the region it's first for.
+      const m = /^(.*?)\s*\(([^)]*)\)\s*$/.exec(pick);
+      const w = m ? m[1] : pick;
+      const el = defWord(w, r.defs?.[w] || (r.phrases?.includes(w) ? 'A phrase, not a dictionary entry.' : ''), i < r.draft.length - 1 && !m);
+      if (m) { el.append(text('span', 'region', m[2])); if (i < r.draft.length - 1) el.append(text('span', 'comma', ',')); }
+      means.append(el);
+    });
     body.append(means);
   }
   if (r.example) {
