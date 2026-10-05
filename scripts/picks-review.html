@@ -125,7 +125,7 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 .def-word { font: inherit; font-size: 16px; color: inherit; background: none; border: 0; padding: 0; cursor: help; text-decoration: underline dotted; text-decoration-color: var(--muted); text-underline-offset: 4px; }
 .def-word.no-def { cursor: default; text-decoration: none; }
 .comma { color: var(--muted); }
-.def-tip { display: none; position: absolute; left: 0; top: calc(100% + 6px); z-index: 4; width: max-content; max-width: min(300px, calc(100vw - 48px)); padding: 8px 10px; border-radius: 8px; background: var(--ink); color: var(--paper); font-size: 13px; line-height: 1.45; font-weight: 400; box-shadow: 0 6px 18px rgb(0 0 0 / .18); }
+.def-tip { white-space: pre-line; display: none; position: absolute; left: 0; top: calc(100% + 6px); z-index: 4; width: max-content; max-width: min(300px, calc(100vw - 48px)); padding: 8px 10px; border-radius: 8px; background: var(--ink); color: var(--paper); font-size: 13px; line-height: 1.45; font-weight: 400; box-shadow: 0 6px 18px rgb(0 0 0 / .18); }
 .def:hover .def-tip, .def-word:focus-visible + .def-tip, .def.open .def-tip { display: block; }
 .example { display: flex; gap: 8px; align-items: baseline; }
 .example .label { min-width: 74px; }
@@ -189,6 +189,7 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+<script type="application/json" id="defs">__DEFS__</script>
 <script>
 const ROWS = __ROWS__;
 const LANG = '__LANG__';
@@ -212,20 +213,42 @@ function matches(r) {
 }
 
 // A target-language word whose definition shows on hover, keyboard focus, or tap (phones have no hover).
+// The language's definitions (headword → its first definitions), built into the page and read on first use.
+let DEFS = null;
+const defsTable = () => DEFS ??= (() => { try { return JSON.parse(document.getElementById('defs').textContent); } catch { return {}; } })();
+// A pick's definitions, looked up without its region tag; an optional part gives both forms
+// ("thật sự [là]": thật sự, and thật sự là).
+function definitionOf(pick) {
+  const bare = pick.replace(/\s*\([^)]*\)\s*$/, '').trim();
+  const tidy = (x) => x.replace(/\s+/g, ' ').trim();
+  const forms = bare.includes('[') ? [...new Set([tidy(bare.replace(/\[[^\]]*\]/g, ' ')), tidy(bare.replace(/[[\]]/g, ''))])] : [bare];
+  const t = defsTable();
+  const one = (f) => t[f] ?? t[f.toLowerCase()] ?? t[f.charAt(0).toUpperCase() + f.slice(1)] ?? 'Not a dictionary entry (a phrase).';
+  return forms.length > 1 ? forms.map((f) => `${f}: ${one(f)}`).join('\n') : one(forms[0]);
+}
+
+// A target-language word whose definition shows on hover, keyboard focus, or tap (phones have no hover).
+// `def` is the text, or a function giving it on first use.
 function defWord(w, def, comma) {
   const wrap = text('span', 'def');
-  const b = text('button', 'vi def-word', w);
+  const b = text('button', 'vi def-word');
   b.type = 'button';
   b.lang = LANG;
+  // "bữa [ăn] tối": the optional part faded.
+  w.split(/(\[[^\]]*\])/).filter(Boolean).forEach((part) => b.append(part.startsWith('[') ? text('span', 'optional', part.slice(1, -1)) : part));
   wrap.append(b);
   if (def) {
-    const tip = text('span', 'def-tip', def);
+    const tip = text('span', 'def-tip', typeof def === 'string' ? def : '');
     tip.setAttribute('role', 'tooltip');
     tip.id = 'tip-' + Math.random().toString(36).slice(2, 9);
     b.setAttribute('aria-describedby', tip.id);
     wrap.append(tip);
+    const fill = () => { if (!tip.textContent && typeof def === 'function') tip.textContent = def(); };
+    wrap.addEventListener('mouseenter', fill);
+    b.addEventListener('focus', fill);
     b.addEventListener('click', (e) => {
       e.stopPropagation();
+      fill();
       const open = !wrap.classList.contains('open');
       document.querySelectorAll('.def.open').forEach((x) => x.classList.remove('open'));
       wrap.classList.toggle('open', open);
@@ -381,7 +404,22 @@ function rowEl(r) {
     chip.append(t, undo);
     return chip;
   };
+  // The meanings of the words in the box (typed, edited or suggested), each looked up on first hover or tap.
+  const means = text('div', 'means');
+  const drawMeans = () => {
+    const picks = parse(input.value);
+    means.hidden = !picks.length;
+    means.replaceChildren(text('span', 'label', 'Meanings'));
+    picks.forEach((pick, i) => {
+      const m = /^(.*?)\s*\(([^)]*)\)\s*$/.exec(pick);
+      const last = i === picks.length - 1;
+      const el = defWord(m ? m[1] : pick, () => definitionOf(pick), !last && !m);
+      if (m) { el.append(text('span', 'region', m[2])); if (!last) el.append(text('span', 'comma', ',')); }
+      means.append(el);
+    });
+  };
   const draw = () => {
+    drawMeans();
     const list = fullOrder();
     const picked = new Set(parse(input.value));
     order.hidden = !list.length && !drops.length;
@@ -400,20 +438,7 @@ function rowEl(r) {
       onEnd: () => commit([...orderRow.children].map((c) => c.dataset.pick)),
     });
   }
-  body.append(order);
-  if (r.draft?.length) {
-    const means = text('div', 'means');
-    means.append(text('span', 'label', 'Meanings'));
-    r.draft.forEach((pick, i) => {
-      // "thiệt (Southern)": the word, and the region it's first for.
-      const m = /^(.*?)\s*\(([^)]*)\)\s*$/.exec(pick);
-      const w = m ? m[1] : pick;
-      const el = defWord(w, r.defs?.[w] || (r.phrases?.includes(w) ? 'A phrase, not a dictionary entry.' : ''), i < r.draft.length - 1 && !m);
-      if (m) { el.append(text('span', 'region', m[2])); if (i < r.draft.length - 1) el.append(text('span', 'comma', ',')); }
-      means.append(el);
-    });
-    body.append(means);
-  }
+  body.append(order, means);
   if (r.example) {
     const ex = text('div', 'example');
     ex.append(text('span', 'label', 'Example'));

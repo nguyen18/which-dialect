@@ -172,6 +172,16 @@ async function reviewPage(lang: string, rows: SheetRow[], wordCount: number, out
       extra: true, first: Boolean(d.first), ...(d.example ? { example: d.example } : {}),
     })
   }
+  // Every headword's first definitions, built into the page so any word typed there can be looked up.
+  const definitions: Record<string, string> = {}
+  for (const shard of meta.shards.words) {
+    const words: Record<string, { senses: { glosses: string[] }[] }[]> = JSON.parse(await readFile(join(ROOT, 'packages', lang, 'data', 'words', `${shard}.json`), 'utf8'))
+    for (const [w, entries] of Object.entries(words)) {
+      const glosses = [...new Set(entries.flatMap((e) => e.senses.map((s) => s.glosses[s.glosses.length - 1])))]
+        .map((g) => (g.length > 90 ? `${g.slice(0, 89).trimEnd()}…` : g))
+      if (glosses.length) definitions[w] = glosses.slice(0, 3).join(' · ')
+    }
+  }
   const template = await readFile(join(ROOT, 'scripts', 'picks-review.html'), 'utf8')
   // The first regional pick in the drafts, else a placeholder: "thật / thiệt (Southern)".
   const tagged = drafts.find((d) => d.picks.some((p) => /\([^)]*\)\s*$/.test(p)))
@@ -187,6 +197,7 @@ async function reviewPage(lang: string, rows: SheetRow[], wordCount: number, out
     __REGION_EXAMPLE__: regionExample,
     __APPLY_COMMAND__: `/word-review ${lang} ${wordCount} apply`,
     __ROWS__: JSON.stringify(page).replace(/<\//g, '<\\/'),
+    __DEFS__: JSON.stringify(definitions).replace(/<\//g, '<\\/'),
   }
   const html = template.replace(/__[A-Z_]+__/g, (k) => fill[k] ?? k)
   await mkdir(dirname(out), { recursive: true })
