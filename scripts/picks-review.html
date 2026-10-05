@@ -83,6 +83,8 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 .chip.check { background: var(--warn-soft); color: var(--warn); }
 .chip.first { background: var(--violet-soft); color: var(--violet); }
 .chip.grammar { background: var(--rule); color: var(--muted); }
+.chip.applied { background: var(--good-soft); color: var(--good); }
+.chip.pending { background: var(--violet-soft); color: var(--violet); }
 .body { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
 .meaning { color: var(--muted); font-size: 14px; }
 .compare { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; }
@@ -195,7 +197,12 @@ const ROWS = __ROWS__;
 const LANG = '__LANG__';
 const PAGE = 60;
 const state = { tab: 'draft', q: '', checkOnly: false, shown: PAGE };
-const decisions = new Map(); // id -> { status: 'accept'|'edit'|'reject', picks: string }
+const decisions = new Map(); // id -> { status: 'accept'|'edit'|'reject', picks: string, drop?, updatedAt? }
+// What the last apply took in (`review/applied`, written by the skill's apply step): each decision's
+// updatedAt as it was applied. A decision still at that version is applied: its row leaves the other tabs
+// and is shown under Decided only. One changed since then counts as not applied yet.
+let applied = {};
+const isApplied = (id) => { const d = decisions.get(id); return Boolean(d?.updatedAt) && applied[id] === d.updatedAt; };
 let db = null;
 
 const $ = (id) => document.getElementById(id);
@@ -205,7 +212,7 @@ const draftText = (r) => (r.draft || []).join(' / ');
 function matches(r) {
   const d = decisions.get(r.id);
   if (state.tab === 'decided') { if (!d) return false; }
-  else if (r.kind !== state.tab) return false;
+  else if (r.kind !== state.tab || isApplied(r.id)) return false;
   if (state.checkOnly && r.conf !== 'check') return false;
   if (!state.q) return true;
   const q = state.q.toLowerCase();
@@ -271,6 +278,8 @@ function rowEl(r) {
   if (r.conf) chips.append(text('span', 'chip ' + r.conf, r.conf === 'sure' ? 'Sure' : 'Please check'));
   if (r.first) chips.append(text('span', 'chip first', 'Moves to first meaning'));
   if (r.kind === 'grammar') chips.append(text('span', 'chip grammar', 'Grammar word'));
+  if (d && isApplied(r.id)) chips.append(text('span', 'chip applied', 'Applied'));
+  else if (d) chips.append(text('span', 'chip pending', 'Not applied yet'));
   word.append(chips);
 
   const body = text('div', 'body');
@@ -476,7 +485,7 @@ function render() {
   const list = $('list');
   const rows = ROWS.filter(matches);
   list.replaceChildren(...rows.slice(0, state.shown).map(rowEl));
-  if (!rows.length) list.append(text('p', 'empty', state.tab === 'decided' ? 'Nothing decided yet. Rows you decide on show up here.' : 'No rows match.'));
+  if (!rows.length) list.append(text('p', 'empty', state.tab === 'decided' ? 'Nothing decided yet. Rows you decide on show up here, and once applied, only here.' : 'No rows match.'));
   $('more').hidden = rows.length <= state.shown;
   $('more').textContent = `Show more (${rows.length - state.shown} left)`;
   counts();
@@ -487,7 +496,7 @@ function counts() {
   const done = drafts.filter((r) => decisions.has(r.id)).length;
   $('count').textContent = `${done} of ${drafts.length} drafts reviewed`;
   $('meter').style.width = (100 * done / drafts.length) + '%';
-  for (const k of ['draft', 'fine', 'grammar']) $('n-' + k).textContent = ROWS.filter((r) => r.kind === k).length;
+  for (const k of ['draft', 'fine', 'grammar']) $('n-' + k).textContent = ROWS.filter((r) => r.kind === k && !isApplied(r.id)).length;
   $('n-decided').textContent = decisions.size;
 }
 
@@ -496,7 +505,8 @@ function setSave(msg, error) { const s = $('save'); s.textContent = msg; s.class
 async function decide(r, d) {
   const before = decisions.get(r.id);
   if ((d?.status ?? null) === (before?.status ?? null) && (d?.picks ?? '') === (before?.picks ?? '') && (d?.drop ?? '') === (before?.drop ?? '')) return;
-  if (d) decisions.set(r.id, d); else decisions.delete(r.id);
+  const updatedAt = new Date().toISOString();
+  if (d) decisions.set(r.id, { ...d, updatedAt }); else decisions.delete(r.id);
   const el = document.querySelector(`.row[data-id="${r.id}"]`);
   if (el) el.replaceWith(rowEl(r));
   counts();
@@ -504,7 +514,7 @@ async function decide(r, d) {
   setSave('Saving…');
   try {
     const ref = db.collection('decisions').doc(r.id);
-    if (d) await ref.set({ ...d, english: r.english, pos: r.pos, meaning: r.meaning, updatedAt: new Date().toISOString() });
+    if (d) await ref.set({ ...d, english: r.english, pos: r.pos, meaning: r.meaning, updatedAt });
     else await ref.delete();
     setSave('Saved');
   } catch (e) {
@@ -537,14 +547,22 @@ $('more').addEventListener('click', () => { state.shown += PAGE; render(); });
 
 render();
 
+// Keep a row the viewer is typing in; redraw the rest.
+function redraw() {
+  if (document.activeElement?.tagName === 'INPUT' && document.activeElement.id.startsWith('pick-')) counts(); else render();
+}
+
 (async () => {
   db = await window.claude?.use?.('db') ?? null;
   if (!db) { $('dbnote').hidden = false; return; }
   db.collection('decisions').onSnapshot((snap) => {
     decisions.clear();
-    for (const doc of snap.docs) { const v = doc.data(); if (v?.status) decisions.set(doc.id, { status: v.status, picks: v.picks || '', ...(v.drop ? { drop: v.drop } : {}) }); }
-    // Keep a row the viewer is typing in; redraw the rest.
-    if (document.activeElement?.tagName === 'INPUT' && document.activeElement.id.startsWith('pick-')) counts(); else render();
+    for (const doc of snap.docs) { const v = doc.data(); if (v?.status) decisions.set(doc.id, { status: v.status, picks: v.picks || '', ...(v.drop ? { drop: v.drop } : {}), ...(v.updatedAt ? { updatedAt: v.updatedAt } : {}) }); }
+    redraw();
   }, () => setSave('Live updates stopped. Reload to see the latest.', true));
+  db.doc('review/applied').onSnapshot((snap) => {
+    applied = (snap.exists && snap.data()?.decisions) || {};
+    redraw();
+  }, () => {});
 })();
 </script>

@@ -13,7 +13,7 @@
 // Or as a review page (an HTML page published as a claude.ai Artifact, saving decisions in its db):
 //
 //   npm run picks-sheet -- <lang> --top 300 --drafts reviews/<lang>-top300.json --html page.html
-//   npm run picks-sheet -- <lang> --apply-decisions <dir> [--drafts reviews/<lang>-top300.json]
+//   npm run picks-sheet -- <lang> --apply-decisions <dir> [--drafts reviews/<lang>-top300.json] [--applied applied.json]
 //
 // The drafts file holds suggested picks for some meanings ({ rows: [{ english, pos, meaning (the start
 // of the definition is enough), picks, confidence: 'sure' | 'check', why, example: { en, target }, first? }] });
@@ -22,6 +22,8 @@
 // reviewer keeps the current words, uses the suggestion, or types their own. Rows have stable ids, so a
 // regenerated page keeps saved decisions. --apply-decisions reads the decisions (the db's "decisions"
 // collection, saved as JSON files, e.g. with the Artifact tool's read_db and out_dir) and prints config rows.
+// With --applied, it also writes what was applied ({ at, decisions: { id: updatedAt } }), to save as the
+// page's review/applied document: the page then lists those rows under Decided only.
 
 import { createHash } from 'node:crypto'
 import { existsSync } from 'node:fs'
@@ -231,7 +233,7 @@ async function applyDecisions(lang: string, path: string) {
         const dir = existsSync(join(path, 'decisions')) ? join(path, 'decisions') : path
         return (await readdir(dir)).filter((f) => f.endsWith('.json')).map((f) => join(dir, f))
       })()
-  const docs: { status: string; picks?: string; drop?: string; english: string; pos: string; meaning: string }[] = []
+  const docs: { status: string; picks?: string; drop?: string; english: string; pos: string; meaning: string; updatedAt?: string }[] = []
   for (const f of files) {
     const v = JSON.parse(await readFile(f, 'utf8'))
     docs.push(...(Array.isArray(v) ? v : [v.data ?? v]))
@@ -253,6 +255,12 @@ async function applyDecisions(lang: string, path: string) {
   }
   console.log(`// ${out.length} picks from ${docs.length} decisions (${kept} kept as they are). Paste into languages/${lang}.ts \`picks\`, then rebuild.`)
   console.log(out.join('\n'))
+  const appliedFile = arg('--applied')
+  if (appliedFile) {
+    const decisions = Object.fromEntries(docs.filter((d) => d.updatedAt).map((d) => [rowId(d.english, d.pos, d.meaning), d.updatedAt]))
+    await writeFile(appliedFile, JSON.stringify({ at: new Date().toISOString(), decisions }, null, 2))
+    console.error(`Wrote ${appliedFile}: ${Object.keys(decisions).length} applied decisions (save it as the page's review/applied).`)
+  }
 }
 
 // A definition pattern for the config: the start of the gloss, cut at a word boundary.
@@ -280,7 +288,7 @@ async function apply(lang: string, file: string) {
 async function main() {
   const lang = process.argv[2]
   if (!lang || lang.startsWith('--')) {
-    throw new Error('usage: npm run picks-sheet -- <lang> [--top N | --words file] [--out file.csv | --html page.html [--drafts file.json]] | --apply file.csv | --apply-decisions dir [--drafts file.json]')
+    throw new Error('usage: npm run picks-sheet -- <lang> [--top N | --words file] [--out file.csv | --html page.html [--drafts file.json]] | --apply file.csv | --apply-decisions dir [--drafts file.json] [--applied applied.json]')
   }
   const applyFile = arg('--apply')
   if (applyFile) return apply(lang, applyFile)
