@@ -592,7 +592,8 @@ const config: LanguageConfig = {
       note: "\"still (not moving)\" = yên / đứng yên",
     },
     {
-      word: "there", pos: "noun", gloss: /^That place \(previously mentioned or/, picks: ["chỗ đó", "đó", "mọi nơi"],
+      word: "there", pos: "noun", gloss: /^That place \(previously mentioned or/, picks: ["chỗ đó", "đó"],
+      note: "\"there (that place)\" = chỗ đó",
     },
     {
       word: "think", pos: "verb", gloss: /^To conceive of something or someone/, picks: ["nghĩ", "thấy"],
