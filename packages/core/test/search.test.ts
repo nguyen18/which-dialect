@@ -237,6 +237,36 @@ describe('hand-picked words (fake data)', () => {
   it('reaches picks from another language through the English meaning', async () => {
     assert.deepEqual(words(await tr.translate('holen', { from: 'yy', to: 'xx' })), ['grab*', 'carry*', 'snatch*', 'wrong'])
   })
+
+  // "old" has nested senses under one heading: a pick keyed by one's own definition is that sense's alone.
+  // Its picks are a phrase the dictionary doesn't list, and it excludes the ranking's word.
+  const nested = (() => {
+    const heading = 'Having existed a long time.'
+    const en2 = {
+      'meta.json': { name: 'English', regions: ['US'], shards: { words: ['ol'], en: [] } },
+      'words/ol.json': { old: [{ word: 'old', pos: 'adj', senses: [
+        { glosses: [heading, 'Of an object, worn.'] },
+        { glosses: [heading, 'Of a living being, aged.'] },
+      ] }] },
+    }
+    const xx2 = {
+      'meta.json': { name: 'Target', regions: ['North', 'South'], shards: { words: ['wo', 'gr'], en: ['ag', 'wo'] }, picks: true },
+      'en/ag.json': { aged: [{ word: 'grey', pos: 'adj', gloss: 'aged', senseIndex: 0, senses: 3, primary: true }] },
+      'en/wo.json': { worn: [{ word: 'worn', pos: 'adj', gloss: 'worn', senseIndex: 0, senses: 3, primary: true }] },
+      'words/wo.json': { worn: [{ word: 'worn', pos: 'adj', senses: [{ glosses: ['worn'] }] }] },
+      'words/gr.json': { grey: [{ word: 'grey', pos: 'adj', senses: [{ glosses: ['aged'] }] }] },
+      'picks.json': [{ word: 'old', pos: 'adj', gloss: 'Of a living being, aged.', picks: [{ word: 'many years' }, { word: 'up there', tags: ['South'] }], exclude: ['grey'] }],
+    }
+    const f: Record<string, Record<string, unknown>> = { en: en2, xx: xx2 }
+    return createTranslator({ load: (lang) => async (p) => f[lang][p] })
+  })()
+  const byGloss = async (opts: object = {}) =>
+    Object.fromEntries((await nested.translate('old', { from: 'en', to: 'xx', ...opts })).map((g) => [g.source.glosses.at(-1), g.translations.map((t) => `${t.word}${t.phrase ? '+' : ''}`)]))
+
+  it('keys picks by a nested sense\'s own definition, takes phrases, and drops excluded words', async () => {
+    assert.deepEqual(await byGloss(), { 'Of an object, worn.': ['worn'], 'Of a living being, aged.': ['many years+', 'up there+'] })
+    assert.deepEqual((await byGloss({ toRegion: 'North' }))['Of a living being, aged.'], ['many years+'])
+  })
 })
 
 describe('parts of speech', () => {

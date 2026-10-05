@@ -429,6 +429,208 @@ const config: LanguageConfig = {
       word: 'of', pos: 'prep', gloss: /^Belonging to, existing in, or taking place in/, picks: ['của'], first: true,
       note: 'Possession ("the book of my friend": sách của bạn tôi); the first-listed meanings are distance and separation.',
     },
+    // From the owner's review of the top 300 English words (reviews/vi-top300.json, review page in
+    // ARCHITECTURE.md), applied 2026-10-05: 54 meanings.
+    {
+      word: "about", pos: "prep", gloss: /^Indicates that something will happen/, picks: ["sắp"],
+      note: "\"about to\" = sắp",
+    },
+    {
+      word: "can", pos: "verb", gloss: /^To know how to\./, picks: ["biết"],
+      note: "\"can (know how to)\" = biết: \"tôi biết bơi\"",
+    },
+    {
+      word: "can", pos: "verb", gloss: /^To be able to\./, picks: ["có thể", "được"],
+      note: "\"be able to\" = có thể / được; biết is \"know how\"",
+    },
+    {
+      word: "down", pos: "adv", gloss: /^To or towards what is considered the/, picks: ["xuống"],
+      note: "\"down\" = xuống; xịu is \"sag (of a face)\"",
+    },
+    {
+      word: "first", pos: "adv", gloss: /^For the first time\./, picks: ["lần đầu tiên", "lần đầu"],
+    },
+    {
+      word: "first", pos: "adj", gloss: /^Preceding all others of a series or/, picks: ["đầu tiên", "thứ nhất"],
+      note: "\"first\" = đầu tiên (everyday), thứ nhất (in a list)",
+    },
+    {
+      word: "go", pos: "verb", gloss: /^To start; to begin \(an action or/, picks: ["bắt đầu"],
+      note: "\"go (start)\" = bắt đầu; khởi is literary",
+    },
+    {
+      word: "good", pos: "adj", gloss: /^Of a person or an animal:/, picks: ["tốt"],
+      note: "\"a good person\" = người tốt; hay is \"interesting/good at\"",
+    },
+    {
+      word: "here", pos: "noun", gloss: /^This place; this location\./, picks: ["ở đây", "chỗ này", { word: "ni", tags: ["Central"] }, "nơi này"],
+    },
+    {
+      word: "how", pos: "adv", gloss: /^In what manner/, picks: ["như thế nào", { word: "thế nào", tags: ["Northern"] }, { word: "làm sao", tags: ["Southern"] }, { word: "sao", tags: ["Southern"] }, { word: "làm răng", tags: ["Central"] }],
+      note: "\"how (in what way)\" = như thế nào. Northern speech says thế nào, Southern (làm) sao, Central làm răng.",
+    },
+    {
+      word: "how", pos: "adv", gloss: /^To what degree or extent\./, picks: ["bao nhiêu", { word: "nhiêu", tags: ["Southern"] }, "mấy"],
+    },
+    {
+      word: "just", pos: "adj", gloss: /^Morally right; upright, righteous,/, picks: ["công bằng"],
+      note: "chính alone means \"main/proper\"; \"fair, just\" is công bằng",
+    },
+    {
+      word: "know", pos: "verb", gloss: /^To be acquainted or familiar with; to/, picks: ["quen", "quen biết"],
+      note: "\"know (someone)\" = quen / quen biết",
+    },
+    {
+      word: "life", pos: "noun", gloss: /^The state of organisms preceding their/, picks: ["sự sống", "cuộc sống", "cuộc đời"],
+    },
+    {
+      word: "life", pos: "noun", gloss: /^A living being; the fact of a/, picks: ["mạng", "mạng sống", "sinh mạng"],
+    },
+    {
+      word: "life", pos: "noun", gloss: /^A biography\./, picks: ["cuộc đời"],
+      note: "\"his life (story)\" = cuộc đời",
+    },
+    {
+      word: "life", pos: "noun", gloss: /^Animation; spirit; vivacity\./, picks: ["sức sống"],
+      note: "\"full of life\" = đầy sức sống",
+    },
+    {
+      word: "like", pos: "verb", gloss: /^To prefer and maintain \(an action\) as a/, picks: ["thích"],
+      note: "\"like doing\" (a habit) is thích; như means \"as/like (similar)\"",
+    },
+    {
+      word: "like", pos: "verb", gloss: /^To want, desire\. See also would like\./, picks: ["muốn"],
+      note: "\"would like\" = muốn; như is the comparison \"like\"",
+    },
+    {
+      word: "long", pos: "adj", gloss: /^Not short; tall\./, picks: ["cao", "cao lớn"],
+    },
+    {
+      word: "long", pos: "adj", gloss: /^Having great duration\./, picks: ["lâu", "dài"],
+      note: "\"a long time\" = lâu",
+    },
+    {
+      word: "more", pos: "pron", gloss: /^A greater number or quantity \(of/, picks: ["thêm", "nhiều hơn"],
+      note: "\"more\" as a quantity: thêm, nhiều hơn; lượng means \"amount\"",
+    },
+    {
+      word: "most", pos: "adv", gloss: /^To a great extent or degree; highly;/, picks: ["rất", "nhất"],
+    },
+    {
+      word: "most", pos: "pron", gloss: /^The greater part of a group, especially/, picks: ["phần lớn", "hầu hết", "đa số"],
+      note: "\"most (of them)\" = phần lớn / hầu hết",
+    },
+    {
+      word: "much", pos: "adv", gloss: /^To a great extent\./, picks: ["nhiều", "lắm"],
+      note: "\"much\" = nhiều / lắm; nhiều nhặn is negative-only",
+    },
+    {
+      word: "never", pos: "adv", gloss: /^Not at any other time; not on any other/, picks: ["chưa bao giờ", "chưa từng"],
+      note: "\"never (before)\" = chưa bao giờ",
+    },
+    {
+      word: "new", pos: "adj", gloss: /^Current or later, as opposed to former\./, picks: ["mới"],
+      note: "\"the new (current) one\" is still mới; tân is Sino-Vietnamese, formal",
+    },
+    {
+      word: "new", pos: "adj", gloss: /^Newborn\./, picks: ["em bé sơ sinh", "sơ sinh"],
+    },
+    {
+      word: "off", pos: "adj", gloss: /^Inoperative, disabled\./, picks: ["tắt"],
+      note: "\"off (switched off)\" = tắt; the ranking gave tàn tật (\"disabled\")",
+    },
+    {
+      word: "one", pos: "pron", gloss: /^Any person \(applying to people in/, picks: ["một người", "người ta", "ta"],
+    },
+    {
+      word: "only", pos: "adv", gloss: /^Without others or anything further;/, picks: ["chỉ"],
+      note: "\"only (just)\" = chỉ; the ranking gave không (\"not\")",
+    },
+    {
+      word: "only", pos: "adj", gloss: /^Alone in a category\./, picks: ["duy nhất"],
+      note: "\"the only one\" = duy nhất",
+    },
+    {
+      word: "out", pos: "adv", gloss: /^Away from the inside or centre\./, picks: ["ra", "ra ngoài"],
+      note: "\"out (away from inside)\" = ra / ra ngoài",
+    },
+    {
+      word: "over", pos: "adj", gloss: /^Finished; ended; concluded\./, picks: ["xong", "hết"],
+      note: "\"it's over\" = xong rồi / hết rồi; đủ means \"enough\"",
+    },
+    {
+      word: "people", pos: "noun", gloss: /^A person's ancestors, relatives or/, picks: ["gia đình", "người nhà"],
+      note: "\"my people\" (family) = gia đình / người nhà",
+    },
+    {
+      word: "really", pos: "adv", gloss: /^In a way or manner that is real, not/, picks: ["thật sự", "thật sự là", "thực sự", "thực sự là", { word: "thiệt", tags: ["Southern"] }, { word: "thiệt là", tags: ["Southern"] }, "dữ"],
+    },
+    {
+      word: "really", pos: "adv", gloss: /^Actually; in fact; in reality\./, picks: ["thật ra", "thực ra", { word: "thiệt ra", tags: ["Southern"] }],
+      note: "\"really (in fact)\" = thật ra. Southern speech says thiệt ra.",
+    },
+    {
+      word: "really", pos: "adv", gloss: /^Very \(modifying an adjective\); very/, picks: ["thật", "rất", "quá", { word: "thiệt", tags: ["Southern"] }],
+      note: "\"really (very)\" good = thật / rất. Southern speech says thiệt (\"ngon thiệt\").",
+    },
+    {
+      word: "see", pos: "verb", gloss: /^To perceive or detect someone or/, picks: ["thấy", "nhìn thấy"],
+      note: "\"see\" = thấy; xem is \"watch/look at\"",
+    },
+    {
+      word: "see", pos: "verb", gloss: /^To form a mental picture of, to/, picks: ["hình dung", "thấy", "tưởng tượng"],
+    },
+    {
+      word: "some", pos: "pron", gloss: /^An indefinite quantity\./, picks: ["một ít", "một chút", "vài"],
+    },
+    {
+      word: "still", pos: "adj", gloss: /^Uttering no sound; silent\./, picks: ["im lặng", "im"],
+      note: "\"still (silent)\" = im lặng",
+    },
+    {
+      word: "still", pos: "adj", gloss: /^Not moving; calm\./, picks: ["yên", "đứng yên"],
+      note: "\"still (not moving)\" = yên / đứng yên",
+    },
+    {
+      word: "there", pos: "noun", gloss: /^That place \(previously mentioned or/, picks: ["chỗ đó", "đó", "mọi nơi"],
+    },
+    {
+      word: "think", pos: "verb", gloss: /^To conceive of something or someone/, picks: ["nghĩ", "thấy"],
+      note: "\"I think (it's good)\" = tôi nghĩ / tôi thấy",
+    },
+    {
+      word: "think", pos: "verb", gloss: /^To communicate to oneself in one's/, picks: ["suy nghĩ", "nghĩ"],
+      note: "\"think (a problem through)\" = suy nghĩ",
+    },
+    {
+      word: "think", pos: "verb", gloss: /^To have \(some statement\) in one's mind;/, picks: ["nghĩ"],
+      note: "\"think (to oneself)\" = nghĩ",
+    },
+    {
+      word: "think", pos: "verb", gloss: /^To ponder, to go over in one's mind\./, picks: ["suy nghĩ", "nghĩ", "liệu"],
+    },
+    {
+      word: "time", pos: "noun", gloss: /^A duration of time\./, picks: ["thời gian", "khoảng thời gian"],
+      note: "\"a duration of time\" is thời gian",
+    },
+    {
+      word: "too", pos: "adv", gloss: /^To a high degree, very\./, picks: ["quá"],
+      note: "\"too (much)\" = quá; quá thể is an intensified form",
+    },
+    {
+      word: "way", pos: "noun", gloss: /^To do with a place or places\./, picks: ["đường"],
+      note: "\"the way (route)\" = đường; ngả is a fork in the road",
+    },
+    {
+      word: "well", pos: "adj", gloss: /^In good health\./, picks: ["khỏe", "mạnh khỏe"], exclude: ["mát mặt"],
+    },
+    {
+      word: "why", pos: "adv", gloss: /^For what cause, reason, or purpose\./, picks: ["tại sao", "vì sao", "sao", { word: "răng", tags: ["Central"] }],
+      note: "\"why\" = tại sao / vì sao. Central speech says răng (\"răng rứa?\").",
+    },
+    {
+      word: "why", pos: "noun", gloss: /^Reason\./, picks: ["lý do", "lý lẽ"],
+    },
   ],
 }
 
