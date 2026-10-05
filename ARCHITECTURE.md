@@ -359,6 +359,7 @@ Known-correct cases; pass = a correct word in the top 3 of the first (most relev
 ## Working conventions
 
 - **Design every improvement and feature to scale to more languages** (owner's rule, 2026-09-30). Vietnamese and English are the first of many. Before adding something, check: does it work, or degrade gracefully, for a language that doesn't have it yet? Is per-language work kept in `languages/<lang>.ts` and that language's data package, not in the API or in language-pair code? Does the work grow with the number of languages (fine), not with the number of pairs (English is the bridge)? Is it measured per language? Rules that only hold for one language's data (Vietnamese glosses, English grammar words) go in that language's config or behind a language check, and say so in a comment. Example: the planned picks layer (FUTURE_IMPROVEMENTS.md).
+- **No LLM features** (owner's decision, 2026-10-01): translation, checking and journal review are rule-based and data-driven (dictionary, pronoun table, picks, sentence frames, checker), with no API costs or LLM dependency. Don't propose AI rewrite buttons, LLM fallbacks or "needs AI" paths; when rules can't handle something, say so and fall back to hints. Using Claude for development work (drafting picks for a speaker to review, `/word-review`) is fine.
 - Keep code MIT and data CC BY-SA; keep attribution in READMEs and `packages/<lang>/LICENSE`.
 - `npm test` and `npm run typecheck` clean before committing.
 - Never commit generated data or `.cache/`.
