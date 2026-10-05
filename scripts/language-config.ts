@@ -115,6 +115,8 @@ export type PickRowConfig = {
   pos: string
   gloss: RegExp
   picks: (string | { word: string; tags?: string[] })[]
+  /** Words never given for this meaning (removed on the review page). */
+  exclude?: string[]
   first?: boolean
   note?: string
 }

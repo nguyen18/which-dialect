@@ -662,15 +662,17 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
   // gives per English meaning. Translation tables and hand-picked words are keyed by these.
   type EnglishMeaning = { word: string; pos: string; gloss: string; translations?: Record<string, TableTranslation[]> }
   async function englishMeanings(sense: SourceSense, from: string, bridge: string[]): Promise<EnglishMeaning[]> {
-    if (from === 'en') return [{ word: sense.lemma, pos: sense.pos, gloss: sense.glosses[0] ?? '', translations: sense.translations }]
+    // A meaning's gloss is its own (last) definition: a nested sense's first is the heading it shares.
+    if (from === 'en') return [{ word: sense.lemma, pos: sense.pos, gloss: sense.glosses.at(-1) ?? '', translations: sense.translations }]
     const found: EnglishMeaning[] = []
     for (const term of bridge.slice(0, 3)) {
       for (const entry of await dict('en').lookup(term)) {
         for (const s of entry.senses) {
           const own = s.translations?.[from]
           if (!own?.some((t) => t.word === sense.lemma || t.word === sense.word)) continue
-          if (!found.some((f) => f.word === entry.word && f.gloss === s.glosses[0])) {
-            found.push({ word: entry.word, pos: entry.pos, gloss: s.glosses[0], translations: s.translations })
+          const gloss = s.glosses.at(-1) ?? ''
+          if (!found.some((f) => f.word === entry.word && f.gloss === gloss)) {
+            found.push({ word: entry.word, pos: entry.pos, gloss, translations: s.translations })
           }
         }
       }
@@ -729,6 +731,14 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
       word: entry.word, pos: entry.pos, gloss: s.glosses[0], regions: s.regions, regionTagged: s.regionTagged,
       labels: s.labels, senseIndex: index, senses: entry.senses.length, primary: true,
       ...(entry.frequency !== undefined ? { frequency: entry.frequency } : {}),
+    }
+  }
+
+  // A hand-picked phrase the dictionary doesn't list: used everywhere, or where its tags say.
+  function phraseHit(word: string, sense: SourceSense, places: Set<string> | null, meta: LanguageMeta): Hit {
+    return {
+      word, pos: sense.pos, gloss: sense.glosses.at(-1) ?? '', regions: places ? [...places] : meta.regions,
+      regionTagged: Boolean(places), labels: [], senseIndex: 0, senses: 1, primary: true, phrase: true,
     }
   }
 
@@ -939,7 +949,8 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
         // Hand-picked words for this meaning go first, in the listed order: a speaker's judgment of the
         // natural word where the ranking puts another first. With a target region, picks tagged for it
         // lead, and picks tagged only for other regions (or words not used there) are left to the
-        // ranking. The ranked words follow. (A pronoun-table row, below, still comes before them.)
+        // ranking. The ranked words follow. (A pronoun-table row, below, still comes before them.) A pick
+        // that isn't a headword is a phrase ("bữa tối"), given as is. Words a row excludes are dropped.
         const rows = pickRows.length
           ? await englishMeanings(sense, from, bridge).then((ms) => pickRows.filter((r) => ms.some((m) => m.word === r.word && m.pos === r.pos && m.gloss === r.gloss)))
           : []
@@ -950,11 +961,15 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
           const places = tagRegions(t.tags, toMeta)
           if (toWanted && places && ![...places].some((r) => toWanted.has(r))) continue
           if (to === from && t.word === sense.lemma && !places?.size) continue
-          const hit = scored.get(t.word) ?? (await tableHit(t.word, to, posList, toWanted, exclude, bridge))
+          const hit =
+            scored.get(t.word) ??
+            (await tableHit(t.word, to, posList, toWanted, exclude, bridge)) ??
+            (t.word.includes(' ') ? phraseHit(t.word, sense, places, toMeta) : null)
           if (!hit || hit.labels.some((l) => exclude.includes(l))) continue
           if (!places && !intersects(hit.regions, toWanted)) continue
           picked.push({ hit, tagged: Boolean(toWanted && places) })
         }
+        for (const w of rows.flatMap((r) => r.exclude ?? [])) scored.delete(w)
         if (picked.length) {
           const ordered = [...picked.filter((p) => p.tagged), ...picked.filter((p) => !p.tagged)]
           const top = Math.max(0, ...[...scored.values()].map((t) => t.score))

@@ -64,6 +64,8 @@ export type Hit = {
   frequency?: number
   /** true when the English term is the first meaning listed in the gloss (e.g. "now" in "now, today"). */
   primary: boolean
+  /** true for a hand-picked phrase that isn't a dictionary headword ("bữa tối"); its details are the pick's. */
+  phrase?: boolean
 }
 
 export type LanguageMeta = {
@@ -192,12 +194,18 @@ export type CheckerConfig = {
  * translating between two other languages reaches it through the English meaning.
  */
 export type PickRow = {
-  /** The English headword, part of speech and first definition of the meaning, as in the English data. */
+  /**
+   * The English headword, part of speech and definition of the meaning, as in the English data. For a
+   * nested sense (a heading plus its own definition: "old", "Of a living being…") it's the sense's own,
+   * last definition, so senses under one heading are told apart.
+   */
   word: string
   pos: string
   gloss: string
-  /** Best first. `tags` name regions like translation-table tags ("Southern"). */
+  /** Best first. `tags` name regions like translation-table tags ("Southern"). A pick needn't be a headword ("bữa tối"). */
   picks: TableTranslation[]
+  /** Words never given for this meaning (a speaker removed them: wrong or unnatural here). */
+  exclude?: string[]
   /** Put this meaning first when the caller gives no `pos` or `meaning` ("got" → "Have/has."). */
   first?: boolean
 }
