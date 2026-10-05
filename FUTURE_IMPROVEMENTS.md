@@ -173,6 +173,23 @@ The first version (2026-10-01): 34 frames in `languages/frames.ts`, Vietnamese v
 - **Talking to someone in a journal:** an entry that addresses someone ("Mẹ ơi, …") could set the listener
   for that sentence.
 
+## Phrase lookup
+
+Wiktionary lists words, not everyday phrases, so many natural picks aren't headwords: *bữa tối*, *tốt
+nhất*, *ít hơn*, *thật sự là*. The review page shows them as "Not a dictionary entry (a phrase)" with no
+definition (2026-10-05). Ideas:
+
+- **Build a phrase's meaning from its parts:** split it into known words (`dictionary.segment`) and show
+  each part's definition (*thật sự là* = thật sự "really" + là "is"; *bữa tối* = bữa "meal" + tối
+  "evening").
+- **A phrase list per language:** everyday phrases with a definition and a note, like the pronoun
+  table's overrides, so picks, the translator and the review page can all use them. Reviewed picks that
+  are phrases are a natural starting list.
+- **Phrases from example sentences:** Wiktionary's examples and their translations contain many of
+  them; frequent word pairs there could be suggested for the list.
+- **Lookup without accents and case** for phrases too (*thiet la* → *thiệt là*), as `variants` does for
+  words.
+
 ## Pronouns
 
 - **Possessives:** plain "her" leads with its possessive sense ("belonging to her"), Wiktionary's first,
