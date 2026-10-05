@@ -108,6 +108,8 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
 .nudge:hover:not(:disabled) { background: var(--rule); color: var(--ink); }
 .nudge:disabled { opacity: .25; cursor: default; }
 .nudge.drop { font-size: 12px; }
+.optional { opacity: .55; font-style: italic; }
+.optional::before { content: "("; } .optional::after { content: ")"; }
 .removed-row { display: flex; gap: 6px; flex-wrap: wrap; flex-basis: 100%; padding-left: 82px; }
 .chip-word.removed { cursor: default; opacity: .7; background: none; border-style: dashed; }
 .chip-word.removed .chip-text { text-decoration: line-through; color: var(--muted); }
@@ -159,7 +161,7 @@ h1 { font-family: var(--font-display); font-size: clamp(26px, 4vw, 34px); line-h
       </div>
     </div>
   </div>
-  <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> moves it to the top; today’s words stay after it, as the “Order” line shows. To change the order, drag the words in that line, or use their ‹ › buttons; ✕ takes a word out (a removed current word won’t be shown for this meaning; ↺ brings it back). To reorder only today’s words, press Keep current, then rearrange them. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>), then press Use suggestion. Put the general word first: a word tagged for a region goes first only for learners of that region, and learners of general __LANG_NAME__ get the words in the order listed. Your choices save as you go.</p>
+  <p class="lede">__INTRO__ English words, their meanings, and the __LANG_NAME__ word which-dialect puts first. Where the first word is wrong or stiff, I drafted the natural everyday choice (“Suggested”, in the box). <b>Use suggestion</b> moves it to the top; today’s words stay after it, as the “Order” line shows. To change the order, drag the words in that line, or use their ‹ › buttons; ✕ takes a word out (a removed current word won’t be shown for this meaning; ↺ brings it back). To reorder only today’s words, press Keep current, then rearrange them. <b>Keep current</b> rejects it and leaves the “Current” word, what which-dialect shows today. To use your own words, type them in the box (best first, separated by “/”; a region in brackets, e.g. <span class="vi">__REGION_EXAMPLE__</span>; an optional part in square brackets, e.g. <span class="vi">bữa [ăn] tối</span> for both “bữa tối” and “bữa ăn tối”), then press Use suggestion. Put the general word first: a word tagged for a region goes first only for learners of that region, and learners of general __LANG_NAME__ get the words in the order listed. Your choices save as you go.</p>
   <div id="dbnote" class="note-db" hidden>Your choices can’t be saved in this view, so they’ll only last until you close the page. Open it on claude.ai while signed in to save them.</div>
 
   <div class="bar">
@@ -317,7 +319,9 @@ function rowEl(r) {
     left.setAttribute('aria-label', `Move ${bareOf(p)} earlier`);
     const right = text('button', 'nudge', '›'); right.type = 'button'; right.disabled = i === list.length - 1;
     right.setAttribute('aria-label', `Move ${bareOf(p)} later`);
-    const w = text('span', 'chip-text', bareOf(p)); w.lang = LANG;
+    const w = text('span', 'chip-text'); w.lang = LANG;
+    // "bữa [ăn] tối": the optional part faded.
+    bareOf(p).split(/(\[[^\]]*\])/).filter(Boolean).forEach((part) => w.append(part.startsWith('[') ? text('span', 'optional', part.slice(1, -1)) : part));
     chip.append(left, w);
     const tag = /\(([^)]*)\)\s*$/.exec(p);
     if (tag) chip.append(text('span', 'region', tag[1]));

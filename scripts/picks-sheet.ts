@@ -195,13 +195,20 @@ async function reviewPage(lang: string, rows: SheetRow[], wordCount: number, out
   console.log(`${page.length} rows: ${count('draft')} drafted (${drafts.length - used.size === 0 ? 'all' : used.size} matched the sheet), ${count('fine')} look fine, ${count('grammar')} grammar words. Wrote ${out}`)
 }
 
-/** "heo (Southern) / lợn" → config pick literals. */
+/**
+ * "heo (Southern) / lợn" → config pick literals. Square brackets mark an optional part, which gives both
+ * forms, the short one first: "bữa [ăn] tối" → "bữa tối", "bữa ăn tối".
+ */
 function pickLiterals(cell: string): string[] {
-  return cell.split('/').map((p) => {
+  return cell.split('/').flatMap((p) => {
     const m = /^(.*?)\s*\(([^)]*)\)\s*$/.exec(p.trim())
-    const word = (m ? m[1] : p).trim()
+    const written = (m ? m[1] : p).trim()
     const tags = m ? m[2].split(',').map((t) => t.trim()).filter(Boolean) : []
-    return tags.length ? `{ word: ${JSON.stringify(word)}, tags: ${JSON.stringify(tags)} }` : JSON.stringify(word)
+    const tidy = (s: string) => s.replace(/\s+/g, ' ').trim()
+    const forms = written.includes('[')
+      ? [...new Set([tidy(written.replace(/\[[^\]]*\]/g, ' ')), tidy(written.replace(/[[\]]/g, ''))])]
+      : [written]
+    return forms.map((word) => (tags.length ? `{ word: ${JSON.stringify(word)}, tags: ${JSON.stringify(tags)} }` : JSON.stringify(word)))
   })
 }
 
