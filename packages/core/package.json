@@ -1,6 +1,6 @@
 {
   "name": "which-dialect",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "description": "Translate words between languages and dialects, meaning by meaning, starting with Vietnamese (Northern, Central, Southern) and English, with Wiktionary data loaded on demand. More languages are planned.",
   "type": "module",
   "main": "./dist/index.js",

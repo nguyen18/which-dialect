@@ -1,6 +1,6 @@
 {
   "name": "which-dialect-vi",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "description": "Vietnamese dictionary data with Northern, Central and Southern dialect regions, from Wiktionary via Kaikki.org. Loaded by which-dialect.",
   "files": [
     "data",

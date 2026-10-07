@@ -25,7 +25,7 @@ export * from './pos.ts'
  * Data packages this version of the API reads by default, as a jsDelivr version range.
  * Bump it when the data format changes.
  */
-export const DATA_VERSION = '0.1'
+export const DATA_VERSION = '0.2'
 
 /** Labels left out of search results unless `exclude` is passed. */
 export const DEFAULT_EXCLUDED_LABELS = [

@@ -208,7 +208,7 @@ Each sentence has `original`, `parts`, `corrected`, `changes` (`{ from, to, why,
 
 ### `createDictionary({ lang, baseUrl?, load? })`
 
-One language's dictionary. `baseUrl` defaults to `https://cdn.jsdelivr.net/npm/which-dialect-<lang>@0.1/data`.
+One language's dictionary. `baseUrl` defaults to `https://cdn.jsdelivr.net/npm/which-dialect-<lang>@0.2/data`.
 
 - `dictionary.lookup(word)`: all entries for a word, with every sense's definitions, regions, labels, synonyms and variant links (`altOf`). The word as written, else lowercase, else capitalized, so names written in lowercase are found (*nhật* → *Nhật*, Japan; *nhật bản* → *Nhật Bản*).
 - `dictionary.searchEnglish(term, { region?, pos?, exclude?, limit?, allSenses? })`: words for an English term in this language, one per word, best first (no meaning handling: use the translator for that). `allSenses: true` returns every matching sense of those words instead.
@@ -330,4 +330,4 @@ npm publish -w which-dialect-vi
 npm publish -w which-dialect
 ```
 
-The API loads data versions matching `DATA_VERSION` in `packages/core/src/index.ts` (currently `0.1`). Data-only updates can publish new 0.1.x data versions without touching the API; bump `DATA_VERSION` when the data format changes.
+The API loads data versions matching `DATA_VERSION` in `packages/core/src/index.ts` (currently `0.2`; `0.1` up to which-dialect 0.5.6). Data-only updates can publish new 0.2.x data versions without touching the API; bump `DATA_VERSION` when the data format changes.
