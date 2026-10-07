@@ -21,7 +21,7 @@ const force = process.argv.includes('--force')
 // Every language data package in the repo (packages/<lang> named which-dialect-<lang>).
 const langs = readdirSync(join(ROOT, 'packages')).filter((d) => existsSync(join(ROOT, 'packages', d, 'package.json')) && d !== 'core')
 
-// The newest published version the API reads (DATA_VERSION, e.g. 0.1.x).
+// The newest published version the API reads (DATA_VERSION, e.g. 0.2.x).
 async function latest(name: string): Promise<{ version: string; tarball: string }> {
   const res = await fetch(`https://registry.npmjs.org/${name}`)
   if (!res.ok) throw new Error(`${name}: npm registry ${res.status}`)

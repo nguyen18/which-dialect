@@ -1,6 +1,6 @@
 {
   "name": "which-dialect-en",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "English dictionary data with regional usage (US, UK, Australia, India, …) plus parts of speech and base forms, from Wiktionary via Kaikki.org. Loaded by which-dialect, and used by its translator.",
   "files": [
     "data",

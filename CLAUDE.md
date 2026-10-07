@@ -28,8 +28,8 @@ only), so npm and jsDelivr always match `main`.
 
 - npm won't republish a version, so **bump versions in the same branch as the change**: `which-dialect`
   when `packages/core` changed; a data package (`which-dialect-vi`, `which-dialect-en`) when its built
-  data changed (rebuilds, build-script or config changes), with a patch bump (0.1.x) so it stays within
-  the API's `DATA_VERSION` (`'0.1'`). If the data format changes, bump `DATA_VERSION` and the data minor
+  data changed (rebuilds, build-script or config changes), with a patch bump (0.2.x) so it stays within
+  the API's `DATA_VERSION` (`'0.2'`; it was `'0.1'` up to `which-dialect` 0.5.6). If the data format changes, bump `DATA_VERSION` and the data minor
   version together. Don't publish a package whose contents didn't change, and only packages that exist
   in the repo (Spanish was removed).
 - Before publishing: rebuild changed languages (English first; Vietnamese uses it), then `npm test`,
