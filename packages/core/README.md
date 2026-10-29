@@ -2,7 +2,7 @@
 
 Translate words **between languages and between dialects**, meaning by meaning: Northern Vietnamese *ngô* into Southern *bắp*, English *cool* (as in "awesome") into Southern Vietnamese *ngầu*, English "I" into the right Vietnamese pronoun for who you're talking to, US *truck* into UK *lorry*. Dictionary data comes from [Wiktionary](https://en.wiktionary.org/) (via [Kaikki.org](https://kaikki.org/)) and loads only when you need it.
 
-**Status:** which-dialect is starting with **Vietnamese**, with English as the bridge language, and the current focus is cleaning up Vietnamese translations. **More languages are planned.** The translator and data format are language-general, so adding one is a config file plus a data package (see [Adding a language](#adding-a-language)). Spanish was supported early on and has been removed for now so the work can focus on Vietnamese.
+**Status:** which-dialect is starting with **Vietnamese**, with English as the bridge language, and the current focus is cleaning up Vietnamese translations. **More languages are planned.** The translator and data format are language-general, so adding one is a config file plus a data package (see [Adding a language](#adding-a-language)). **Spanish** is supported too, by country and region group (Spain, Mexico, Latin America, Río de la Plata, …).
 
 ```ts
 import { createTranslator } from 'which-dialect'
@@ -18,7 +18,7 @@ await tr.translate('cool', { from: 'en', to: 'vi', toRegion: 'Southern', meaning
 
 Each result is a list of **groups, one per meaning** of the source word, each with its part of speech, its definitions and its translations, so a word's meanings never get mixed up.
 
-**Data:** Wiktionary data of 2026-09-25 for both languages. See [`DATA_UPDATES.md`](DATA_UPDATES.md) for each language's dates and update history.
+**Data:** Wiktionary data of 2026-09-25 (Vietnamese: 2026-09-28). See [`DATA_UPDATES.md`](DATA_UPDATES.md) for each language's dates and update history.
 
 You install one small package. Dictionary data is **not bundled**: each lookup fetches one small file (usually 5–100 kB compressed) from the language's data package on the jsDelivr CDN, and caches it.
 
@@ -27,9 +27,10 @@ You install one small package. Dictionary data is **not bundled**: each lookup f
 | Language | Code | Data package | Regions | Entries | Region-tagged senses |
 |---|---|---|---|---|---|
 | Vietnamese | `vi` | [`which-dialect-vi`](packages/vi) | Northern, Central, Southern | 35,394 | 1,330 of 42,419 (3.1%) |
+| Spanish | `es` | [`which-dialect-es`](packages/es) | 23 countries (Spain, Mexico, Argentina, Cuba, …), plus groups: Latin America, Central America, Caribbean, South America, Río de la Plata | 123,995 | 11,940 of 153,963 (7.8%) |
 | English | `en` | [`which-dialect-en`](packages/en) | 15 countries/areas (US, UK, Australia, India, …), plus groups: North America, British Isles, Commonwealth, … | 594,544 | 37,339 of 776,085 (4.8%) |
 
-Vietnamese and English can be translated in both directions, and between any of their regions, including between two dialects of one language (Northern → Southern Vietnamese, US → UK English). English is also the bridge every language's definitions are written in.
+Any of these languages can be translated into any other, in both directions and between any of their regions, including between two dialects of one language (Northern → Southern Vietnamese, US → UK English, Spain → Mexico Spanish) and dialect to dialect across languages (Mexican Spanish → Southern Vietnamese). English is also the bridge every language's definitions are written in.
 
 More languages are planned. Each one is a config file in [`languages/`](languages) plus a data package in `packages/<code>`; see [Adding a language](#adding-a-language).
 
@@ -98,14 +99,14 @@ Picks are keyed by English meaning, so each language needs one list however many
 
 ### How accurate is it?
 
-`npm run evaluate` runs known-correct translations across language pairs and dialect pairs (English → Vietnamese by region, including pronouns, Northern → Southern Vietnamese, US ↔ UK, Vietnamese → English). A case passes when a correct word is in the top 3 of the first meaning:
+`npm run evaluate` runs known-correct translations across language pairs and dialect pairs (English → Vietnamese by region, including pronouns, English → Spanish by country, Spanish ↔ Vietnamese, Northern → Southern Vietnamese, Spain ↔ Mexico, US ↔ UK, Vietnamese → English). A case passes when a correct word is in the top 3 of the first meaning:
 
 | Set | Correct word in top 3 | Correct word first |
 |---|---|---|
-| Tuning set (used while developing) | 49 / 49 (100%) | 49 / 49 (100%); 48 / 49 without picks |
-| Held-out set (written afterwards, not tuned against) | 17 / 17 (100%) | 16 / 17 (94%) |
+| Tuning set (used while developing) | 88 / 91 (97%) | 82 / 91 (90%); 81 / 91 without picks |
+| Held-out set (written afterwards, not tuned against) | 29 / 30 (97%) | 28 / 30 (93%) |
 
-The cases involving Spanish were removed with it. The held-out set has since been looked at, so new held-out cases are needed before relying on it (see [`FUTURE_IMPROVEMENTS.md`](FUTURE_IMPROVEMENTS.md)).
+With Spanish back (2026-10-29), its cases are back too; the misses are Spanish (*cerdo* without a part of speech, and Mexican "popcorn" and "cat"; see [`FUTURE_IMPROVEMENTS.md`](FUTURE_IMPROVEMENTS.md)). The held-out set has since been looked at, so new held-out cases are needed before relying on it (see [`FUTURE_IMPROVEMENTS.md`](FUTURE_IMPROVEMENTS.md)).
 
 ## Checking text
 
@@ -311,7 +312,7 @@ Generated data isn't committed (it would bloat git history); it's built before p
 
 ### Adding a language
 
-1. Add `languages/<code>.ts`: the Kaikki language name, the language's regions (and groups, if any), and how to read regions from Wiktionary's tags. See [`languages/vi.ts`](languages/vi.ts) (dialect areas and a pronoun table) and [`languages/en.ts`](languages/en.ts) (countries with region groups, and trimming a very large language). Spanish was built this way too (countries and region groups; `languages/es.ts` in the git history). Set `placeNames: {}` so its place names translate ("Japan" ↔ its name for Japan). Set `skipFormOf` for heavily inflected languages; for very large ones, see the trimming options in [`scripts/language-config.ts`](scripts/language-config.ts) (`dropTechnical`, `formOfPos`, `keepFormOf`, `maxSensesPerEntry`, `shardLength`, …).
+1. Add `languages/<code>.ts`: the Kaikki language name, the language's regions (and groups, if any), and how to read regions from Wiktionary's tags. See [`languages/vi.ts`](languages/vi.ts) (dialect areas and a pronoun table) and [`languages/en.ts`](languages/en.ts) (countries with region groups, and trimming a very large language). [`languages/es.ts`](languages/es.ts) shows countries with region groups (Latin America, Río de la Plata) and `skipFormOf`. Set `placeNames: {}` so its place names translate ("Japan" ↔ its name for Japan). Set `skipFormOf` for heavily inflected languages; for very large ones, see the trimming options in [`scripts/language-config.ts`](scripts/language-config.ts) (`dropTechnical`, `formOfPos`, `keepFormOf`, `maxSensesPerEntry`, `shardLength`, …).
 2. Copy a data package (`packages/vi`) to `packages/<code>` and update its `package.json` and `README.md`.
 3. Add the language's code to `translationLangs` in `languages/en.ts` (so English keeps its translation tables for it) and rebuild English.
 4. `npm run build:data -- <code>`, check the results, add a few real-data tests and evaluation cases, and publish.

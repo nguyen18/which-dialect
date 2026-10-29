@@ -196,6 +196,31 @@ describe('Vietnamese data', { skip: !existsSync(viData) && 'run `npm run build:d
   })
 })
 
+// Checks against the real Spanish build. Run `npm run build:data -- es` first; skipped otherwise.
+const esData = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'es', 'data')
+describe('Spanish data', { skip: !existsSync(esData) && 'run `npm run build:data -- es` first' }, () => {
+  const dict = createDictionary({ lang: 'es', load: async (p) => JSON.parse(await readFile(join(esData, p), 'utf8')) })
+  const words = async (term: string, region?: string) => (await dict.searchEnglish(term, { region })).map((h) => h.word)
+
+  it('separates Spain from Latin America', async () => {
+    assert.equal((await words('car', 'Spain'))[0], 'coche')
+    // "auto" and "carro" are both everyday Mexican words; frequency puts "auto" first.
+    assert.ok((await words('car', 'Mexico')).slice(0, 3).includes('carro'))
+    assert.equal((await words('computer', 'Spain'))[0], 'ordenador')
+    assert.ok((await words('computer', 'Latin America')).includes('computadora'))
+  })
+
+  it('expands group tags to their countries', async () => {
+    assert.ok((await words('you', 'Argentina')).includes('vos'))
+    assert.ok((await words('popcorn', 'Argentina')).includes('pochoclo'))
+  })
+
+  it('leaves out inflected forms', async () => {
+    assert.deepEqual(await dict.lookup('hablamos'), [])
+    assert.ok((await dict.lookup('hablar')).length > 0)
+  })
+})
+
 describe('hand-picked words (fake data)', () => {
   // English "fetch" has one meaning, whose translation table lists source-language (yy) "holen". The
   // target language (xx) ranks "wrong" first for "fetch" and has picks for that meaning.
@@ -411,5 +436,39 @@ describe('translator (real data)', { skip: !built && 'build en and vi data first
     const parent = group.relationships?.find((r) => r.id === 'parent')
     assert.deepEqual(parent?.words.map((c) => c.word), ['con'])
     assert.ok(group.relationships?.find((r) => r.id === 'close-friend')?.warning)
+  })
+})
+
+// Translator checks involving Spanish; skipped unless en, vi and es are all built.
+const builtEs = ['en', 'vi', 'es'].every((l) => existsSync(join(root, l, 'data')))
+describe('translator with Spanish (real data)', { skip: !builtEs && 'build en, vi and es data first' }, () => {
+  const tr = createTranslator({
+    load: (lang) => async (p) => JSON.parse(await readFile(join(root, lang, 'data', p), 'utf8')),
+  })
+  const top = async (word: string, options: Parameters<typeof tr.translate>[1]) =>
+    (await tr.translate(word, options))[0]?.translations.map((t) => t.word) ?? []
+
+  it('translates between languages, into a dialect', async () => {
+    // "chất" and "ngầu" are both Southern slang for cool (as in the evaluation).
+    assert.ok((await top('chido', { from: 'es', fromRegion: 'Mexico', to: 'vi', toRegion: 'Southern' })).some((w) => ['ngầu', 'chất'].includes(w)))
+    assert.ok((await top('heo', { from: 'vi', fromRegion: 'Southern', to: 'es', toRegion: 'Mexico' })).some((w) => ['cerdo', 'puerco', 'cochino', 'chancho'].includes(w)))
+  })
+
+  it('translates between dialects of one language', async () => {
+    assert.ok((await top('coche', { from: 'es', fromRegion: 'Spain', to: 'es', toRegion: 'Mexico' })).includes('carro'))
+  })
+
+  it('ranks the everyday word first', async () => {
+    assert.equal((await top('cerdo', { from: 'es', to: 'vi', toRegion: 'Southern', pos: 'noun' }))[0], 'heo')
+  })
+
+  it('ignores the listener without a pronoun table', async () => {
+    assert.equal((await top('I', { from: 'en', to: 'es', listener: 'parent' }))[0], 'yo')
+  })
+
+  it('translates Vietnamese pronouns into Spanish', async () => {
+    // Into another language, as its "I".
+    const es = await tr.translate('em', { from: 'vi', to: 'es', pos: 'pron' })
+    assert.equal(es.find((g) => g.pronounUses?.some((u) => u.person === 'self'))?.translations[0]?.word, 'yo')
   })
 })

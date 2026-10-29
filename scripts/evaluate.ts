@@ -2,11 +2,12 @@
 //
 //   node --experimental-strip-types scripts/evaluate.ts [--verbose]
 //
-// Uses the built data in packages/<lang>/data (build en and vi first). A case passes when one of
+// Uses the built data in packages/<lang>/data (build en, es and vi first). A case passes when one of
 // its expected words is in the top 3 of the first (most relevant) translation group. Each set is run
 // with hand-picked words (the default) and without them (the ranking alone), and broken down by
 // target language.
 
+import { existsSync } from 'node:fs'
 import { readFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -26,6 +27,8 @@ const c = (p: ReturnType<typeof pair>, word: string, expect: string[], extra: Pa
 
 const enViS = pair('en', undefined, 'vi', 'Southern')
 const enViN = pair('en', undefined, 'vi', 'Northern')
+const enEsSpain = pair('en', undefined, 'es', 'Spain')
+const enEsMexico = pair('en', undefined, 'es', 'Mexico')
 
 export const CASES: Case[] = [
   // English -> Vietnamese
@@ -68,6 +71,43 @@ export const CASES: Case[] = [
   c(enViS, 'she', ['chỉ', 'chị ấy']),
   c(pair('en', undefined, 'vi', undefined), 'we', ['chúng tôi', 'chúng ta']),
   c(pair('en', undefined, 'vi', undefined), 'they', ['họ']),
+  // English -> Spanish
+  c(enEsSpain, 'car', ['coche']),
+  c(enEsMexico, 'car', ['carro', 'auto']),
+  c(enEsSpain, 'computer', ['ordenador']),
+  c(pair('en', undefined, 'es', 'Latin America'), 'computer', ['computadora', 'computador']),
+  c(enEsSpain, 'juice', ['zumo']),
+  c(enEsMexico, 'juice', ['jugo']),
+  c(enEsMexico, 'bus', ['camión']),
+  c(pair('en', undefined, 'es', 'Cuba'), 'bus', ['guagua']),
+  // `meaning` is matched by shared words: English Wiktionary defines this sense as "Fashionable; trendy;
+  // hip." and Spanish defines guay/molón only as "cool", so "awesome great" can't find it (it passed by
+  // luck before register matching). Use the definition's wording, as apps that show definitions do.
+  c(enEsSpain, 'cool', ['guay', 'molón'], { meaning: 'fashionable' }),
+  c(enEsMexico, 'cool', ['chido', 'padre'], { meaning: 'awesome great' }),
+  c(pair('en', undefined, 'es', 'Argentina'), 'popcorn', ['pochoclo', 'pororó']),
+  c(enEsMexico, 'popcorn', ['palomitas', 'palomita']),
+  c(pair('en', undefined, 'es', 'Argentina'), 'car', ['auto']),
+  c(pair('en', undefined, 'es', 'Argentina'), 'you', ['vos']),
+  c(enEsSpain, 'peach', ['melocotón']),
+  c(enEsMexico, 'peach', ['durazno']),
+  c(enEsMexico, 'straw', ['popote'], { meaning: 'drinking tube' }),
+  // Spanish -> Vietnamese (dialect to dialect)
+  c(pair('es', undefined, 'vi', 'Southern'), 'coche', ['xe hơi', 'ô tô', 'ôtô', 'xe']),
+  c(pair('es', undefined, 'vi', 'Southern'), 'perro', ['chó']),
+  c(pair('es', undefined, 'vi', 'Southern'), 'hablar', ['nói']),
+  c(pair('es', 'Spain', 'vi', 'Southern'), 'zumo', ['nước ép', 'nước trái cây']),
+  c(pair('es', 'Mexico', 'vi', 'Southern'), 'chido', ['ngầu', 'chất']),
+  c(pair('es', 'Caribbean', 'vi', 'Southern'), 'guagua', ['xe buýt', 'xe bus', 'buýt']),
+  c(pair('es', undefined, 'vi', 'Southern'), 'cerdo', ['heo']),
+  c(pair('es', undefined, 'vi', 'Northern'), 'cerdo', ['lợn']),
+  c(pair('es', 'Mexico', 'vi', 'Southern'), 'elote', ['bắp']),
+  // Vietnamese -> Spanish
+  c(pair('vi', 'Southern', 'es', 'Mexico'), 'heo', ['cerdo', 'puerco', 'cochino', 'chancho', 'marrano', 'cocho']),
+  c(pair('vi', undefined, 'es', undefined), 'chờ', ['esperar']),
+  c(pair('vi', 'Southern', 'es', undefined), 'má', ['madre', 'mamá']),
+  c(pair('vi', undefined, 'es', 'Mexico'), 'ngầu', ['chido', 'padre'], { meaning: 'cool awesome' }),
+  c(pair('vi', 'Southern', 'es', 'Mexico'), 'bắp', ['maíz', 'elote']),
   // Vietnamese, Northern -> Southern
   c(pair('vi', 'Northern', 'vi', 'Southern'), 'lợn', ['heo']),
   c(pair('vi', 'Northern', 'vi', 'Southern'), 'ngô', ['bắp']),
@@ -75,6 +115,15 @@ export const CASES: Case[] = [
   c(pair('vi', 'Northern', 'vi', 'Southern'), 'dứa', ['thơm', 'khóm']),
   c(pair('vi', 'Northern', 'vi', 'Southern'), 'mẹ', ['má']),
   c(pair('vi', 'Northern', 'vi', 'Southern'), 'vâng', ['dạ']),
+  // Spanish, Spain <-> Mexico
+  c(pair('es', 'Spain', 'es', 'Mexico'), 'coche', ['carro', 'auto']),
+  c(pair('es', 'Spain', 'es', 'Mexico'), 'ordenador', ['computadora']),
+  c(pair('es', 'Spain', 'es', 'Mexico'), 'zumo', ['jugo']),
+  c(pair('es', 'Spain', 'es', 'Mexico'), 'autobús', ['camión']),
+  c(pair('es', 'Spain', 'es', 'Mexico'), 'melocotón', ['durazno']),
+  c(pair('es', 'Mexico', 'es', 'Spain'), 'carro', ['coche']),
+  c(pair('es', 'Mexico', 'es', 'Spain'), 'computadora', ['ordenador']),
+  c(pair('es', 'Mexico', 'es', 'Spain'), 'jugo', ['zumo']),
   // English, US <-> UK
   c(pair('en', 'US', 'en', 'UK'), 'truck', ['lorry']),
   c(pair('en', 'US', 'en', 'UK'), 'apartment', ['flat']),
@@ -88,6 +137,10 @@ export const CASES: Case[] = [
   c(pair('vi', undefined, 'en', undefined), 'heo', ['pig', 'hog', 'swine']),
   c(pair('vi', undefined, 'en', undefined), 'chờ', ['wait', 'await']),
   c(pair('vi', undefined, 'en', undefined), 'ngầu', ['cool'], { meaning: 'awesome' }),
+  c(pair('es', undefined, 'en', undefined), 'coche', ['car', 'automobile']),
+  c(pair('es', 'Spain', 'en', 'UK'), 'zumo', ['juice']),
+  // With the intended part of speech: "cerdo" is listed as an adjective ("dirty") first.
+  c(pair('es', undefined, 'vi', 'Southern'), 'cerdo', ['heo'], { pos: 'noun' }),
 ]
 
 // Held-out cases, written after the tuning above and not tuned against: a check on how well the
@@ -103,10 +156,23 @@ export const HOLDOUT: Case[] = [
   c(enViS, 'money', ['tiền']),
   c(enViS, 'run', ['chạy']),
   c(enViS, 'sleep', ['ngủ']),
+  c(enEsMexico, 'water', ['agua']),
+  c(enEsMexico, 'house', ['casa']),
+  c(enEsMexico, 'eat', ['comer']),
+  c(enEsMexico, 'friend', ['amigo', 'cuate', 'compa']),
+  c(enEsMexico, 'cat', ['gato']),
+  c(pair('es', undefined, 'vi', 'Southern'), 'agua', ['nước']),
+  c(pair('es', undefined, 'vi', 'Southern'), 'casa', ['nhà']),
+  c(pair('es', undefined, 'vi', 'Southern'), 'comer', ['ăn']),
+  c(pair('vi', undefined, 'es', undefined), 'nước', ['agua']),
+  c(pair('vi', undefined, 'es', undefined), 'mèo', ['gato']),
   c(pair('en', 'US', 'en', 'UK'), 'vacation', ['holiday', 'holidays']),
   c(pair('en', 'US', 'en', 'UK'), 'trash', ['rubbish']),
   c(pair('en', 'US', 'en', 'UK'), 'diaper', ['nappy']),
   c(pair('en', 'US', 'en', 'UK'), 'subway', ['underground', 'tube']),
+  c(pair('es', 'Spain', 'es', 'Mexico'), 'patata', ['papa']),
+  c(pair('es', 'Spain', 'es', 'Mexico'), 'conducir', ['manejar']),
+  c(pair('es', 'Spain', 'es', 'Mexico'), 'gafas', ['lentes', 'anteojos']),
   c(pair('vi', 'Northern', 'vi', 'Southern'), 'bát', ['chén']),
   c(pair('vi', 'Northern', 'vi', 'Southern'), 'thìa', ['muỗng']),
   c(pair('vi', 'Northern', 'vi', 'Southern'), 'quả', ['trái']),
@@ -146,11 +212,18 @@ async function main() {
   const tr = createTranslator({
     load: (lang) => async (p) => JSON.parse(await readFile(join(ROOT, 'packages', lang, 'data', p), 'utf8')),
   })
-  await run(CASES, 'Tuning set', verbose, tr)
-  await run(HOLDOUT, 'Held-out set (not tuned against)', verbose, tr)
+  // Cases touching a language whose data isn't built are skipped, with one note, rather than crashing.
+  const built = (lang: string) => existsSync(join(ROOT, 'packages', lang, 'data'))
+  const all = [...CASES, ...HOLDOUT]
+  const notBuilt = [...new Set(all.flatMap((k) => [k.from, k.to]).filter((l) => !built(l)))]
+  const skipped = all.filter((k) => !built(k.from) || !built(k.to)).length
+  if (skipped) console.log(`skipped ${skipped} cases: ${notBuilt.join(', ')} not built`)
+  const usable = (cases: Case[]) => cases.filter((k) => built(k.from) && built(k.to))
+  await run(usable(CASES), 'Tuning set', verbose, tr)
+  await run(usable(HOLDOUT), 'Held-out set (not tuned against)', verbose, tr)
   // Without hand-picked words: what the ranking does on its own (picks must not hide ranking problems).
-  await run(CASES, 'Tuning set, ranking only (picks off)', verbose, tr, false)
-  await run(HOLDOUT, 'Held-out set, ranking only (picks off)', verbose, tr, false)
+  await run(usable(CASES), 'Tuning set, ranking only (picks off)', verbose, tr, false)
+  await run(usable(HOLDOUT), 'Held-out set, ranking only (picks off)', verbose, tr, false)
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) main()

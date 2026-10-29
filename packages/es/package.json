@@ -1,0 +1,25 @@
+{
+  "name": "which-dialect-es",
+  "version": "0.2.0",
+  "description": "Spanish dictionary data with country and regional usage (Spain, Mexico, Argentina, the Caribbean, …), from Wiktionary via Kaikki.org. Loaded by which-dialect.",
+  "files": [
+    "data",
+    "LICENSE",
+    "README.md"
+  ],
+  "keywords": [
+    "spanish",
+    "español",
+    "dictionary",
+    "dialect",
+    "wiktionary",
+    "which-dialect"
+  ],
+  "license": "CC-BY-SA-4.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nguyen18/which-dialect.git",
+    "directory": "packages/es"
+  },
+  "homepage": "https://github.com/nguyen18/which-dialect#readme"
+}

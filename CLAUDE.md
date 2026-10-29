@@ -27,11 +27,11 @@ Every merge to `main` is followed by publishing the npm packages, without waitin
 only), so npm and jsDelivr always match `main`.
 
 - npm won't republish a version, so **bump versions in the same branch as the change**: `which-dialect`
-  when `packages/core` changed; a data package (`which-dialect-vi`, `which-dialect-en`) when its built
+  when `packages/core` changed; a data package (`which-dialect-vi`, `which-dialect-en`, `which-dialect-es`) when its built
   data changed (rebuilds, build-script or config changes), with a patch bump (0.2.x) so it stays within
   the API's `DATA_VERSION` (`'0.2'`; it was `'0.1'` up to `which-dialect` 0.5.6). If the data format changes, bump `DATA_VERSION` and the data minor
   version together. Don't publish a package whose contents didn't change, and only packages that exist
-  in the repo (Spanish was removed).
+  in the repo.
 - Before publishing: rebuild changed languages (English first; Vietnamese uses it), then `npm test`,
   `npm run typecheck` and `npm run evaluate` on the built data. Data packages first, then the API.
 - The npm account (nguyen18) has **2FA**: don't publish from Claude Code's shell or the `!` prompt

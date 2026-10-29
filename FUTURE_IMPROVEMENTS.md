@@ -34,7 +34,7 @@ source sense is itself a letter.
 
 **Problem:** `tableFor()` looks up English bridge terms, which are lowercase, so for "I" it finds the
 letter *i*, not the pronoun *I*, and misses its translation table. Spanish *yo* → Vietnamese missed
-*tôi* because of this (when Spanish was supported). `englishCandidates()` had the same bug and was
+*tôi* because of this. `englishCandidates()` had the same bug and was
 fixed (it also looks up the capitalized word and prefers the exact part of speech); `tableFor()` needs
 the same fix.
 
@@ -208,12 +208,11 @@ Vietnamese. More languages are planned; the code is language-general (region gro
 `translationLangs`, the pronoun table), so adding one is a config file plus a data package (README:
 "Adding a language").
 
-### Spanish (removed 2026-09-30, to add back later)
+### Spanish (added back 2026-10-29)
 
-Spanish was supported from 2026-09-27 and removed to focus on Vietnamese. To bring it back: restore
-`languages/es.ts` and `packages/es/` from git history (last in commit `e0136ed`), add `'es'` back to
-`translationLangs` in `languages/en.ts`, rebuild es and en, and restore the Spanish test suite and
-evaluation cases (also in that commit). Known problems to fix when it comes back:
+Spanish was supported from 2026-09-27, removed on 2026-09-30 to focus on Vietnamese, and added back on
+2026-10-29 as it was (plus `placeNames`). Known problems, from before the removal and not re-checked
+unless noted:
 
 - "you" leads with object forms (*le*, *os*) and mostly misses *tú*: Wiktionary lists the plural and
   object senses of "you" first, and their tables are object clitics.
@@ -221,13 +220,17 @@ evaluation cases (also in that commit). Known problems to fix when it comes back
 - *tú* → Vietnamese gives dialectal *mầy*/*bay*/*bây*, far stronger than *tú*.
 - *ellos* → Vietnamese gives nothing.
 - *yo* → Vietnamese misses *tôi* (the lowercase "i" bug in `tableFor`, above).
-- *cerdo* without `pos` fails: its adjective sense ("dirty") is listed first.
+- *cerdo* without `pos` fails: its adjective sense ("dirty") is listed first (still failing 2026-10-29:
+  Southern *dơ*, Northern *bẩn*).
+- Evaluation misses on 2026-10-29 (new since the removal): "popcorn" (Mexico) gives *roseta*, *tostón*,
+  *palomilla* instead of *palomitas*; "cat" (Mexico, held-out) gives *felino*, *tac*, *mozo* instead of *gato*.
 - A pronoun table for Spanish could cover *tú* / *usted* / *vos* by relationship and region.
-- The Spanish data needs a rebuild to pick up the subpage-title fix ("i/languages M to Z" → *i*).
 
-Removing Spanish also shrank the English data from 140.2 to 136.2 MB (it stored Spanish translation
-tables), leaving more room under jsDelivr's ~150 MB package limit. Adding languages back will grow it
-again; check the size each time.
+- Spanish has no picks, sentence frames or grammar checker yet (all optional per language).
+
+English stores a translation table for each language, so it grew from 136.2 to 142.8 MB with Spanish
+back, about 7 MB under jsDelivr's ~150 MB package limit. The next language will likely need English
+trimmed first (e.g. fewer examples, or tables only for senses with a frequency).
 
 ## Publishing and apps
 
