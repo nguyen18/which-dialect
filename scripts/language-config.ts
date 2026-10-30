@@ -30,6 +30,14 @@ export type LanguageConfig = {
    * They're most of a heavily inflected language's entries and aren't how learners look words up.
    */
   skipFormOf?: boolean
+  /**
+   * Put inflected forms in a compact forms index (forms/<shard>.json, see FormShard) instead of dropping
+   * them (skipFormOf) or storing them as entries: each is just its lemma, part of speech, which form it is
+   * and its frequency, so a heavily inflected language can look up "hablo" (→ hablar) and the checker can
+   * fix accents on forms ("hable" vs "hablé") without its data tripling. `keep` returns false to leave a form
+   * out (Spanish: verbs with attached pronouns, "dámelo"). Takes precedence over skipFormOf for inflections.
+   */
+  formsIndex?: { keep?: (tags: string[], pos: string) => boolean }
   /** Return false to leave a headword out. */
   keepWord?: (word: string) => boolean
   /**

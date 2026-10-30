@@ -188,6 +188,7 @@ const PLAIN_TYPO_MIN_ZIPF = 4
 const SPELLING_CANDIDATES = 3
 
 async function spelling(ctx: Context): Promise<CheckIssue[]> {
+  if (ctx.config.units === 'words') return wordSpelling(ctx)
   if (ctx.config.units !== 'syllables' || !ctx.meta.syllables) return []
   const syllables = await ctx.dict.syllables()
   const byPlain = syllablesByPlain(syllables)
@@ -317,6 +318,58 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
           ? `${quote(u.text)} looks typed without accents. Did you mean ${options(u, better)}?`
           : `${quote(u.text)} is a rare word; did you mean ${options(u, better)}?`)
       }
+    }
+  }
+  return issues
+}
+
+// Wiktionary's own misspelling entries ("misspelling of también", "common misspelling of …"). A word counts
+// as misspelt when it's a misspelling and otherwise only an out-of-use spelling ("tambien": misspelling, and
+// obsolete spelling, of también).
+const MISSPELLING = /\bmisspelling of ([\p{L}\p{M}'-]+)/iu
+const NOT_IN_USE_SPELLING = /\b(misspelling|obsolete spelling|archaic spelling|dated spelling|obsolete form|archaic form) of\b/i
+// Zipf points below the most common look-alike beyond which another isn't suggested.
+const RARE_VARIANT_GAP = 2
+
+// Spelling and accents for languages written in words (Spanish), from the dictionary alone: a word it doesn't
+// know, as a headword or an inflected form (the forms index), that matches known words once accents are
+// dropped gets the most common of them ("cancion" → "canción", "tambien" → "también"). Known words are left
+// alone even when an accented one is more
+// common ("esta" is a word, as "está" is), and so are unknown words with no such match (names, other
+// languages, typos this can't fix), and words capitalized mid-sentence (names).
+async function wordSpelling(ctx: Context): Promise<CheckIssue[]> {
+  const issues: CheckIssue[] = []
+  for (const sentence of ctx.sentences) {
+    for (const w of sentence.words) {
+      if (w.units.length !== 1) continue
+      // Words the dictionary lists only as misspellings ("tambien": "misspelling of también") count as unknown,
+      // with what they're a misspelling of.
+      const senses = w.entries.flatMap((e) => e.senses)
+      const misspelt =
+        senses.some((s) => MISSPELLING.test(s.glosses[0] ?? '')) && senses.every((s) => NOT_IN_USE_SPELLING.test(s.glosses[0] ?? ''))
+      if (w.entries.length && !misspelt) continue
+      const u = w.units[0]
+      if (ctx.inBase(u) || !/\p{L}/u.test(u.text)) continue
+      if (u !== sentence.units[0] && /\p{Lu}/u.test(u.text.charAt(0))) continue
+      const variants = await ctx.dict.variants(u.text, { limit: 3 })
+      // Rare look-alikes don't crowd out the word meant ("nino": niño, not also ñiño).
+      const best = variants[0]?.frequency
+      const found = unique([
+        ...(misspelt ? senses.map((s) => s.altOf ?? MISSPELLING.exec(s.glosses[0] ?? '')?.[1]) : []).filter((x): x is string => Boolean(x)),
+        ...variants.filter((v) => best === undefined || (v.frequency ?? -Infinity) >= best - RARE_VARIANT_GAP).map((v) => v.word),
+      ]).slice(0, 3)
+      if (!found.length) continue
+      // Missing accents is the common learner slip; a wrong accent is more surely wrong.
+      const accented = plain(u.text) !== u.text
+      issues.push({
+        rule: 'spelling',
+        severity: accented ? 'error' : 'warning',
+        start: u.start,
+        end: u.end,
+        text: u.text,
+        message: `${quote(u.text)} isn't a ${ctx.meta.name} word. Did you mean ${listOf(found.map(quote), 'or')}?`,
+        suggestions: found.map((c) => matchCase(u.text, c)),
+      })
     }
   }
   return issues

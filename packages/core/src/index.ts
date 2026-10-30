@@ -10,13 +10,14 @@ import {
   type PronounRow,
   type EnglishShard,
   type Entry,
+  type FormShard,
   type Hit,
   type LanguageMeta,
   type PickRow,
   type StoredPronounRow,
   type WordShard,
 } from './types.ts'
-import { accentCombinations, segment as segmentUnits, syllablesByPlain, units } from './text.ts'
+import { accentCombinations, plain, segment as segmentUnits, syllablesByPlain, units } from './text.ts'
 
 export * from './types.ts'
 export * from './pos.ts'
@@ -141,8 +142,9 @@ export type Dictionary = {
   /**
    * Other words written with the same letters but other accents, that the dictionary has, most common
    * first: "muộn" → muốn, mượn, …; for words of several syllables, every syllable varies ("hom nay" →
-   * "hôm nay"). For languages written in syllables (with a syllable list); `[]` otherwise. The word
-   * itself isn't included.
+   * "hôm nay"). Languages written in words (with no syllable list) compare whole words, headwords and
+   * inflected forms alike: Spanish "cancion" → canción, "esta" → está, ésta. The word itself isn't
+   * included.
    */
   variants(word: string, options?: { limit?: number }): Promise<WordVariant[]>
 }
@@ -196,20 +198,44 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
   const meta = () => loadOnce<LanguageMeta>('meta.json')
 
   // Missing shards simply mean no words start with those letters, so they aren't requested.
-  async function shard<T>(kind: 'words' | 'en', term: string): Promise<T | null> {
+  async function shard<T>(kind: 'words' | 'en' | 'forms', term: string): Promise<T | null> {
     const m = await meta()
     const key = shardKey(term, m.shardLength)
-    return m.shards[kind].includes(key) ? loadOnce<T>(`${kind}/${key}.json`) : null
+    return m.shards[kind]?.includes(key) ? loadOnce<T>(`${kind}/${key}.json`) : null
+  }
+
+  // An inflected form from the forms index as an entry: one sense, "first-person singular present
+  // indicative of hablar", pointing at its lemma (altOf), used in every region like the lemma.
+  function formEntries(m: LanguageMeta, word: string, forms: FormShard[string]): Entry[] {
+    const descriptions = m.forms?.descriptions ?? []
+    return forms.map(([lemma, pos, description, frequency]) => ({
+      word,
+      pos,
+      senses: [
+        {
+          glosses: [(descriptions[description] ?? 'form of {}').replace('{}', lemma)],
+          regions: m.regions,
+          regionTagged: false,
+          labels: [],
+          altOf: lemma,
+        },
+      ],
+      ...(frequency !== undefined ? { frequency } : {}),
+    }))
   }
 
   async function lookup(word: string): Promise<Entry[]> {
     const w = word.trim()
-    const [m, data] = await Promise.all([meta(), shard<WordShard>('words', w)])
+    const [m, data, forms] = await Promise.all([meta(), shard<WordShard>('words', w), shard<FormShard>('forms', w)])
     // The word as written, else lowercase ("Mẹ" → "mẹ"), else capitalized for names written in lowercase
     // ("nhật" → "Nhật", Japan; "nhật bản" → "Nhật Bản"), which spellchecker suggestions and learners do.
     const titled = w.toLowerCase().replace(/(^|[\s-])(\p{Ll})/gu, (_, sep: string, c: string) => sep + c.toUpperCase())
-    const stored = data?.[w] ?? data?.[w.toLowerCase()] ?? data?.[titled] ?? []
-    return stored.map((e) => ({ ...e, senses: e.senses.map((s) => fromStored(s, m.regions)) }))
+    const key = [w, w.toLowerCase(), titled].find((k) => data?.[k] || forms?.[k])
+    if (!key) return []
+    // Headword entries first, then the word as an inflected form of others ("música": the noun, then the
+    // feminine of "músico").
+    const entries = (data?.[key] ?? []).map((e) => ({ ...e, senses: e.senses.map((s) => fromStored(s, m.regions)) }))
+    return [...entries, ...formEntries(m, key, forms?.[key] ?? [])]
   }
 
   const checker = async (): Promise<CheckerConfig> => {
@@ -220,6 +246,30 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
   const syllables = async (): Promise<Record<string, number>> => {
     const m = await meta()
     return m.syllables ? loadOnce<Record<string, number>>('syllables.json') : {}
+  }
+
+  // Variants for languages written in words: other headwords and inflected forms with the same letters
+  // once accents are dropped. Shards are keyed without accents, so they're all in the word's own shards.
+  async function wordVariants(word: string, limit: number) {
+    const written = word.trim().normalize('NFC').toLowerCase()
+    const target = plain(written)
+    if (!target) return []
+    const [data, forms] = await Promise.all([shard<WordShard>('words', written), shard<FormShard>('forms', written)])
+    const candidates = new Set<string>()
+    for (const key of [...Object.keys(data ?? {}), ...Object.keys(forms ?? {})]) {
+      const lower = key.toLowerCase()
+      if (lower !== written && plain(lower) === target) candidates.add(lower)
+    }
+    const found = await Promise.all([...candidates].map(async (c) => ({ word: c, entries: await lookup(c) })))
+    const frequency = (entries: Entry[]) => {
+      const known = entries.map((e) => e.frequency).filter((f): f is number => f !== undefined)
+      return known.length ? Math.max(...known) : undefined
+    }
+    return found
+      .filter((v) => v.entries.length)
+      .map((v) => ({ ...v, frequency: frequency(v.entries) }))
+      .sort((a, b) => (b.frequency ?? -1) - (a.frequency ?? -1))
+      .slice(0, limit)
   }
 
   return {
@@ -237,7 +287,7 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
 
     async variants(word, { limit = 5 } = {}) {
       const list = await syllables()
-      if (!Object.keys(list).length) return []
+      if (!Object.keys(list).length) return wordVariants(word, limit)
       const written = word.trim().normalize('NFC').toLowerCase()
       const parts = written.split(/\s+/)
       const combos = accentCombinations(parts, syllablesByPlain(list), {

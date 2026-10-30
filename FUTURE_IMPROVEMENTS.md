@@ -226,7 +226,13 @@ unless noted:
   *palomilla* instead of *palomitas*; "cat" (Mexico, held-out) gives *felino*, *tac*, *mozo* instead of *gato*.
 - A pronoun table for Spanish could cover *tú* / *usted* / *vos* by relationship and region.
 
-- Spanish has no picks, sentence frames or grammar checker yet (all optional per language).
+- Spanish has no picks, sentence frames or pronoun table yet (all optional per language). Since 2026-10-29
+  it has inflected forms (the forms index) and a spellchecker for accents (see ARCHITECTURE.md), but:
+  - verbs with attached pronouns ("dámelo", "tápalo", ~120k forms) are left out of the forms index to keep
+    the data small, so they're unknown words;
+  - accents that make another real word aren't checked ("esta" for "está", "tu" for "tú", "el" for "él"):
+    that needs the words around them (a grammar rule), not the dictionary;
+  - typos other than accents ("cancoin") get no suggestion.
 
 English stores a translation table for each language, so it grew from 136.2 to 142.8 MB with Spanish
 back, about 7 MB under jsDelivr's ~150 MB package limit. The next language will likely need English

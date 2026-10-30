@@ -5,6 +5,7 @@ import { dirname, join } from 'node:path'
 import { describe, it } from 'node:test'
 import { fileURLToPath } from 'node:url'
 import {
+  createChecker,
   compatiblePos,
   createDictionary,
   createTranslator,
@@ -215,9 +216,29 @@ describe('Spanish data', { skip: !existsSync(esData) && 'run `npm run build:data
     assert.ok((await words('popcorn', 'Argentina')).includes('pochoclo'))
   })
 
-  it('leaves out inflected forms', async () => {
-    assert.deepEqual(await dict.lookup('hablamos'), [])
+  it('finds inflected forms in the forms index, not in English search', async () => {
+    const [form] = await dict.lookup('hablamos')
+    assert.equal(form.pos, 'verb')
+    assert.equal(form.senses[0].altOf, 'hablar')
+    assert.match(form.senses[0].glosses[0], /^first-person plural .* of hablar$/)
     assert.ok((await dict.lookup('hablar')).length > 0)
+    // Forms aren't translations of English words: "speak" gives the verb, not its conjugations.
+    assert.ok(!(await words('speak')).includes('hablamos'))
+  })
+
+  it('suggests accents on words and forms', async () => {
+    assert.equal((await dict.variants('cancion'))[0]?.word, 'canción')
+    assert.equal((await dict.variants('hable'))[0]?.word, 'hablé')
+    assert.deepEqual((await dict.variants('esta')).map((v) => v.word).slice(0, 2), ['está', 'ésta'])
+  })
+
+  it('checks spelling: missing accents and misspellings, not real words', { skip: !existsSync(join(esData, '..', '..', 'en', 'data')) && 'needs the English build' }, async () => {
+    const load = (lang: string) => async (p: string) => JSON.parse(await readFile(join(esData, '..', '..', lang, 'data', p), 'utf8'))
+    const checker = createChecker({ load })
+    const { issues } = await checker.check('Tambien escuche una cancion con mi mama sobre el nino.', { lang: 'es', base: 'en' })
+    const fixes = Object.fromEntries(issues.filter((i) => i.rule === 'spelling').map((i) => [i.text, i.suggestions[0]]))
+    // "Tambien" is listed only as a misspelling; "escuche" and "mama" are real words (left alone).
+    assert.deepEqual(fixes, { Tambien: 'También', cancion: 'canción', nino: 'niño' })
   })
 })
 

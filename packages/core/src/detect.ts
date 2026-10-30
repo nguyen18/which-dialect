@@ -16,7 +16,8 @@ import type { Translator } from './translate.ts'
  * way, using its accented form's frequency: "rat" is "rất" (far more common than English "rat"); close
  * calls ("met": mệt or English met) go to the target only when their neighbors are the target's ("Tôi met
  * quá"), so English stays English among English ("kem but it was": but, not bút). A word only the target
- * knows without its accents ("khong") is still the target's. The base is known through the translator, so
+ * knows without its accents ("khong") is still the target's. Languages written in words do the same with
+ * whole words and their inflected forms (Spanish "cancion" → canción, "tambien" → también). The base is known through the translator, so
  * inflected forms count ("went", "cooked").
  */
 // Zipf points by which a word both languages know must be more common in one to count as that language's
@@ -37,7 +38,11 @@ export async function markLanguages(
   // 'exact': a target word as written; 'accents': one only with accents added ("khong" → "không").
   const targetKnows = async (u: Unit): Promise<'exact' | 'accents' | false> => {
     const lower = u.text.toLowerCase()
-    if (!syllableLanguage) return (await o.target.lookup(lower)).length > 0 ? 'exact' : false
+    // Languages written in words compare whole words: "cancion" is Spanish "canción" without its accent.
+    if (!syllableLanguage) {
+      if ((await o.target.lookup(lower)).length > 0) return 'exact'
+      return (await o.target.variants(lower, { limit: 1 })).length > 0 ? 'accents' : false
+    }
     if (lower in syllables || lower !== plain(lower)) return 'exact'
     return plainSyllables.has(lower) ? 'accents' : false
   }
@@ -50,7 +55,8 @@ export async function markLanguages(
     return t === 'accents' ? o.lang : '?'
   }))
   // The most common form a plain-letter unit takes once accents are added ("rat" → rất, 6.4).
-  const accentedFrequency = (u: Unit) => {
+  const accentedFrequency = async (u: Unit) => {
+    if (!syllableLanguage) return (await o.target.variants(u.text.toLowerCase(), { limit: 1 }))[0]?.frequency ?? 0
     const bare = plain(u.text.toLowerCase())
     let best = 0
     for (const [s, f] of Object.entries(syllables)) if (f > best && plain(s) === bare) best = f
