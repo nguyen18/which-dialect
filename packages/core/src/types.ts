@@ -103,9 +103,11 @@ export type LanguageMeta = {
    * The language's inflected forms are in a compact index (forms/<shard>.json, see FormShard) rather than
    * stored as entries: Spanish's conjugations and plurals are most of its source and would triple its
    * data. `descriptions` are what each form is, with "{}" where the lemma goes ("first-person singular
-   * present indicative of {}"); a stored form points into it.
+   * present indicative of {}"); a stored form points into it. `shardLength`: letters per forms/ shard key
+   * when it differs from the words' (Spanish uses 3: two-letter form shards reached 2 MB, too much to
+   * parse per word in a serverless function).
    */
-  forms?: { descriptions: string[]; count: number }
+  forms?: { descriptions: string[]; count: number; shardLength?: number }
 }
 
 /**

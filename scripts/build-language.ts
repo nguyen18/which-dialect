@@ -430,8 +430,9 @@ async function main() {
         return [form, list.map((x): StoredForm => (f !== undefined ? [x.lemma, x.pos, index.get(x.description)!, f] : [x.lemma, x.pos, index.get(x.description)!]))]
       }),
     )
-    formShards = await writeShards(join(outDir, 'forms'), stored, shardLength)
-    formsMeta = { descriptions, count: FORMS.size }
+    const formsShardLength = config.formsIndex.shardLength ?? shardLength
+    formShards = await writeShards(join(outDir, 'forms'), stored, formsShardLength)
+    formsMeta = { descriptions, count: FORMS.size, ...(formsShardLength !== shardLength ? { shardLength: formsShardLength } : {}) }
     console.log(`Forms index: ${FORMS.size} forms, ${descriptions.length} kinds of form`)
   }
 
