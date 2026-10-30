@@ -63,8 +63,13 @@ const config: LanguageConfig = {
     }
     return [...found]
   },
-  // Conjugations and plurals ("first-person plural of hablar") are ~80% of the source; the base words stay.
-  skipFormOf: true,
+  // Conjugations and plurals ("first-person plural of hablar") are ~80% of the source (~670k forms), so
+  // they go in the compact forms index rather than the entries: "hablo" → hablar, and accent fixes on forms
+  // ("hable" vs "hablé"). Verbs with attached pronouns ("dámelo", "tápalo", ~120k) are left out to keep the
+  // data small. (Before 2026-10-29: skipFormOf, every form left out.)
+  formsIndex: { keep: (tags) => !tags.some((t) => t.startsWith('object-')) },
+  // Spaces separate words; the checker fixes accents from the words and forms ("cancion" → "canción").
+  checker: { units: 'words' },
   // Country and city names translate ("Japan" ↔ "Japón").
   placeNames: {},
   wordfreq: 'large',

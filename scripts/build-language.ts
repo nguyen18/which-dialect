@@ -26,6 +26,8 @@ import {
   type Sense,
   type StoredPronounRow,
   type WordShard,
+  type FormShard,
+  type StoredForm,
 } from '../packages/core/src/types.ts'
 import { recordDataUpdate } from './data-updates.ts'
 import { buildFrames } from './frames.ts'
@@ -188,6 +190,34 @@ function placeKind(raw: KaikkiEntry): 'country' | 'place' | null {
 /** Whether a sense of an entry is a place name: a place entry's sense that isn't a personal name. */
 const isPlaceSense = (e: Entry, s: Sense) => PLACE_ENTRIES.has(e) && !PERSONAL_NAME.test(s.glosses[0] ?? '')
 
+// Inflected forms for a language with a forms index (LanguageConfig.formsIndex): form → its lemmas, each
+// with its part of speech and what form it is. The description is the gloss up to the lemma, which becomes
+// "{}" ("first-person singular present indicative of {}"), so the few hundred kinds of form are stored once
+// (in meta.json). Verb forms come as a heading and the form ("inflection of hablar:", "first-person singular
+// present indicative"); notes after the lemma ("…of muy, synonym of …") and the phrase a reflexive form is
+// used in ("only used in te querelles, …") are dropped.
+const FORMS = new Map<string, { lemma: string; pos: string; description: string }[]>()
+
+function formDescription(lemma: string, glosses: string[]): string {
+  const [first, ...rest] = glosses
+  // The lemma as a whole word ("ir" in "first-person singular preterite indicative of ir", not in "first").
+  const escaped = lemma.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const at = first.search(new RegExp(`(?<![\\p{L}\\p{M}])${escaped}(?![\\p{L}\\p{M}])`, 'u'))
+  // Reflexive verb forms name the phrase they're used in ("only used in te querelles, second-person …"):
+  // the kind of form is the rest.
+  const before = (at >= 0 ? first.slice(0, at).trim() : 'form of').replace(/^only used in [^,]+, /i, '')
+  // "inflection of {}:" followed by the form itself.
+  if (rest.length && /^inflection of$/i.test(before)) return `${rest[rest.length - 1].replace(/[.:;]$/, '')} of {}`
+  return `${before} {}`
+}
+
+function addForm(form: string, lemma: string, pos: string, glosses: string[]) {
+  const description = formDescription(lemma, glosses)
+  const list = FORMS.get(form) ?? []
+  if (!list.some((f) => f.lemma === lemma && f.pos === pos && f.description === description)) list.push({ lemma, pos, description })
+  FORMS.set(form, list)
+}
+
 async function readEntries(file: string, config: LanguageConfig): Promise<Entry[]> {
   const skipPos = new Set(config.skipPos ?? [])
   const dropLabels = new Set(config.dropLabels ?? [])
@@ -214,6 +244,12 @@ async function readEntries(file: string, config: LanguageConfig): Promise<Entry[
       const tags = s.tags ?? []
       // Inflections are dropped (all of them, or outside formOfPos), but spelling/dialect variants ("alt-of") are kept.
       const inflection = tags.includes('form-of') && !tags.includes('alt-of')
+      // With a forms index, inflections go there instead (one per form, lemma and kind of form).
+      if (inflection && config.formsIndex) {
+        const lemma = s.form_of?.[0]?.word
+        if (lemma && lemma !== raw.word && (config.formsIndex.keep?.(tags, raw.pos) ?? true)) addForm(raw.word, lemma, raw.pos, glosses)
+        continue
+      }
       if (inflection && (config.skipFormOf || (config.formOfPos && !config.formOfPos.includes(raw.pos)))) continue
       const lemma = s.form_of?.[0]?.word
       if (inflection && lemma && config.keepFormOf && !config.keepFormOf(raw.word, lemma, raw.pos)) continue
@@ -379,6 +415,26 @@ async function main() {
   const wordShards = await writeShards(join(outDir, 'words'), storedWords, shardLength)
   const enShards = await writeShards(join(outDir, 'en'), storedEnglish, shardLength)
 
+  // The forms index: descriptions numbered by how often they're used, each form with its frequency.
+  let formShards: string[] = []
+  let formsMeta: LanguageMeta['forms']
+  if (config.formsIndex) {
+    const freq = config.wordfreq ? await loadFrequencies(ROOT, config.lang, config.wordfreq) : () => undefined
+    const uses = new Map<string, number>()
+    for (const list of FORMS.values()) for (const f of list) uses.set(f.description, (uses.get(f.description) ?? 0) + 1)
+    const descriptions = [...uses.keys()].sort((a, b) => uses.get(b)! - uses.get(a)!)
+    const index = new Map(descriptions.map((d, i) => [d, i]))
+    const stored = new Map<string, FormShard[string]>(
+      [...FORMS].map(([form, list]) => {
+        const f = freq(form)
+        return [form, list.map((x): StoredForm => (f !== undefined ? [x.lemma, x.pos, index.get(x.description)!, f] : [x.lemma, x.pos, index.get(x.description)!]))]
+      }),
+    )
+    formShards = await writeShards(join(outDir, 'forms'), stored, shardLength)
+    formsMeta = { descriptions, count: FORMS.size }
+    console.log(`Forms index: ${FORMS.size} forms, ${descriptions.length} kinds of form`)
+  }
+
   if (config.pronouns) {
     const { rows, report } = buildPronounTable(entries, config.pronouns, config.regions)
     const stored: StoredPronounRow[] = rows.map((r) => {
@@ -443,19 +499,20 @@ async function main() {
       regionTaggedSenses: senses.filter((s) => s.regionTagged).length,
       englishTerms: english.size,
     },
-    shards: { words: wordShards, en: enShards },
+    shards: { words: wordShards, en: enShards, ...(formShards.length ? { forms: formShards } : {}) },
     ...(shardLength !== 2 ? { shardLength } : {}),
     ...(config.pronouns ? { pronouns: true } : {}),
     ...(config.checker ? { checker: true } : {}),
     ...(config.checker?.units === 'syllables' ? { syllables: true } : {}),
     ...(config.frames ? { frames: true } : {}),
+    ...(formsMeta ? { forms: formsMeta } : {}),
   }
   await writeFile(join(outDir, 'meta.json'), JSON.stringify(meta, null, 2))
   await writePicks(config)
   await recordDataUpdate(ROOT, { lang: config.lang, name: config.name, lastModified: source.lastModified, retrieved: source.retrieved, entries: entries.length })
 
   let bytes = 0
-  for (const [sub, names] of [['words', wordShards], ['en', enShards]] as const) {
+  for (const [sub, names] of [['words', wordShards], ['en', enShards], ['forms', formShards]] as const) {
     for (const n of names) bytes += (await stat(join(outDir, sub, `${n}.json`))).size
   }
   console.log(`${config.name}: ${meta.counts.entries} entries, ${meta.counts.senses} senses ` +

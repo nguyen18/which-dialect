@@ -85,8 +85,8 @@ export type LanguageMeta = {
   /** Where word frequencies come from, with the credit its license requires. */
   frequencySource?: { name: string; url: string; license: string; sources: string }
   counts: { entries: number; senses: number; regionTaggedSenses: number; englishTerms: number }
-  /** Shard file names (without .json) in words/ and en/. */
-  shards: { words: string[]; en: string[] }
+  /** Shard file names (without .json) in words/ and en/, and forms/ when the language has a forms index. */
+  shards: { words: string[]; en: string[]; forms?: string[] }
   /** Letters per shard key; see shardKey. Omitted means 2. */
   shardLength?: number
   /** true when the language has a pronoun table (pronouns.json, see PronounRow). */
@@ -99,6 +99,13 @@ export type LanguageMeta = {
   syllables?: boolean
   /** true when the language has sentence frames (frames.json, see FramesData). */
   frames?: boolean
+  /**
+   * The language's inflected forms are in a compact index (forms/<shard>.json, see FormShard) rather than
+   * stored as entries: Spanish's conjugations and plurals are most of its source and would triple its
+   * data. `descriptions` are what each form is, with "{}" where the lemma goes ("first-person singular
+   * present indicative of {}"); a stored form points into it.
+   */
+  forms?: { descriptions: string[]; count: number }
 }
 
 /**
@@ -284,6 +291,16 @@ export type StoredHit = Omit<Hit, 'regions' | 'regionTagged' | 'labels'> & { reg
 
 /** words/<shard>.json: entries keyed by headword. */
 export type WordShard = Record<string, StoredEntry[]>
+
+/**
+ * One inflected form in forms/<shard>.json: [lemma, part of speech, index into meta.forms.descriptions,
+ * Zipf frequency (omitted when unknown)]. lookup() turns it into an entry with one sense whose gloss is
+ * the description and whose `altOf` is the lemma, so the translator follows it to the lemma's meanings.
+ */
+export type StoredForm = [lemma: string, pos: string, description: number, frequency?: number]
+
+/** forms/<shard>.json: a language's inflected forms keyed by form ("hablo" → hablar). */
+export type FormShard = Record<string, StoredForm[]>
 
 /** en/<shard>.json: hits keyed by lowercase English term. */
 export type EnglishShard = Record<string, StoredHit[]>
