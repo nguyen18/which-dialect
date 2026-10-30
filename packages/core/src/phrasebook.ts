@@ -200,7 +200,8 @@ export function createPhrasebook(options: PhrasebookOptions = {}): Phrasebook {
     }
     if (last < frame.text.length) parts.push({ text: frame.text.slice(last), kind: 'fixed' })
     let text = tidy(parts.map((p) => p.text).join(''))
-    if (!frame.clause) text = text.charAt(0).toUpperCase() + text.slice(1)
+    // The first letter, after any opening mark (Spanish "¿quieres…" → "¿Quieres…").
+    if (!frame.clause) text = text.replace(/^([¿¡]?)(\p{L})/u, (_, mark: string, c: string) => mark + c.toUpperCase())
     const slots = Object.entries(frame.slots).map(([name, pos]) => ({ name, pos }))
     const en = Object.keys(frame.slots).reduce(
       (s, name) => (typeof values[name] === 'string' ? s.replace(`{${name}}`, values[name] as string) : s), frame.en[0])

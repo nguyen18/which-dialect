@@ -1,6 +1,6 @@
 {
   "name": "which-dialect-es",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Spanish dictionary data with country and regional usage (Spain, Mexico, Argentina, the Caribbean, …), from Wiktionary via Kaikki.org. Loaded by which-dialect.",
   "files": [
     "data",

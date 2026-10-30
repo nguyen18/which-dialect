@@ -100,7 +100,13 @@ export type LanguageConfig = {
    * How this language says the shared sentence frames (languages/frames.ts), by frame id. `text` has
    * {slot} placeholders: the frame's content slots, pronoun slots ({I}, {YOU}, …) and `frameWords` keys.
    */
-  frames?: { frame: string; text: string; note?: string }[]
+  frames?: {
+    frame: string
+    text: string
+    note?: string
+    /** The catalog's English ways that this text says, when not all of them ("I was" isn't "Estoy"). */
+    en?: string[]
+  }[]
   /** The words for frame word slots ({WHERE}, {Q_END}, …), each from a definition or an override. */
   frameWords?: Record<string, { meaning: string; optional?: boolean; words: FrameWordPick[] }>
 }
