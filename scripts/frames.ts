@@ -55,7 +55,11 @@ export function buildFrames(entries: Entry[], config: LanguageConfig): { data: S
       if (!slots[name] && !FRAME_PRONOUNS[name] && !words[name]) report.problems.push(`${row.frame}: unknown slot {${name}}`)
     }
     for (const name of Object.keys(slots)) if (!used.includes(name)) report.problems.push(`${row.frame}: slot {${name}} isn't used`)
-    frames.push({ id: entry.id, topic: entry.topic, en: entry.en, slots, ...(entry.clause ? { clause: true } : {}), text: row.text })
+    for (const en of row.en ?? []) if (!entry.en.includes(en)) report.problems.push(`${row.frame}: "${en}" isn't one of the catalog's English ways`)
+    const en = row.en?.filter((e) => entry.en.includes(e)) ?? entry.en
+    frames.push({
+      id: entry.id, topic: entry.topic, en: en.length ? en : entry.en, slots, ...(entry.clause ? { clause: true } : {}), text: row.text,
+    })
   }
   report.frames = frames.length
   return { data: { frames, words }, report }

@@ -145,3 +145,25 @@ describe('journal review (real data)', { skip: !built && 'build en and vi data f
     }
   })
 })
+
+const builtEs = ['en', 'es'].every((l) => existsSync(join(root, l, 'data')))
+
+describe('sentence frames (real Spanish data)', { skip: !builtEs && 'build en and es data first' }, () => {
+  const pb = createPhrasebook({ load })
+
+  it('uses vos forms and Spain\'s perfect by region, capitalized after "¿"', async () => {
+    assert.equal((await pb.render('ask-want', { lang: 'es', region: 'Mexico', slots: { thing: { text: 'café' } } })).text, '¿Quieres café?')
+    assert.equal((await pb.render('ask-want', { lang: 'es', region: 'Argentina', slots: { thing: { text: 'café' } } })).text, '¿Querés café?')
+    assert.equal((await pb.render('ask-eaten', { lang: 'es', region: 'Spain' })).text, '¿Ya has comido?')
+    assert.equal((await pb.render('ask-eaten', { lang: 'es', region: 'Colombia' })).text, '¿Ya comiste?')
+  })
+
+  it('matches English to frames that take an infinitive, only in the tenses they say', async () => {
+    assert.equal((await pb.match('I want to sleep.', { lang: 'es' }))?.text, 'Quiero dormir.')
+    assert.equal((await pb.match('Can you help me?', { lang: 'es', region: 'Argentina' }))?.text, '¿Me podés ayudar?')
+    assert.equal((await pb.match('I feel tired.', { lang: 'es' }))?.text, 'Me siento cansado.')
+    // "Me siento" is present: "I felt" isn't one of its English ways, and "Today I…" isn't a Spanish frame.
+    assert.equal(await pb.match('I felt tired.', { lang: 'es' }), null)
+    assert.equal(await pb.match('Today I cooked.', { lang: 'es' }), null)
+  })
+})

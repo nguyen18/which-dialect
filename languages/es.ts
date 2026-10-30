@@ -9,6 +9,8 @@ const CARIBBEAN = ['Cuba', 'Dominican Republic', 'Puerto Rico']
 const SOUTH_AMERICA = ['Colombia', 'Venezuela', 'Ecuador', 'Peru', 'Bolivia', 'Chile', 'Argentina', 'Uruguay', 'Paraguay']
 const LATIN_AMERICA = ['Mexico', ...CENTRAL_AMERICA, ...CARIBBEAN, ...SOUTH_AMERICA]
 const RIO_DE_LA_PLATA = ['Argentina', 'Uruguay']
+// Where vos is the everyday "you" (sentence frames).
+const VOSEO = [...RIO_DE_LA_PLATA, 'Paraguay']
 
 const regionGroups: Record<string, string[]> = {
   'Latin America': LATIN_AMERICA,
@@ -76,6 +78,60 @@ const config: LanguageConfig = {
   // Country and city names translate ("Japan" ↔ "Japón").
   placeNames: {},
   wordfreq: 'large',
+  // Sentence frames (the shared catalog is languages/frames.ts), in tú, with vos where it's the everyday
+  // "you" (querés, podés). Spanish verbs change with the person and tense, so frames whose verb slot would
+  // need conjugating ("Today I {action}", "Do you {action}?") are left out: the others take an infinitive
+  // (Quiero {action}), which is what a translated verb is. A noun slot gets the bare word: "Where is the
+  // bathroom?" → "¿Dónde está baño?", missing its article until the data has noun genders (still far
+  // closer than word by word). `en` keeps a frame to the English ways it says ("I was" isn't "Estoy").
+  frames: [
+    { frame: 'tomorrow', text: 'Mañana voy a {action}.' },
+    { frame: 'want-to', text: 'Quiero {action}.' },
+    { frame: 'want', text: 'Quiero {thing}.' },
+    { frame: 'like-to', text: 'Me gusta {action}.' },
+    { frame: 'like', text: 'Me gusta {thing}.' },
+    { frame: 'went-to', text: 'Fui a {place}.' },
+    { frame: 'have-to', text: 'Tengo que {action}.' },
+    { frame: 'can', text: 'Puedo {action}.' },
+    { frame: 'cannot', text: 'No puedo {action}.' },
+    { frame: 'dont-know', text: 'No sé.' },
+    { frame: 'dont-understand', text: 'No entiendo.' },
+    { frame: 'feel', text: 'Me siento {quality}.', en: ['I feel {quality}.'] },
+    // Estar, for how someone is ("Estoy cansado", the feelings topic); "I am tall" would be ser.
+    { frame: 'am', text: 'Estoy {quality}.', en: ['I am {quality}.', "I'm {quality}."] },
+    { frame: 'it-was', text: 'Fue {quality}.', en: ['It was {quality}.'] },
+    { frame: 'but-it-was', text: 'pero fue {quality}', en: ['but it was {quality}'] },
+    { frame: 'ask-where', text: '¿Dónde está {place}?' },
+    { frame: 'ask-what', text: '¿Qué es {thing}?' },
+    { frame: 'ask-how', text: '¿Cómo está {thing}?' },
+    { frame: 'ask-when', text: '¿Cuándo vas a {action}?' },
+    { frame: 'ask-how-much', text: '¿Cuánto cuesta {thing}?' },
+    { frame: 'ask-eaten', text: '¿Ya {ATE}?' },
+    { frame: 'ask-want', text: '¿{YOU_WANT} {thing}?' },
+    { frame: 'help-me', text: '¿Me {YOU_CAN} ayudar?' },
+    { frame: 'give-me', text: 'Me da {thing}, por favor.' },
+    { frame: 'lets', text: 'Vamos a {action}.' },
+    { frame: 'hello', text: 'Hola.' },
+    { frame: 'thanks', text: 'Gracias.' },
+    { frame: 'sorry', text: 'Lo siento.' },
+    { frame: 'goodbye', text: 'Hasta luego.' },
+    { frame: 'good-night', text: 'Buenas noches.' },
+  ],
+  // The words that change by region: vos forms where vos is the everyday "you", and Spain's perfect tense.
+  frameWords: {
+    YOU_WANT: { meaning: 'do you want', words: [
+      { word: 'quieres', note: 'Tú form of querer.' },
+      { word: 'querés', regions: VOSEO, note: 'Vos form of querer, the everyday "you" in the Río de la Plata and Paraguay.' },
+    ] },
+    YOU_CAN: { meaning: 'can you', words: [
+      { word: 'puedes', note: 'Tú form of poder.' },
+      { word: 'podés', regions: VOSEO, note: 'Vos form of poder, the everyday "you" in the Río de la Plata and Paraguay.' },
+    ] },
+    ATE: { meaning: 'have you eaten', words: [
+      { word: 'comiste', note: 'Preterite, the usual "have you eaten yet" in Latin America.' },
+      { word: 'has comido', regions: ['Spain'], note: 'Spain uses the perfect for something just done.' },
+    ] },
+  },
 }
 
 export default config

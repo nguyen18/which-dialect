@@ -226,7 +226,11 @@ unless noted:
   *palomilla* instead of *palomitas*; "cat" (Mexico, held-out) gives *felino*, *tac*, *mozo* instead of *gato*.
 - A pronoun table for Spanish could cover *tú* / *usted* / *vos* by relationship and region.
 
-- Spanish has no picks, sentence frames or pronoun table yet (all optional per language). Since 2026-10-29
+- Spanish frames (2026-10-29) leave out frames whose verb would need conjugating, and a noun slot gets the
+  bare word ("¿Dónde está baño?"). Storing noun genders (Kaikki's head templates say m/f) would let frames
+  add the article and the checker catch "la depósito". Usted isn't offered; with a pronoun table, frame
+  words could use `when: 'respect'` for *usted* forms.
+- Spanish has no picks or pronoun table yet (both optional per language). Since 2026-10-29
   it has inflected forms (the forms index) and a spellchecker for accents (see ARCHITECTURE.md), but:
   - verbs with attached pronouns ("dámelo", "tápalo", ~120k forms) are left out of the forms index to keep
     the data small, so they're unknown words;
