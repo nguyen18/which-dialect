@@ -68,6 +68,9 @@ const config: LanguageConfig = {
   // ("hable" vs "hablé"). Verbs with attached pronouns ("dámelo", "tápalo", ~120k) are left out to keep the
   // data small. (Before 2026-10-29: skipFormOf, every form left out.)
   formsIndex: { keep: (tags) => !tags.some((t) => t.startsWith('object-')) },
+  // Three-letter shards (words, English index and forms), as English: two-letter ones reached 2 MB
+  // (forms/de.json), too much to parse per word in a serverless function (Mai's journal check ran out of CPU).
+  shardLength: 3,
   // Spaces separate words; the checker fixes accents from the words and forms ("cancion" → "canción").
   checker: { units: 'words' },
   // Country and city names translate ("Japan" ↔ "Japón").

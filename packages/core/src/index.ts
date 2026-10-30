@@ -200,7 +200,7 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
   // Missing shards simply mean no words start with those letters, so they aren't requested.
   async function shard<T>(kind: 'words' | 'en' | 'forms', term: string): Promise<T | null> {
     const m = await meta()
-    const key = shardKey(term, m.shardLength)
+    const key = shardKey(term, kind === 'forms' ? (m.forms?.shardLength ?? m.shardLength) : m.shardLength)
     return m.shards[kind]?.includes(key) ? loadOnce<T>(`${kind}/${key}.json`) : null
   }
 
@@ -248,6 +248,25 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
     return m.syllables ? loadOnce<Record<string, number>>('syllables.json') : {}
   }
 
+  // Each shard's keys by their plain lowercase form, built once per shard: Spanish forms/de.json has ~49k
+  // keys, and stripping accents from all of them on every call ran the checker out of CPU time.
+  const plainIndexes = new WeakMap<object, Map<string, string[]>>()
+  function plainIndex(file: object): Map<string, string[]> {
+    let index = plainIndexes.get(file)
+    if (!index) {
+      index = new Map()
+      for (const key of Object.keys(file)) {
+        const lower = key.toLowerCase()
+        const p = plain(lower)
+        const list = index.get(p)
+        if (!list) index.set(p, [lower])
+        else if (!list.includes(lower)) list.push(lower)
+      }
+      plainIndexes.set(file, index)
+    }
+    return index
+  }
+
   // Variants for languages written in words: other headwords and inflected forms with the same letters
   // once accents are dropped. Shards are keyed without accents, so they're all in the word's own shards.
   async function wordVariants(word: string, limit: number) {
@@ -256,10 +275,7 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
     if (!target) return []
     const [data, forms] = await Promise.all([shard<WordShard>('words', written), shard<FormShard>('forms', written)])
     const candidates = new Set<string>()
-    for (const key of [...Object.keys(data ?? {}), ...Object.keys(forms ?? {})]) {
-      const lower = key.toLowerCase()
-      if (lower !== written && plain(lower) === target) candidates.add(lower)
-    }
+    for (const file of [data, forms]) for (const lower of file ? plainIndex(file).get(target) ?? [] : []) if (lower !== written) candidates.add(lower)
     const found = await Promise.all([...candidates].map(async (c) => ({ word: c, entries: await lookup(c) })))
     const frequency = (entries: Entry[]) => {
       const known = entries.map((e) => e.frequency).filter((f): f is number => f !== undefined)

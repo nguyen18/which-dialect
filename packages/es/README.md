@@ -21,10 +21,10 @@ Spain, Mexico, Guatemala, Honduras, El Salvador, Nicaragua, Costa Rica, Panama, 
 ## Contents
 
 - `data/meta.json`: regions, groups, source, license, counts, and the list of files.
-- `data/words/<xx>.json`: entries by Spanish headword, split by the first two letters without accents (`ñame` → `na`).
-- `data/en/<xx>.json`: English search terms → Spanish words.
+- `data/words/<xxx>.json`: entries by Spanish headword, split by the first three letters without accents (`ñame` → `nam`; `meta.shardLength` is 3).
+- `data/en/<xxx>.json`: English search terms → Spanish words.
 
-About 124,000 entries; roughly 12,000 senses carry a region tag. Inflected forms (conjugations and plurals, about 80% of Wiktionary's Spanish entries) are in a compact forms index instead (`data/forms/<xx>.json`, about 547,000 forms: "hablo" → first-person singular present indicative of *hablar*), which `lookup()` returns after the headword entries; verbs with attached pronouns ("dámelo") are left out. Base words and spelling/regional variants are kept as entries. `checker.json` turns on the word-level spellchecker (missing accents: "cancion" → "canción").
+About 124,000 entries; roughly 12,000 senses carry a region tag. Inflected forms (conjugations and plurals, about 80% of Wiktionary's Spanish entries) are in a compact forms index instead (`data/forms/<xxx>.json`, about 547,000 forms: "hablo" → first-person singular present indicative of *hablar*), which `lookup()` returns after the headword entries; verbs with attached pronouns ("dámelo") are left out. Base words and spelling/regional variants are kept as entries. `checker.json` turns on the word-level spellchecker (missing accents: "cancion" → "canción").
 
 ## Word frequencies
 

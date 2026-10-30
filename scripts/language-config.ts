@@ -35,9 +35,10 @@ export type LanguageConfig = {
    * them (skipFormOf) or storing them as entries: each is just its lemma, part of speech, which form it is
    * and its frequency, so a heavily inflected language can look up "hablo" (→ hablar) and the checker can
    * fix accents on forms ("hable" vs "hablé") without its data tripling. `keep` returns false to leave a form
-   * out (Spanish: verbs with attached pronouns, "dámelo"). Takes precedence over skipFormOf for inflections.
+   * out (Spanish: verbs with attached pronouns, "dámelo"). `shardLength`: letters per forms/ shard key, when
+   * the forms need smaller files than the words (Spanish: 3). Takes precedence over skipFormOf for inflections.
    */
-  formsIndex?: { keep?: (tags: string[], pos: string) => boolean }
+  formsIndex?: { keep?: (tags: string[], pos: string) => boolean; shardLength?: number }
   /** Return false to leave a headword out. */
   keepWord?: (word: string) => boolean
   /**
