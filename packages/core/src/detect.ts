@@ -2,7 +2,7 @@
 // English by default), from the two languages' data alone. Shared by the checker and the journal review.
 
 import type { Dictionary } from './index.ts'
-import { plain, type Unit } from './text.ts'
+import { plain, syllablesByPlain, type Unit } from './text.ts'
 import type { Translator } from './translate.ts'
 
 /**
@@ -34,7 +34,10 @@ export async function markLanguages(
 ): Promise<string[]> {
   const syllables = await o.target.syllables()
   const syllableLanguage = Object.keys(syllables).length > 0
-  const plainSyllables = syllableLanguage ? new Set(Object.keys(syllables).map(plain)) : new Set<string>()
+  // Each syllable's accented forms by their plain letters, most common first: built once per language
+  // (syllablesByPlain caches it), since this runs for every sentence and stripping the accents from all
+  // ~7,000 Vietnamese syllables each time was a fifth of a journal check's CPU (2026-11-01).
+  const byPlain = syllablesByPlain(syllables)
   // 'exact': a target word as written; 'accents': one only with accents added ("khong" → "không").
   const targetKnows = async (u: Unit): Promise<'exact' | 'accents' | false> => {
     const lower = u.text.toLowerCase()
@@ -44,7 +47,7 @@ export async function markLanguages(
       return (await o.target.variants(lower, { limit: 1 })).length > 0 ? 'accents' : false
     }
     if (lower in syllables || lower !== plain(lower)) return 'exact'
-    return plainSyllables.has(lower) ? 'accents' : false
+    return byPlain.has(lower) ? 'accents' : false
   }
   const baseKnows = async (u: Unit) => (await o.translator.senses(u.text, { from: o.base }).catch(() => [])).length > 0
   const marks = await Promise.all(list.map(async (u) => {
@@ -57,10 +60,8 @@ export async function markLanguages(
   // The most common form a plain-letter unit takes once accents are added ("rat" → rất, 6.4).
   const accentedFrequency = async (u: Unit) => {
     if (!syllableLanguage) return (await o.target.variants(u.text.toLowerCase(), { limit: 1 }))[0]?.frequency ?? 0
-    const bare = plain(u.text.toLowerCase())
-    let best = 0
-    for (const [s, f] of Object.entries(syllables)) if (f > best && plain(s) === bare) best = f
-    return best
+    const forms = byPlain.get(plain(u.text.toLowerCase()))
+    return forms ? Math.max(0, syllables[forms[0]]) : 0
   }
   // How common a word is in each language (Zipf; 0 when unknown).
   const targetFrequency = async (u: Unit) => {
