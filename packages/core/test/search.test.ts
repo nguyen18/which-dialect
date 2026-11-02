@@ -562,6 +562,12 @@ describe('translator with Spanish (real data)', { skip: !builtEs && 'build en, v
     // A row tagged for the country comes before one tagged for its region group (Latin America).
     assert.equal((await top('take the bus', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'tomar el camión')
     assert.equal((await top('miss you', { from: 'en', to: 'es', toRegion: 'Colombia' }))[0], 'te extraño')
+    // Into a region group, its own row before a narrower one inside it.
+    assert.equal((await top('in the morning', { from: 'en', to: 'es', toRegion: 'Latin America' }))[0], 'en la mañana')
+    assert.equal((await top('in the morning', { from: 'en', to: 'es', toRegion: 'Argentina' }))[0], 'a la mañana')
+    // English phrases with an inflected first word.
+    assert.equal((await top('went to bed', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'acostarse')
+    assert.ok((await top('took pictures', { from: 'en', to: 'es', toRegion: 'Mexico' })).includes('tomar fotos'))
     assert.equal((await top('¿En serio?', { from: 'es', to: 'en' }))[0], 'seriously?')
     // Punctuation around a single word: "really?" is "really".
     assert.ok((await top('really?', { from: 'en', to: 'es' })).length > 0)

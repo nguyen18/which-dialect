@@ -761,13 +761,30 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
     const lang = from === 'en' ? to : from
     if (!(from === 'en' ? toMeta : fromMeta).phrases) return null
     const toEnglish = to === 'en'
-    const rows = (await dict(lang).phrases()).filter((r) => phraseKey(toEnglish ? r.text : r.en) === key)
+    const all = await dict(lang).phrases()
+    let rows = all.filter((r) => phraseKey(toEnglish ? r.text : r.en) === key)
+    // English with its first word inflected: "went to bed" is "go to bed", "took pictures" "take pictures".
+    if (!rows.length && !toEnglish) {
+      const [first, ...rest] = key.split(' ')
+      const bases = new Set(regularBaseForms(first))
+      for (const e of await dict('en').lookup(first)) for (const s of e.senses) if (s.altOf && FORM_GLOSS.test(s.glosses[0] ?? '')) bases.add(s.altOf.toLowerCase())
+      for (const b of bases) {
+        const k = [b, ...rest].join(' ')
+        rows = all.filter((r) => phraseKey(r.en) === k)
+        if (rows.length) break
+      }
+    }
     if (!rows.length) return null
-    // Into the language: with a target region, phrases tagged for it lead (the narrowest tag first: Mexico's
-    // "tomar el camión" before Latin America's "tomar el autobús") and phrases tagged only for other regions
-    // are left out; rows with a usage note ("to a friend") come after plain ones.
+    // Into the language: with a target region, phrases tagged for it lead, the closest match first (into
+    // Mexico, Mexico's "tomar el camión" before Latin America's "tomar el autobús"; into Latin America, its
+    // "en la mañana" before Río de la Plata's "a la mañana"), and phrases tagged only for other regions are
+    // left out; rows with a usage note ("to a friend") come after plain ones.
+    const fit = (regions: string[], wanted: Set<string>) => {
+      const shared = regions.filter((r) => wanted.has(r)).length
+      return shared ? 1 + shared / (regions.length + wanted.size - shared) : -1
+    }
     const ranked = rows
-      .map((r, i) => ({ r, i, region: !toEnglish && toWanted && r.regionTagged ? (intersects(r.regions, toWanted) ? 1 + 1 / r.regions.length : -1) : 0 }))
+      .map((r, i) => ({ r, i, region: !toEnglish && toWanted && r.regionTagged ? fit(r.regions, toWanted) : 0 }))
       .filter((x) => x.region >= 0)
       .sort((a, b) => b.region - a.region || (toEnglish ? 0 : Number(Boolean(a.r.note)) - Number(Boolean(b.r.note))) || a.i - b.i)
     const seen = new Set<string>()
