@@ -101,7 +101,9 @@ Picks are keyed by English meaning, so each language needs one list however many
 
 Single words translate through the dictionary, but everyday phrases often don't: *go home* is "về nhà", not the euphemism for dying that the dictionary lists, and *ăn cơm chưa* ("have you eaten?", a greeting) isn't a headword at all. A language can have an **everyday phrasebook**: common multi-word phrases and an English way to say each, written by a speaker rather than taken from a corpus (`languages/phrases/<code>.tsv`, built into `phrases.json`). When multi-word input matches a phrase (ignoring case and surrounding punctuation), between English and that language in either direction, the phrasebook's group comes first (`source.pos: 'phrase'`, translations with `bridge: 'phrasebook'` and `phrase: true`), then the dictionary's senses. Phrases can carry region tags like picks (with `toRegion`, *wash the dishes* is Southern *rửa chén*, not Northern *rửa bát*), and a usage note ("polite", "to a friend"), kept in the translation's `gloss`; rows with a note come after plain ones. Single words are left to the dictionary.
 
-Vietnamese has about 2,370 phrase pairs in 32 topics (greetings, time, daily routine, food, school, work, feelings, linking phrases, phrasal verbs…), drafted for journal writing and not yet reviewed by a native speaker. The file is plain tab-separated text, one pair per line, so it's easy to review and edit; `npm run build:phrases -- vi` rebuilds it.
+The spellchecker uses it too: a phrase written right isn't corrected syllable by syllable (*kỳ thi*, exam, isn't changed to *kỳ thị*), and when accents are missing, an everyday phrase is preferred (*thuc day* → *thức dậy*, *gia dinh* → *gia đình*, *pho bo* → *phở bò*, *chẳng the nao* → *chẳng thể nào*).
+
+Vietnamese has about 2,350 phrase pairs in 32 topics (greetings, time, daily routine, food, school, work, feelings, linking phrases, phrasal verbs…), drafted for journal writing and not yet reviewed by a native speaker. The file is plain tab-separated text, one pair per line, so it's easy to review and edit; `npm run build:phrases -- vi` rebuilds it.
 
 ### How accurate is it?
 

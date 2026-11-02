@@ -277,7 +277,8 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
 
   it('suggests accents for rare plain-letter words, more readily in text typed without accents', async () => {
     assert.deepEqual(await fixes('Toi đã ăn cơm.'), ['Toi→Tôi'])
-    assert.deepEqual(await fixes('toi di cho'), ['toi→tôi', 'di→đi'])
+    // "đi chợ" (go to the market) is a phrasebook phrase: alone, "cho" would be left as it is.
+    assert.deepEqual(await fixes('toi di cho'), ['toi→tôi', 'di cho→đi chợ'])
     // Common plain words and listed pronouns stay ("cho", "con", Southern "tui").
     assert.deepEqual(await fixes('Tui cho con ăn cơm.'), [])
   })
@@ -286,7 +287,8 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     // "rat" is "rất" (far more common than English "rat"); "met" is a close call, Vietnamese among Vietnamese.
     assert.deepEqual(await fixes('Tôi rat vui.'), ['rat→rất'])
     assert.deepEqual(await fixes('Hôm nay tôi rat met.'), ['rat→rất', 'met→mệt'])
-    assert.deepEqual(await fixes('Ket qua thi rat tot.'), ['Ket qua→Kết quả', 'thi→thì', 'rat→rất', 'tot→tốt'])
+    // "rất tốt" (very good) is a phrasebook phrase, fixed as one.
+    assert.deepEqual(await fixes('Ket qua thi rat tot.'), ['Ket qua→Kết quả', 'thi→thì', 'rat tot→rất tốt'])
     // English stays English: "but" is much more common in English than "bút" in Vietnamese, and "met" among
     // English words is English.
     assert.deepEqual(await fixes('Tôi muốn ăn thịt lợn but tui không có tiền.', { region: 'Southern' }), ['but→nhưng'])
@@ -295,7 +297,7 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
 
   it('fixes accents by the word a syllable makes with its neighbors', async () => {
     // Alone, "nay" would become "này" ("this"); with "hom" it's "hôm nay" ("today").
-    assert.deepEqual(await fixes('Hom nay toi di cho.'), ['Hom nay→Hôm nay', 'toi→tôi', 'di→đi'])
+    assert.deepEqual(await fixes('Hom nay toi di cho.'), ['Hom nay→Hôm nay', 'toi→tôi', 'di cho→đi chợ'])
     assert.deepEqual(await fixes('Chung toi se di Ha Noi.'), ['Chung toi→Chúng tôi', 'se→sẽ', 'di→đi'])
     assert.deepEqual(await fixes('Toi an com voi ma.'), ['Toi→Tôi', 'an com→ăn cơm', 'voi→với', 'ma→mà'])
     // Real but rarer words written without accents that make a word together: "sam" is a word, "mua sắm" the
@@ -303,11 +305,11 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Hôm nay tôi đi mua sam.'), ['mua sam→mua sắm'])
     assert.deepEqual(await fixes('Tôi đi nha sach.'), ['nha sach→nhà sách'])
     // A word with no accents at all was probably typed without them, even when its syllables are common:
-    // "nha bang" is "nhà băng" (bank), "nha hang" "nhà hàng" (restaurant); "nha tho" could be "nhà thơ" (poet)
-    // or "nhà thờ" (church), so it's left alone.
+    // "nha bang" is "nhà băng" (bank), "nha hang" "nhà hàng" (restaurant). "nha tho" could be "nhà thơ" (poet)
+    // or "nhà thờ" (church), equally common, but only the church is an everyday phrase (the phrasebook's).
     assert.deepEqual(await fixes('Tôi đi nha bang.'), ['nha bang→nhà băng'])
     assert.deepEqual(await fixes('Tôi đi nha hang với má.'), ['nha hang→nhà hàng'])
-    assert.deepEqual(await fixes('Tôi đi nha tho.'), [])
+    assert.deepEqual(await fixes('Tôi đi nha tho.'), ['nha tho→nhà thờ'])
     // Common words written without accents stay ("cho con" isn't "chó con"), and so do runs that could be
     // two words equally ("ban an": bản án or bàn ăn).
     assert.deepEqual(await fixes('Mẹ cho con đi chơi.'), [])
