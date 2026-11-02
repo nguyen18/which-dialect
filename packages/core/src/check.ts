@@ -580,13 +580,20 @@ async function wordSpelling(ctx: Context): Promise<CheckIssue[]> {
 async function accentLookAlike(ctx: Context, sentence: Context['sentences'][number], w: Word): Promise<CheckIssue | undefined> {
   const u = w.units[0]
   if (plain(u.text) !== u.text) return undefined
+  // A word of unknown frequency isn't compared ("Abonaremos" has none; its look-alike any would win).
   const own = Math.max(...w.entries.map((e) => e.frequency ?? -Infinity))
+  const known = own > -Infinity
   const i = sentence.words.indexOf(w)
   const before = i > 0 && joined(ctx.text, sentence.words[i - 1].units[0], u) ? sentence.words[i - 1].lower : undefined
   const cued = new Set(ctx.config.posCues?.filter((c) => before !== undefined && c.before.includes(before)).flatMap((c) => c.pos) ?? [])
   const hasCued = (entries: Entry[]) => entries.some((e) => cued.has(e.pos))
+  // A tilde makes another letter (Spanish "campana", bell; "campaña", campaign), so it needs a bigger gap
+  // ("ano" → "año" still).
+  const gap = (v: string) => WORD_ACCENTS_GAP + (v.normalize('NFD').includes('\u0303') ? 0.5 : 0)
   const found = (await ctx.dict.variants(u.text, { limit: 3 })).filter((v) =>
-    plain(v.word) === v.word.toLowerCase() ? false : (v.frequency ?? -Infinity) >= own + WORD_ACCENTS_GAP || (cued.size > 0 && hasCued(v.entries) && !hasCued(w.entries)),
+    plain(v.word) === v.word.toLowerCase()
+      ? false
+      : (known && (v.frequency ?? -Infinity) >= own + gap(v.word)) || (cued.size > 0 && hasCued(v.entries) && !hasCued(w.entries)),
   )
   if (!found.length) return undefined
   return {
@@ -607,7 +614,8 @@ async function letterFixes(ctx: Context, word: string): Promise<string[]> {
   const lower = word.toLowerCase()
   const groups = ctx.config.similarLetters ?? []
   const silent = ctx.config.silentLetters ?? []
-  if (!groups.length && !silent.length) return []
+  // Short ones are abbreviations more often than misspellings ("hc").
+  if ((!groups.length && !silent.length) || lower.length < 3) return []
   const tries = new Set<string>()
   for (let i = 0; i <= lower.length; i++) {
     const c = lower[i]
@@ -623,7 +631,7 @@ async function letterFixes(ctx: Context, word: string): Promise<string[]> {
     if (usable.length) found.set(t, Math.max(...usable.map((e) => e.frequency ?? -Infinity)))
     for (const v of await ctx.dict.variants(t, { limit: 2 })) found.set(v.word, Math.max(found.get(v.word) ?? -Infinity, v.frequency ?? -Infinity))
   }
-  return [...found].filter(([, f]) => f >= LETTER_FIX_MIN_ZIPF).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([w]) => w)
+  return [...found].filter(([w, f]) => f >= LETTER_FIX_MIN_ZIPF && w.length >= 3).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([w]) => w)
 }
 
 // Words in the learner's own language (English by default), with the target-language word to use: "market"
