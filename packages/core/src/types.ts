@@ -194,6 +194,12 @@ export type CheckerConfig = {
    * alike). The spellchecker counts swapping within a group as half a change, so "họk" → "học" before "họ".
    */
   similarLetters?: string[]
+  /**
+   * Words that tell what part of speech comes next, for choosing between spelling fixes that differ in it:
+   * Vietnamese "đã" before a verb ("đã công nhận", recognized), "các" before a noun ("các công nhân",
+   * workers). `pos` lists the parts of speech (Entry.pos) the words point to.
+   */
+  posCues?: { before: string[]; pos: string[] }[]
 }
 
 /**

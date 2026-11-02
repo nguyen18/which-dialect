@@ -279,6 +279,19 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
     const covered = new Set<Unit>()
     const loneSet = new Set(checked)
     const maxUnits = ctx.config.maxWordUnits ?? 3
+    // The parts of speech the word before a unit points to (posCues), when it's one of the language's cues.
+    // Cues may be two syllables ("có thể"); the longer match wins.
+    const cuedPos = (at: number) => {
+      const units = sentence.units
+      for (const n of [2, 1]) {
+        const before = units.slice(at - n, at)
+        if (before.length < n || before.some((b, j) => !joined(ctx.text, b, before[j + 1] ?? units[at]))) continue
+        const words = before.map(lowerOf).join(' ')
+        const cue = ctx.config.posCues?.find((c) => c.before.includes(words))
+        if (cue) return new Set(cue.pos)
+      }
+      return undefined
+    }
     for (let i = 0; i < sentence.units.length; i++) {
       for (let k = Math.min(maxUnits, sentence.units.length - i); k >= 2; k--) {
         const span = sentence.units.slice(i, i + k)
@@ -313,7 +326,11 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
             .map((f) => ({ ...f, entries: doubtful ? f.entries : f.entries.filter((e) => e.word === e.word.toLowerCase()) }))
             .filter((f) => f.entries.length)
             // Spelled as the headword: names keep their capitals ("nhat ban" → "Nhật Bản").
-            .map((f) => ({ word: f.entries[0].word.toLowerCase() === f.word ? f.entries[0].word : f.word, frequency: Math.max(-1, ...f.entries.map((e) => e.frequency ?? -1)) }))
+            .map((f) => ({
+              word: f.entries[0].word.toLowerCase() === f.word ? f.entries[0].word : f.word,
+              frequency: Math.max(-1, ...f.entries.map((e) => e.frequency ?? -1)),
+              pos: new Set(f.entries.map((e) => e.pos)),
+            }))
             .sort((a, b) => b.frequency - a.frequency)
             .slice(0, 3)
         }
@@ -324,10 +341,17 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
         let found = misspelled ? await words(sameLetters) : []
         if (!found.length) found = await words((u) => bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE))
         if (!found.length) continue
+        // Fixes that differ in part of speech: the word before tells which ("đã cong nhan": công nhận, a
+        // verb; "các cong nhan": công nhân, a noun). The ones it points to come first, and a single one is
+        // a clear winner however close the frequencies.
+        const cued = cuedPos(i)
+        const fits = (f: (typeof found)[number]) => [...f.pos].some((p) => cued?.has(p))
+        const decided = cued && found.length > 1 && found.filter(fits).length === 1 && !found.every(fits)
+        if (cued) found = [...found.filter(fits), ...found.filter((f) => !fits(f))]
         // Changed only for a commoner form: the word must be common too, since the written one may be a
         // word the dictionary lacks ("kỳ thi", exam, isn't a headword; "kỳ thị", discrimination, is).
         if (!doubtful && !span.some(rarePlain) && found[0].frequency < COMMONER_MIN_WORD_ZIPF) continue
-        if (!doubtful && found.length > 1 && found[0].frequency - found[1].frequency < PLAIN_RUN_MARGIN) continue
+        if (!doubtful && !decided && found.length > 1 && found[0].frequency - found[1].frequency < PLAIN_RUN_MARGIN) continue
         const at = { start: span[0].start, end: span[k - 1].end, text: ctx.text.slice(span[0].start, span[k - 1].end) }
         const suggestions = found.map((f) => matchCase(at.text, f.word))
         const quoted = listOf(suggestions.map(quote), 'or')

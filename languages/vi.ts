@@ -135,6 +135,16 @@ const config: LanguageConfig = {
     // Letters often confused: c/k/q and s/x sound alike, i/y are interchangeable in many words, m/n are
     // next to each other and both end syllables ("ơm" for "ơn").
     similarLetters: ['ckq', 'sx', 'iy', 'mn'],
+    // What comes after these words: tense, negation and "được" before verbs; degree words before adjectives
+    // (or stative verbs); plural markers, numbers and classifiers before nouns. Only to choose between
+    // spelling fixes: "đã cong nhan" → công nhận, "các cong nhan" → công nhân.
+    posCues: [
+      { before: ['đã', 'sẽ', 'đang', 'không', 'chưa', 'chẳng', 'được', 'bị', 'cũng', 'hãy', 'đừng', 'vừa', 'mới', 'từng', 'phải', 'muốn', 'cần', 'nên', 'có thể'], pos: ['verb', 'adj'] },
+      { before: ['rất', 'hơi', 'khá', 'quá', 'lắm', 'càng'], pos: ['adj', 'verb'] },
+      { before: ['các', 'những', 'một', 'mỗi', 'mọi', 'nhiều', 'vài', 'mấy', 'người', 'cái', 'chiếc'], pos: ['noun'] },
+      // "của" (of) before its owner: a noun or a pronoun ("của chúng mình", not "của chứng minh").
+      { before: ['của'], pos: ['noun', 'pron'] },
+    ],
   },
   // How to say "I", "you", "he/she", "we", plural "you" and "they" depending on who you're talking to
   // (or about). Picks with a `gloss` are pronoun definitions from the data ("you, my father"); rules are

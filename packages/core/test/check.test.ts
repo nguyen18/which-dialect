@@ -260,6 +260,10 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     // English "the" next to Vietnamese that makes a word with it.
     assert.deepEqual(await fixes('Tôi không the đi.'), ['không the→không thể'])
     assert.deepEqual(await fixes('Tôi co the đi.'), ['co the→có thể'])
+    // The word before decides between fixes that differ in part of speech (posCues).
+    assert.deepEqual(await fixes('Nhà nước đã cong nhan trường này.'), ['cong nhan→công nhận'])
+    assert.deepEqual(await fixes('Các cong nhan làm việc.'), ['cong nhan→công nhân'])
+    assert.deepEqual(await fixes('Trái đất này là của chung minh.'), ['chung minh→chúng mình'])
     assert.deepEqual(await fixes('Bộ GĐ-ĐT đã công bố.'), [])
     assert.deepEqual(await fixes('Chữ 詩 là thơ.'), [])
   })
