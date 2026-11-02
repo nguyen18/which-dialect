@@ -909,6 +909,23 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
     return pronouns.length ? pronouns : found
   }
 
+  // A contraction's expansion translated word by word ("we will" → "tụi tui" + "sẽ"): one translation, when
+  // every word has one.
+  async function expansionGroup(
+    sense: SourceSense,
+    o: Pick<TranslateOptions, 'from' | 'to' | 'toRegion' | 'listener' | 'speaker'>,
+  ): Promise<TranslationGroup | null> {
+    const words = sense.glosses[0].split(' ')
+    const parts = await Promise.all(words.map(async (w) => (await api.translate(w, { ...o, limit: 1 }).catch(() => []))[0]?.translations[0]))
+    if (parts.some((p) => !p)) return null
+    const first = parts[0]!
+    return {
+      source: sense,
+      bridge: words,
+      translations: [{ ...first, word: parts.map((p) => p!.word).join(' '), pos: 'phrase', gloss: sense.glosses[0], phrase: true, score: 100, bridge: 'expansion' }],
+    }
+  }
+
   const api: Translator = {
     senses,
 
@@ -1225,10 +1242,16 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
         (!meaning && pickedFirst.has(g.source) ? 5 : 0)
       // A sense with no translations says nothing, so it goes after the ones that do ("got": "Expressing
       // obligation; used with have." finds nothing; "Must; have/has (to)." gives "phải").
+      // An English contraction ("we'll": we will) means its expansion: word by word, each word's first
+      // translation ("tụi tui sẽ"), first, and the word's misspelling readings ("we'll" for "well") dropped.
+      const contraction = from === 'en' ? sourceSenses.find((s) => s.pos === 'contraction' && !s.via && /^[\p{L}']+( [\p{L}']+)+$/u.test(s.glosses[0] ?? '')) : undefined
+      const expanded = contraction ? await expansionGroup(contraction, { from, to, toRegion, listener, speaker }) : null
       const ordered = groups
+        .filter((g) => !(contraction && g.source.via && SPELLING_VIA.test(g.source.via)))
         .map((g, i) => ({ g, i, r: relevance(g) - (g.translations.length ? 0 : 100) }))
         .sort((a, b) => b.r - a.r || a.i - b.i)
         .map((x) => x.g)
+      if (expanded) ordered.unshift(expanded)
       if (phrase) ordered.unshift(phrase)
       if (allSenses) return ordered
       // Senses that translate to the same words add nothing; keep the first.

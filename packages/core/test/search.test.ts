@@ -437,6 +437,13 @@ describe('translator (real data)', { skip: !built && 'build en and vi data first
     }
   })
 
+  it('translates English contractions through their expansion, with either apostrophe', async () => {
+    // "we'll" is also listed as a misspelling of "well" (hay): the contraction wins.
+    assert.equal((await top("we'll", { from: 'en', to: 'vi', toRegion: 'Southern' }))[0], 'tụi tui sẽ')
+    assert.equal((await top('we’ll', { from: 'en', to: 'vi', toRegion: 'Southern' }))[0], 'tụi tui sẽ')
+    assert.equal((await top('we’ll see', { from: 'en', to: 'vi' }))[0], 'để xem')
+  })
+
   it('follows regional variants and keeps their region', async () => {
     const [hong] = await tr.senses('hông', { from: 'vi', fromRegion: 'Southern', pos: 'adv' })
     assert.equal(hong.lemma, 'không')

@@ -229,7 +229,8 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
   }
 
   async function lookup(word: string): Promise<Entry[]> {
-    const w = word.trim()
+    // Phones type a curly apostrophe ("we’ll"); the dictionary's headwords have the straight one.
+    const w = word.trim().replace(/[’‘]/g, "'")
     const [m, data, forms] = await Promise.all([meta(), shard<WordShard>('words', w), shard<FormShard>('forms', w)])
     // The word as written, else lowercase ("Mẹ" → "mẹ"), else capitalized for names written in lowercase
     // ("nhật" → "Nhật", Japan; "nhật bản" → "Nhật Bản"), which spellchecker suggestions and learners do.
