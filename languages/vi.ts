@@ -632,6 +632,11 @@ const config: LanguageConfig = {
     {
       word: "why", pos: "noun", gloss: /^Reason\./, picks: ["lý do", "lý lẽ"],
     },
+    // Added at the owner's request, 2026-11-01.
+    {
+      word: "wonder", pos: "verb", gloss: /^To ponder; to feel doubt and curiosity/, picks: ["suy nghĩ"], first: true,
+      note: "The everyday \"wonder\" (ponder) is suy nghĩ; the ranking gave phân vân (to be unsure) and bare suy (mostly \"to infer\").",
+    },
   ],
 }
 
