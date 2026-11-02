@@ -50,6 +50,12 @@ this**: it only reorders a form's own colloquial meanings, and keeps a form's ow
 base word's, as before. Other words like this: *left* (the side / past of leave), *found* (to establish /
 past of find), *lay*, *rose*, *bore*, *wound*.
 
+**Update 2026-11-02:** for English input, a past tense's own meanings now lead only when they're everyday
+speech (*got*), and its own past-tense verb entry comes before its nouns: *saw* → see, *felt* → feel,
+*found* → find, *ate* → eat, *drove* → drive (see ARCHITECTURE.md "Spanish power-up"). Still open: words
+that aren't past tenses (*left* the side, *rose* the flower vs. the past of rise, *lay*), and other source
+languages.
+
 **What we found (2026-09-30):** deciding needs to know which meaning is more common, and the data
 doesn't say. The obvious signal, how many languages translate each meaning in Wiktionary's translation
 tables, is unreliable because Kaikki often attaches tables to the wrong meaning: *dog*'s 683-language
@@ -226,6 +232,39 @@ right with the phrasebook, longer English phrases, next-word cues and classifier
 - **Measure translation of phrases:** `npm run evaluate` only has single words; add phrase cases (both
   directions) so phrasebook edits are checked like picks.
 
+### Spanish: from the 2026-11-02 power-up (`/language-powerup spanish`)
+
+Journals and results are in `~/.claude/skills/language-powerup/journals/es/`. What's left, roughly by how
+often a learner meets it:
+
+- **Native-speaker review** of `languages/phrases/es.tsv` (2,926 pairs) and the 32 picks: both are Claude's
+  drafts. Regional tags especially (*botar*, *me da pena*, school-year words, *por/en/a la mañana*).
+- **Verbs stay infinitives** when English is translated word by word: "We walked" → *Nosotros caminar*,
+  "I was almost late" → *yo ser casi tarde*, "went to bed" → *acostarse*. The forms index knows every
+  conjugation with its description ("first-person plural preterite indicative of caminar"), so the English
+  form (past/present, from `regularBaseForms`/form-of senses) and subject (the pronoun before) could pick
+  the form. Language-general, but a real feature: conjugation tables differ per language. ser/estar is
+  separate (needs meaning).
+- **Agreement:** gender and number (*mi nueva compañero*, *los pie*, *mucho emails* for "a lot of emails").
+  Needs noun genders in the data (Kaikki's head templates say m/f), see the frames note above.
+- **English phrases still word by word:** *my friend's birthday party* (Spanish order: *la fiesta de
+  cumpleaños de mi amigo*), *some new people* (*alguno nuevo gente*), *There was* → *Haber*, *I need to* →
+  *deber*, *the next one* → *el siguiente uno*. More phrasebook rows help the common ones.
+- **"friends" in Spanish text** is still read as Spanish when its neighbours are (Spanish Wiktionary lists the
+  English loanword, 3.6 vs English 5.4, inside `BASE_MARGIN` 2). A loanword flag in the data (Kaikki has
+  etymology "borrowed from English") would let detection discount it.
+- **Single words of the phrasebook:** *please*, *sorry*, *tonight*, *maybe* map to phrases (*por favor*,
+  *lo siento*, *esta noche*, *a lo mejor*); using the phrasebook for every single word hijacked nouns
+  (*computer* → *el ordenador*, Vietnamese *dog* → *con chó*). Picks cover *please*/*sorry*; a phrasebook
+  column marking rows that may answer a single word would cover the rest.
+- **English data has no noun plurals** (`formOfPos` leaves nouns out); `IRREGULAR_PLURALS` covers the
+  common irregular ones in code. Keeping irregular noun plurals in the English build would cover all, at a
+  size cost (English is ~7 MB under jsDelivr's limit).
+- **Old spellings in quotes** are flagged now (*á*, *quando*, *muger*: 34 → 62 of 4,000 example sentences),
+  as warnings; fine for learners, noisy for historical text.
+- **`evaluate:spelling` is Vietnamese-only** (`LANG = 'vi'`); a Spanish version (accents off, a letter
+  swapped, inside example sentences) would measure the word spellchecker the same way.
+
 ## Pronouns
 
 - **Possessives:** plain "her" leads with its possessive sense ("belonging to her"), Wiktionary's first,
@@ -266,13 +305,17 @@ unless noted:
   bare word ("¿Dónde está baño?"). Storing noun genders (Kaikki's head templates say m/f) would let frames
   add the article and the checker catch "la depósito". Usted isn't offered; with a pronoun table, frame
   words could use `when: 'respect'` for *usted* forms.
-- Spanish has no picks or pronoun table yet (both optional per language). Since 2026-10-29
-  it has inflected forms (the forms index) and a spellchecker for accents (see ARCHITECTURE.md), but:
+- Spanish has no pronoun table yet (optional per language); it has 32 picks since 2026-11-02, drafted by
+  Claude and not yet reviewed. Since 2026-10-29 it has inflected forms (the forms index) and a spellchecker
+  for accents (see ARCHITECTURE.md), but:
   - verbs with attached pronouns ("dámelo", "tápalo", ~120k forms) are left out of the forms index to keep
     the data small, so they're unknown words;
-  - accents that make another real word aren't checked ("esta" for "está", "tu" for "tú", "el" for "él"):
-    that needs the words around them (a grammar rule), not the dictionary;
-  - typos other than accents ("cancoin") get no suggestion.
+  - accents that make another common real word aren't checked ("esta" for "está", "tu" for "tú", "el" for
+    "él", "mi" for "mí" after a preposition, preterite "quede"/"quedé", "paso"/"pasó", "arreglo"/"arregló"):
+    that needs the words around them (a grammar rule), not the dictionary. Since 2026-11-02 much rarer ones
+    (*trafico*) and nouns after an article (*la practica*) are;
+  - typos other than accents get a suggestion only for `similarLetters` swaps and a silent *h* (since
+    2026-11-02); not transpositions ("cancoin") or a missing *u* ("llege" for "llegué").
 
 English stores a translation table for each language, so it grew from 136.2 to 142.8 MB with Spanish
 back, about 7 MB under jsDelivr's ~150 MB package limit. The next language will likely need English
