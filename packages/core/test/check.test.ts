@@ -323,6 +323,10 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Tôi thức dậy luc 8 giờ.'), ['luc→lúc'])
     assert.deepEqual(await fixes('Tôi muốn đi nhung tôi bận.'), ['nhung→nhưng'])
     assert.deepEqual(await fixes('Tôi thích nhung con mèo.'), ['nhung→những'])
+    // Next to a misspelled syllable, an everyday phrase may fix a real word's accents too ("tư" is "four"):
+    // "đến từ" (come from), as one fix; not when the misspelled syllable alone makes a word ("cơ thể", body).
+    assert.deepEqual(await fixes('Tôi đên tư Mỹ.'), ['đên tư→đến từ'])
+    assert.deepEqual(await fixes('Tôi đau cơ thễ.'), ['cơ thễ→cơ thể'])
     // After "một", a classifier and a noun: "cái áo" (a shirt), not the dictionary's "cài áo" (button up).
     assert.deepEqual(await fixes('Tôi mua một cai ao mới.'), ['cai ao→cái áo'])
     // "hot" is Vietnamese for popular: a hint, never a change.
