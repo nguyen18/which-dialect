@@ -297,6 +297,19 @@ next year	el año que viene
 next year	el próximo año
 on the weekend	el fin de semana
 on the weekend	los fines de semana		habitually
+on Monday	el lunes
+on Tuesday	el martes
+on Wednesday	el miércoles
+on Thursday	el jueves
+on Friday	el viernes
+on Saturday	el sábado
+on Sunday	el domingo
+on Tuesdays	los martes
+on Wednesdays	los miércoles
+on Thursdays	los jueves
+on Fridays	los viernes
+on Saturdays	los sábados
+on Sundays	los domingos
 every day	todos los días
 every day	cada día
 every morning	todas las mañanas
@@ -1085,6 +1098,10 @@ good job	buen trabajo
 be retired	estar jubilado
 
 ## Getting around
+go to	ir a
+on the way back	de regreso
+on the way back	de vuelta
+on the way home	de camino a casa
 go home	irse a casa
 go home	volver a casa
 go out	salir
