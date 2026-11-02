@@ -74,7 +74,23 @@ const config: LanguageConfig = {
   // (forms/de.json), too much to parse per word in a serverless function (Mai's journal check ran out of CPU).
   shardLength: 3,
   // Spaces separate words; the checker fixes accents from the words and forms ("cancion" → "canción").
-  checker: { units: 'words' },
+  checker: {
+    units: 'words',
+    // Letters Spanish learners mix up by sound: b/v, c/s/z (seseo), g/j, y/ll; and the silent h.
+    similarLetters: ['bv', 'csz', 'gj', 'iy'],
+    silentLetters: ['h'],
+    // Words before a noun, for accent fixes on real words: "el trafico" (I traffic) → "el tráfico".
+    posCues: [{ before: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'del', 'mi', 'mis', 'tu', 'tus', 'su', 'sus', 'nuestro', 'nuestra', 'este', 'estos', 'estas', 'ese', 'esa', 'esos', 'esas'], pos: ['noun'] }],
+    // English speakers' classic false friends: a hint wherever the word appears.
+    falseFriends: [
+      { word: 'embarazada', means: 'pregnant', say: ['avergonzada', 'apenada'], for: 'embarrassed' },
+      { word: 'embarazado', means: 'pregnant (or obstructed)', say: ['avergonzado', 'apenado'], for: 'embarrassed' },
+      { word: 'excitado', means: 'sexually aroused', say: ['emocionado'], for: 'excited' },
+      { word: 'excitada', means: 'sexually aroused', say: ['emocionada'], for: 'excited' },
+      { word: 'constipado', means: 'having a cold (Spain)', say: ['estreñido'], for: 'constipated' },
+      { word: 'constipada', means: 'having a cold (Spain)', say: ['estreñida'], for: 'constipated' },
+    ],
+  },
   // Country and city names translate ("Japan" ↔ "Japón").
   placeNames: {},
   wordfreq: 'large',

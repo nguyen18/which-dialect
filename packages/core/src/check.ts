@@ -484,19 +484,23 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
       }
     }
 
-    // Loanwords with a narrower meaning than the learner's word (CheckerConfig.falseFriends): a hint only,
-    // since they're often used right ("bài hát hot", a hit song).
-    for (const u of target) {
-      const friend = ctx.config.falseFriends?.find((f) => f.word === u.text.toLowerCase())
-      if (!friend) continue
-      issues.push({
-        rule: 'spelling', severity: 'suggestion', start: u.start, end: u.end, text: u.text,
-        message: `In ${ctx.meta.name}, ${quote(u.text)} means ${friend.means}; for ${friend.for}, say ${listOf(friend.say.map(quote), 'or')}.`,
-        suggestions: friend.say.map((w) => matchCase(u.text, w)),
-      })
-    }
+    issues.push(...falseFriendHints(ctx, target))
   }
   return issues
+}
+
+// Words with another meaning than the learner's look-alike (CheckerConfig.falseFriends): a hint only, since
+// they're often used right (Vietnamese "bài hát hot", a hit song; Spanish "embarazada", pregnant).
+function falseFriendHints(ctx: Context, target: Unit[]): CheckIssue[] {
+  return target.flatMap((u) => {
+    const friend = ctx.config.falseFriends?.find((f) => f.word === u.text.toLowerCase())
+    if (!friend) return []
+    return [{
+      rule: 'spelling' as const, severity: 'suggestion' as const, start: u.start, end: u.end, text: u.text,
+      message: `In ${ctx.meta.name}, ${quote(u.text)} means ${friend.means}; for ${friend.for}, say ${listOf(friend.say.map(quote), 'or')}.`,
+      suggestions: friend.say.map((w) => matchCase(u.text, w)),
+    }]
+  })
 }
 
 // Wiktionary's own misspelling entries ("misspelling of también", "common misspelling of …"). A word counts
@@ -506,6 +510,13 @@ const MISSPELLING = /\bmisspelling of ([\p{L}\p{M}'-]+)/iu
 const NOT_IN_USE_SPELLING = /\b(misspelling|obsolete spelling|archaic spelling|dated spelling|obsolete form|archaic form) of\b/i
 // Zipf points below the most common look-alike beyond which another isn't suggested.
 const RARE_VARIANT_GAP = 2
+// A known word written without accents gets its accented look-alike when that is this many Zipf points more
+// common (Spanish "trafico", I traffic, 3.4 → "tráfico", traffic, 4.6), or when the word before asks for a
+// part of speech (posCues) only the look-alike has ("la practica" → "práctica"). "esta"/"está" (6.4/6.2) and
+// "mas"/"más" (5.9/6.6) stay: both are common.
+const WORD_ACCENTS_GAP = 1
+// One-letter fixes of unknown words (similarLetters, silentLetters) must be at least this common.
+const LETTER_FIX_MIN_ZIPF = 3
 
 // Spelling and accents for languages written in words (Spanish), from the dictionary alone: a word it doesn't
 // know, as a headword or an inflected form (the forms index), that matches known words once accents are
@@ -516,30 +527,43 @@ const RARE_VARIANT_GAP = 2
 async function wordSpelling(ctx: Context): Promise<CheckIssue[]> {
   const issues: CheckIssue[] = []
   for (const sentence of ctx.sentences) {
+    issues.push(...falseFriendHints(ctx, sentence.units.filter((u) => !ctx.inBase(u))))
     for (const w of sentence.words) {
       if (w.units.length !== 1) continue
-      // Words the dictionary lists only as misspellings ("tambien": "misspelling of también") count as unknown,
-      // with what they're a misspelling of.
+      // Words the dictionary lists only as misspellings or old spellings ("tambien": "misspelling of también";
+      // "jardin": "obsolete spelling of jardín") count as unknown, with the spelling they stand for.
       const senses = w.entries.flatMap((e) => e.senses)
-      const misspelt =
-        senses.some((s) => MISSPELLING.test(s.glosses[0] ?? '')) && senses.every((s) => NOT_IN_USE_SPELLING.test(s.glosses[0] ?? ''))
-      if (w.entries.length && !misspelt) continue
+      const misspelt = senses.length > 0 && senses.every((s) => NOT_IN_USE_SPELLING.test(s.glosses[0] ?? ''))
       const u = w.units[0]
       if (ctx.inBase(u) || !/\p{L}/u.test(u.text)) continue
       if (u !== sentence.units[0] && /\p{Lu}/u.test(u.text.charAt(0))) continue
-      const variants = await ctx.dict.variants(u.text, { limit: 3 })
+      if (w.entries.length && !misspelt) {
+        const issue = await accentLookAlike(ctx, sentence, w)
+        if (issue) issues.push(issue)
+        continue
+      }
+      // Look-alikes that are themselves old spellings stand for their current spelling ("abia": "abía", an
+      // obsolete spelling of "había").
+      const variants = (await ctx.dict.variants(u.text, { limit: 3 })).map((v) => {
+        const vs = v.entries.flatMap((e) => e.senses)
+        const now = vs.length && vs.every((x) => NOT_IN_USE_SPELLING.test(x.glosses[0] ?? '')) ? vs.find((x) => x.altOf)?.altOf : undefined
+        return now ? { ...v, word: now } : v
+      })
       // Rare look-alikes don't crowd out the word meant ("nino": niño, not also ñiño).
       const best = variants[0]?.frequency
       const found = unique([
         ...(misspelt ? senses.map((s) => s.altOf ?? MISSPELLING.exec(s.glosses[0] ?? '')?.[1]) : []).filter((x): x is string => Boolean(x)),
         ...variants.filter((v) => best === undefined || (v.frequency ?? -Infinity) >= best - RARE_VARIANT_GAP).map((v) => v.word),
       ]).slice(0, 3)
+      if (!found.length) found.push(...(await letterFixes(ctx, u.text)))
       if (!found.length) continue
-      // Missing accents is the common learner slip; a wrong accent is more surely wrong.
+      // Missing accents is the common learner slip; a wrong accent is more surely wrong. Old spellings
+      // ("sólo" for "solo") are still seen, so they're a warning.
       const accented = plain(u.text) !== u.text
+      const old = misspelt && !senses.some((s) => MISSPELLING.test(s.glosses[0] ?? ''))
       issues.push({
         rule: 'spelling',
-        severity: accented ? 'error' : 'warning',
+        severity: accented && !old ? 'error' : 'warning',
         start: u.start,
         end: u.end,
         text: u.text,
@@ -549,6 +573,57 @@ async function wordSpelling(ctx: Context): Promise<CheckIssue[]> {
     }
   }
   return issues
+}
+
+// A known word with no accents whose accented look-alike is far more common, or is the part of speech the
+// word before asks for (see WORD_ACCENTS_GAP): a warning, since the word as written is a real word.
+async function accentLookAlike(ctx: Context, sentence: Context['sentences'][number], w: Word): Promise<CheckIssue | undefined> {
+  const u = w.units[0]
+  if (plain(u.text) !== u.text) return undefined
+  const own = Math.max(...w.entries.map((e) => e.frequency ?? -Infinity))
+  const i = sentence.words.indexOf(w)
+  const before = i > 0 && joined(ctx.text, sentence.words[i - 1].units[0], u) ? sentence.words[i - 1].lower : undefined
+  const cued = new Set(ctx.config.posCues?.filter((c) => before !== undefined && c.before.includes(before)).flatMap((c) => c.pos) ?? [])
+  const hasCued = (entries: Entry[]) => entries.some((e) => cued.has(e.pos))
+  const found = (await ctx.dict.variants(u.text, { limit: 3 })).filter((v) =>
+    plain(v.word) === v.word.toLowerCase() ? false : (v.frequency ?? -Infinity) >= own + WORD_ACCENTS_GAP || (cued.size > 0 && hasCued(v.entries) && !hasCued(w.entries)),
+  )
+  if (!found.length) return undefined
+  return {
+    rule: 'spelling',
+    severity: 'warning',
+    start: u.start,
+    end: u.end,
+    text: u.text,
+    message: `${quote(u.text)} is a ${ctx.meta.name} word, but ${listOf(found.map((v) => quote(v.word)), 'or')} is more likely here.`,
+    suggestions: found.map((v) => matchCase(u.text, v.word)),
+  }
+}
+
+// Words an unknown word becomes with one letter swapped within a group of letters often confused
+// (CheckerConfig.similarLetters: Spanish "cosina" → "cocina") or one silent letter added or dropped
+// (silentLetters: "ablar" → "hablar"), each with its accents fixed, the most common first.
+async function letterFixes(ctx: Context, word: string): Promise<string[]> {
+  const lower = word.toLowerCase()
+  const groups = ctx.config.similarLetters ?? []
+  const silent = ctx.config.silentLetters ?? []
+  if (!groups.length && !silent.length) return []
+  const tries = new Set<string>()
+  for (let i = 0; i <= lower.length; i++) {
+    const c = lower[i]
+    if (c) for (const g of groups) if (g.includes(c)) for (const o of g) if (o !== c) tries.add(lower.slice(0, i) + o + lower.slice(i + 1))
+    for (const l of silent) tries.add(lower.slice(0, i) + l + lower.slice(i))
+    if (c && silent.includes(c)) tries.add(lower.slice(0, i) + lower.slice(i + 1))
+  }
+  tries.delete(lower)
+  const found = new Map<string, number>()
+  for (const t of tries) {
+    const own = await ctx.dict.lookup(t)
+    const usable = own.filter((e) => !e.senses.every((s) => NOT_IN_USE_SPELLING.test(s.glosses[0] ?? '')))
+    if (usable.length) found.set(t, Math.max(...usable.map((e) => e.frequency ?? -Infinity)))
+    for (const v of await ctx.dict.variants(t, { limit: 2 })) found.set(v.word, Math.max(found.get(v.word) ?? -Infinity, v.frequency ?? -Infinity))
+  }
+  return [...found].filter(([, f]) => f >= LETTER_FIX_MIN_ZIPF).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([w]) => w)
 }
 
 // Words in the learner's own language (English by default), with the target-language word to use: "market"

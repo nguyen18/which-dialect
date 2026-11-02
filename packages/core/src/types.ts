@@ -197,6 +197,11 @@ export type CheckerConfig = {
    */
   similarLetters?: string[]
   /**
+   * Letters often left out or added because they aren't heard (Spanish "h": "ablar" → "hablar"). For
+   * languages written in words, an unknown word gets the known words one such letter away.
+   */
+  silentLetters?: string[]
+  /**
    * Words that tell what part of speech comes next, for choosing between spelling fixes that differ in it:
    * Vietnamese "đã" before a verb ("đã công nhận", recognized), "các" before a noun ("các công nhân",
    * workers). `pos` lists the parts of speech (Entry.pos) the words point to.

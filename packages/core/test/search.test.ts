@@ -241,6 +241,25 @@ describe('Spanish data', { skip: !existsSync(esData) && 'run `npm run build:data
     // "Tambien" is listed only as a misspelling; "escuche" and "mama" are real words (left alone).
     assert.deepEqual(fixes, { Tambien: 'También', cancion: 'canción', nino: 'niño' })
   })
+
+  it('checks spelling: old spellings, much commoner accented words, confused letters, false friends', { skip: !existsSync(join(esData, '..', '..', 'en', 'data')) && 'needs the English build' }, async () => {
+    const load = (lang: string) => async (p: string) => JSON.parse(await readFile(join(esData, '..', '..', lang, 'data', p), 'utf8'))
+    const checker = createChecker({ load })
+    const fixes = async (text: string) =>
+      Object.fromEntries((await checker.check(text, { lang: 'es', base: 'en' })).issues.filter((i) => i.rule === 'spelling').map((i) => [i.text, i.suggestions[0]]))
+    // "jardin" and "mediodia" are only obsolete spellings; "trafico" (I traffic) is far rarer than "tráfico".
+    assert.deepEqual(await fixes('Al mediodia fui al jardin y había mucho trafico.'), { mediodia: 'mediodía', jardin: 'jardín', trafico: 'tráfico' })
+    // After an article, the noun: "la practica" → "práctica"; but "Ella practica yoga" is the verb.
+    assert.deepEqual(await fixes('Tengo la practica mañana.'), { practica: 'práctica' })
+    assert.deepEqual(await fixes('Ella practica yoga.'), {})
+    // Both common: "esta"/"está", "mas"/"más" are left alone.
+    assert.deepEqual(await fixes('Esta casa es mas grande.'), {})
+    // Letters heard alike and the silent h.
+    assert.deepEqual(await fixes('Comimos en la cosina y voy a ablar con ella.'), { cosina: 'cocina', ablar: 'hablar' })
+    const [hint] = (await checker.check('Estaba un poco embarazada.', { lang: 'es', base: 'en' })).issues
+    assert.equal(hint.severity, 'suggestion')
+    assert.deepEqual(hint.suggestions, ['avergonzada', 'apenada'])
+  })
 })
 
 describe('hand-picked words (fake data)', () => {
@@ -537,6 +556,7 @@ describe('translator with Spanish (real data)', { skip: !builtEs && 'build en, v
   it('translates between dialects of one language', async () => {
     assert.ok((await top('coche', { from: 'es', fromRegion: 'Spain', to: 'es', toRegion: 'Mexico' })).includes('carro'))
   })
+
 
   it('ranks the everyday word first', async () => {
     assert.equal((await top('cerdo', { from: 'es', to: 'vi', toRegion: 'Southern', pos: 'noun' }))[0], 'heo')
