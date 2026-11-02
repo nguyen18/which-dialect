@@ -193,6 +193,9 @@ const COMMONER_MIN_WORD_ZIPF = 5
 // How common a phrasebook phrase counts as, at least, when its accents are chosen: the phrasebook lists
 // everyday phrases, many of which aren't headwords ("thức dậy", "đông người"), so have no frequency.
 const PHRASEBOOK_ZIPF = 5
+// How much more common (Zipf) a phrasebook phrase's syllable must be to replace a real word next to a misspelled
+// one ("đên tư" → "đến từ").
+const PHRASE_NEIGHBOR_GAP = 0.5
 // A plain-letter non-syllable with no accented form is checked as a typo only if a one-letter fix gives a
 // syllable at least this common (Zipf); otherwise it's probably a name or a foreign word.
 const PLAIN_TYPO_MIN_ZIPF = 4
@@ -387,9 +390,20 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
           }).filter((c) => c !== written.join(' '))
           // Phrasebook phrases with the same letters, however far down each syllable's forms they are ("pho
           // bo": phở and bò are 7th and 5th among pho's and bo's forms), keeping the syllables that may not change.
+          // Next to a misspelled syllable, a phrase may also change a real word's accents when its form there is
+          // clearly more common (PHRASE_NEIGHBOR_GAP): "đên tư" → "đến từ" (từ 6.6, tư "four" 5.9), but "nhu thế"
+          // stays "như thế", not the phrase "như thể" (thể 6.7, thế 6.4: under the gap). Correct text has no misspelled syllable.
+          // Such a phrase only counts when no fix keeping that word is a word itself ("cơ thễ" is "cơ thể", body,
+          // not the phrase "có thể"): `stretched`, filtered below.
+          const stretched = new Set<string>()
           for (const c of phrases ? (ctx.phrasebookByPlain.get(plain(written.join(' '))) ?? []) : []) {
             const syllablesOf = c.split(' ')
-            if (!combos.includes(c) && span.every((u, j) => mayChange(u) || syllablesOf[j] === written[j])) combos.push(c)
+            if (combos.includes(c)) continue
+            if (span.every((u, j) => mayChange(u) || syllablesOf[j] === written[j])) combos.push(c)
+            else if (doubtful && span.every((u, j) => mayChange(u) || syllablesOf[j] === written[j] || (syllables[syllablesOf[j]] ?? 0) >= (syllables[written[j]] ?? 0) + PHRASE_NEIGHBOR_GAP)) {
+              combos.push(c)
+              stretched.add(c)
+            }
           }
           // After a word that's followed by a noun ("một", "các"), a classifier and a noun count as a word:
           // "một cái áo" (a shirt) isn't a headword, "cài áo" (to button up) is. Only there: classifiers are
@@ -406,6 +420,7 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
           // but "hoa lan" (orchid, every syllable a word) isn't "Hòa Lan" (the Netherlands).
             .map((f) => ({ ...f, entries: doubtful ? f.entries : f.entries.filter((e) => e.word === e.word.toLowerCase()) }))
             .filter((f) => f.entries.length || f.phrase)
+            .filter((f, _, all) => !stretched.has(f.word) || !all.some((o) => !stretched.has(o.word) && o.entries.length))
             // A unit the next word decides keeps that form ("luc 8": lúc).
             .filter((f) => span.every((u, j) => {
               const cue = cueOf(u)
