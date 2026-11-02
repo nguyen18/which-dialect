@@ -246,6 +246,9 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Tôi muốm ăn.'), ['muốm→muốn'])
     // A word with its neighbors: "cảm ơn", not "cảm ôm".
     assert.deepEqual(await fixes('Cảm ơm bạn.'), ['Cảm ơm→Cảm ơn'])
+    // A mark that shouldn't be there: dropping it is offered too, and makes the word with a neighbor.
+    assert.deepEqual((await spell('suỹ')).issues[0]?.suggestions, ['quỹ', 'suy', 'sỹ'])
+    assert.deepEqual(await fixes('Tôi đang suỹ nghĩ.'), ['suỹ nghĩ→suy nghĩ'])
     assert.deepEqual(await fixes('Bộ GĐ-ĐT đã công bố.'), [])
     assert.deepEqual(await fixes('Chữ 詩 là thơ.'), [])
   })

@@ -216,8 +216,23 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
     // Each non-syllable's candidates: accents and one-letter changes, the writer's own accents first.
     const candidatesOf = new Map<Unit, string[]>()
     const similar = ctx.config.similarLetters ?? []
-    const candidates = (u: Unit, limit = SPELLING_CANDIDATES) =>
-      spellingCandidates(lowerOf(u), syllables, byPlain, { limit, similar }).map((c) => c.word)
+    // The writer's syllable with a typed mark dropped keeps a place: a wrongly accented syllable often had a
+    // mark it shouldn't ("suỹ": quỹ, then suy), which ranks below fixes keeping the writer's marks.
+    const marksOf = (s: string) => [...s.normalize('NFD')].filter((c) => /\p{M}/u.test(c))
+    const dropsMarks = (written: string, w: string) => {
+      const left = marksOf(written)
+      const mine = marksOf(w)
+      return mine.length < left.length && mine.every((m) => left.includes(m) && left.splice(left.indexOf(m), 1))
+    }
+    const candidates = (u: Unit, limit = SPELLING_CANDIDATES) => {
+      const all = spellingCandidates(lowerOf(u), syllables, byPlain, { limit: 50, similar })
+      const top = all.slice(0, limit).map((c) => c.word)
+      const same = all.find((c) => c.edits === 0 && dropsMarks(lowerOf(u), c.word))?.word
+      if (same && !top.includes(same)) top.splice(Math.min(1, top.length), 0, same)
+      return top.slice(0, limit)
+    }
+    const sameLetters = (u: Unit) =>
+      spellingCandidates(lowerOf(u), syllables, byPlain, { limit: 50, similar }).filter((c) => c.edits === 0).map((c) => c.word)
     // For words with neighbors, only the best-ranked candidates: "muốm ăn" mustn't become "muối ăn" (salt)
     // through a worse fix of "muốm" than "muốn" just because "muối ăn" is a dictionary word.
     const bestCandidates = (u: Unit, limit: number) => {
@@ -268,22 +283,29 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
         const mayChange = (u: Unit) => suspect(u) || rarePlain(u)
         if (!doubtful && !span.some(rarePlain)) continue
         const written = span.map(lowerOf)
-        const combos = accentCombinations(written, byPlain, {
-          fixed: span.map((u) => !mayChange(u)),
-          // Misspelled syllables may change letters too ("cảm ơm" → "cảm ơn").
-          forms: span.map((u) => (unknown.has(u) ? bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE) : undefined)),
-          perUnit: COMPOUND_FORMS_PER_SYLLABLE,
-          max: COMPOUND_MAX_COMBINATIONS,
-        }).filter((c) => c !== written.join(' '))
-        const found = (await Promise.all(combos.map(async (c) => ({ word: c, entries: await ctx.dict.lookup(c) }))))
+        const words = async (forms: (u: Unit) => string[]) => {
+          const combos = accentCombinations(written, byPlain, {
+            fixed: span.map((u) => !mayChange(u)),
+            // Misspelled syllables may change letters too ("cảm ơm" → "cảm ơn").
+            forms: span.map((u) => (unknown.has(u) ? forms(u) : undefined)),
+            perUnit: COMPOUND_FORMS_PER_SYLLABLE,
+            max: COMPOUND_MAX_COMBINATIONS,
+          }).filter((c) => c !== written.join(' '))
+          return (await Promise.all(combos.map(async (c) => ({ word: c, entries: await ctx.dict.lookup(c) }))))
           // Names (found through a capitalized headword) only for a misspelled run: "nhat ban" → "Nhật Bản",
           // but "hoa lan" (orchid, every syllable a word) isn't "Hòa Lan" (the Netherlands).
-          .map((f) => ({ ...f, entries: doubtful ? f.entries : f.entries.filter((e) => e.word === e.word.toLowerCase()) }))
-          .filter((f) => f.entries.length)
-          // Spelled as the headword: names keep their capitals ("nhat ban" → "Nhật Bản").
-          .map((f) => ({ word: f.entries[0].word.toLowerCase() === f.word ? f.entries[0].word : f.word, frequency: Math.max(-1, ...f.entries.map((e) => e.frequency ?? -1)) }))
-          .sort((a, b) => b.frequency - a.frequency)
-          .slice(0, 3)
+            .map((f) => ({ ...f, entries: doubtful ? f.entries : f.entries.filter((e) => e.word === e.word.toLowerCase()) }))
+            .filter((f) => f.entries.length)
+            // Spelled as the headword: names keep their capitals ("nhat ban" → "Nhật Bản").
+            .map((f) => ({ word: f.entries[0].word.toLowerCase() === f.word ? f.entries[0].word : f.word, frequency: Math.max(-1, ...f.entries.map((e) => e.frequency ?? -1)) }))
+            .sort((a, b) => b.frequency - a.frequency)
+            .slice(0, 3)
+        }
+        let found = await words((u) => bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE))
+        // When those make no word, the same letters with other accents may: "suỹ nghĩ" → "suy nghĩ".
+        if (!found.length && span.some((u) => unknown.has(u))) {
+          found = await words((u) => [...sameLetters(u).slice(0, 2), ...bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE - 2)])
+        }
         if (!found.length) continue
         if (!doubtful && found.length > 1 && found[0].frequency - found[1].frequency < PLAIN_RUN_MARGIN) continue
         const at = { start: span[0].start, end: span[k - 1].end, text: ctx.text.slice(span[0].start, span[k - 1].end) }
