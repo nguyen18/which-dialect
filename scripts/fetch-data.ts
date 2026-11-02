@@ -13,6 +13,7 @@ import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { DATA_VERSION, type LanguageMeta } from '../packages/core/src/index.ts'
 import type { LanguageConfig } from './language-config.ts'
+import { writePhrases } from './phrases.ts'
 import { writePicks } from './picks.ts'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -62,6 +63,7 @@ async function main() {
     if (!existsSync(configFile) || !existsSync(join(ROOT, 'packages', lang, 'data', 'meta.json'))) continue
     const config = (await import(configFile)).default as LanguageConfig
     if (config.picks?.length) await writePicks(config)
+    await writePhrases(config)
   }
 }
 

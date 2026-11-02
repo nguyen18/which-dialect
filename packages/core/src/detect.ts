@@ -3,7 +3,7 @@
 
 import type { Dictionary } from './index.ts'
 import { plain, syllablesByPlain, type Unit } from './text.ts'
-import type { Translator } from './translate.ts'
+import { phraseKey, type Translator } from './translate.ts'
 
 /**
  * Marks each unit (of one sentence) with `lang` or `base`. A unit the target knows and the base doesn't
@@ -27,6 +27,17 @@ const BASE_MARGIN = 2
 // For a base word that's a target word only with accents added, a smaller lead keeps it the base's: it was
 // typed exactly as the base word ("but" is 1.9 more common in English than "bút" in Vietnamese).
 const BASE_MARGIN_ACCENTS = 1
+// The longest base phrase a word is joined to its base neighbors by (see the phrase pass below): the
+// phrasebook's longest English phrases have five words ("how much does it cost").
+const BASE_PHRASE_UNITS = 5
+
+// The English of a target language's phrasebook, as phrase keys: built once per dictionary.
+const phrasebookEnglish = new WeakMap<Dictionary, Promise<Set<string>>>()
+const englishPhrases = (d: Dictionary) => {
+  let keys = phrasebookEnglish.get(d)
+  if (!keys) phrasebookEnglish.set(d, (keys = d.phrases().then((rows) => new Set(rows.map((r) => phraseKey(r.en))))))
+  return keys
+}
 
 export async function markLanguages(
   list: Unit[],
@@ -46,7 +57,10 @@ export async function markLanguages(
       if ((await o.target.lookup(lower)).length > 0) return 'exact'
       return (await o.target.variants(lower, { limit: 1 })).length > 0 ? 'accents' : false
     }
-    if (lower in syllables || lower !== plain(lower)) return 'exact'
+    if (lower !== plain(lower)) return 'exact'
+    // A plain-letter syllable never seen as written (Zipf 0: "nau", an obsolete word for pain) is a word only
+    // with accents added, as far as text goes ("nấu", to cook).
+    if (lower in syllables && (syllables[lower] > 0 || (byPlain.get(lower) ?? []).every((f) => f === lower))) return 'exact'
     return byPlain.has(lower) ? 'accents' : false
   }
   const baseKnows = async (u: Unit) => (await o.translator.senses(u.text, { from: o.base }).catch(() => [])).length > 0
@@ -81,7 +95,7 @@ export async function markLanguages(
     return m === 'accents' ? '?accents' : '?'
   }))
   const known = (x: string) => x !== '?' && x !== '?accents'
-  return decided.map((m, i) => {
+  const langs = decided.map((m, i) => {
     if (known(m)) return m
     const left = decided.slice(0, i).reverse().find(known)
     const right = decided.slice(i + 1).find(known)
@@ -90,4 +104,53 @@ export async function markLanguages(
     if (m === '?accents') return (left ?? o.lang) === o.lang && (right ?? o.lang) === o.lang && (left || right) ? o.lang : o.base
     return left && right && left !== right ? o.lang : left ?? right ?? o.lang
   })
+  // A word both languages know, read as the base's by frequency, is the target's when it makes a target
+  // word with a neighbor, accents added if need be: "không the" (không thể). The neighbor may be such a word
+  // too ("co the": có thể) when the pair is all there is or has a target word beside it ("Tôi co the đi").
+  // English among English stays English: "I like the phở" ("the phở" isn't a word), "to the store".
+  if (syllableLanguage) {
+    const flippable = (i: number) => langs[i] === o.base && (marks[i] === 'both' || marks[i] === 'accents')
+    const makesWord = async (a: Unit, b: Unit) => {
+      const phrase = `${a.text} ${b.text}`.toLowerCase()
+      return (await o.target.lookup(phrase)).length > 0 || (await o.target.variants(phrase, { limit: 1 })).length > 0
+    }
+    for (let i = 0; i + 1 < list.length; i++) {
+      const [a, b] = [flippable(i), flippable(i + 1)]
+      if (!(a || b)) continue
+      if (a && b) {
+        const beside = [langs[i - 1], langs[i + 2]].filter((l) => l !== undefined)
+        if (beside.length && !beside.includes(o.lang)) continue
+      } else if (langs[a ? i + 1 : i] !== o.lang) continue
+      if (await makesWord(list[i], list[i + 1])) langs[i] = langs[i + 1] = o.lang
+    }
+  }
+  // The other way: a word both languages know, read as the target's, is the base's when it makes a base
+  // phrase with its base neighbors: "tôi go home sớm" ("go" is also Vietnamese, and with "tôi" on one side
+  // and "home" on the other its neighbors disagree). A phrase is one the target's phrasebook has in English
+  // ("go home", "watch a movie") or the base dictionary knows. Its other words must be the base's or such
+  // words too ("go to bed": "to" is Vietnamese "big"), with at least one already the base's, so target words
+  // stay the target's ("Tôi đi market").
+  if (o.base === 'en') {
+    const phrasebook = await englishPhrases(o.target)
+    const isPhrase = async (from: number, to: number) => {
+      const phrase = list.slice(from, to + 1).map((u) => u.text).join(' ')
+      return phrasebook.has(phraseKey(phrase)) || (await o.baseDictionary.lookup(phrase.toLowerCase())).length > 0
+    }
+    const flippable = (i: number) => langs[i] === o.lang && (marks[i] === 'both' || marks[i] === 'accents')
+    for (let i = 0; i < list.length; i++) {
+      if (!flippable(i)) continue
+      search: for (let k = BASE_PHRASE_UNITS; k >= 2; k--) {
+        for (let from = Math.max(0, i - k + 1); from <= i && from + k <= list.length; from++) {
+          const to = from + k - 1
+          const span = list.slice(from, to + 1).map((_, j) => from + j)
+          if (!span.every((j) => langs[j] === o.base || flippable(j)) || !span.some((j) => langs[j] === o.base)) continue
+          if (await isPhrase(from, to)) {
+            for (const j of span) langs[j] = o.base
+            break search
+          }
+        }
+      }
+    }
+  }
+  return langs
 }

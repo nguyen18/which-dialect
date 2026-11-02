@@ -1,0 +1,2423 @@
+# Everyday phrases, Vietnamese <-> English (which-dialect phrasebook). Written for which-dialect; CC BY-SA 4.0
+# like the rest of the data package. One pair per line, tab-separated:
+#   English<TAB>Vietnamese<TAB>regions (optional: Northern, Central, Southern; comma-separated)<TAB>note (optional)
+# The same English or Vietnamese can appear on several lines; earlier lines are preferred. "## Topic" starts a topic.
+# Build with: npm run build:phrases -- vi
+
+## Greetings and politeness
+good morning	chào buổi sáng
+good afternoon	chào buổi chiều
+good evening	chào buổi tối
+good night	chúc ngủ ngon
+how are you	bạn khỏe không
+how's it going	dạo này thế nào
+what's up	có gì mới không
+nice to meet you	rất vui được gặp bạn
+see you later	hẹn gặp lại
+see you soon	sớm gặp lại
+see you tomorrow	mai gặp lại
+take care	giữ gìn sức khỏe
+have a nice day	chúc một ngày tốt lành
+have a good weekend	chúc cuối tuần vui vẻ
+thank you	cảm ơn
+thanks a lot	cảm ơn nhiều
+thank you so much	cảm ơn rất nhiều
+you're welcome	không có gì
+no problem	không sao
+no worries	đừng lo
+excuse me	xin lỗi		cho hỏi
+I'm sorry	tôi xin lỗi
+my bad	lỗi của tôi
+never mind	thôi
+never mind	không sao
+it's okay	không sao đâu
+of course	tất nhiên
+sure thing	chắc chắn rồi
+all right	được rồi
+long time no see	lâu rồi không gặp
+good luck	chúc may mắn
+congratulations on	chúc mừng về
+happy birthday	chúc mừng sinh nhật
+happy new year	chúc mừng năm mới
+merry Christmas	giáng sinh vui vẻ
+welcome back	chào mừng trở lại
+come in	mời vào
+after you	mời bạn trước
+bless you	sống lâu nhé		khi hắt hơi
+go ahead	cứ tự nhiên
+help yourself	cứ tự nhiên
+please wait	xin chờ
+hold on	chờ chút
+just a moment	đợi một chút
+just a second	đợi một giây
+I see	tôi hiểu rồi
+got it	hiểu rồi
+I don't know	tôi không biết
+I don't understand	tôi không hiểu
+could you repeat that	bạn nói lại được không
+what do you mean	ý bạn là gì
+say that again	nói lại đi
+pardon me	xin lỗi
+pardon me	gì cơ
+hello	xin chào
+hi	chào bạn		to a friend
+goodbye	tạm biệt
+see you again	hẹn gặp lại
+thank you	cám ơn
+thank you	cảm ơn bạn		to a friend
+sorry	xin lỗi
+it's fine	không sao
+very glad	rất vui
+nice to meet	rất vui được gặp
+please	làm ơn
+please	xin mời		inviting
+congratulations	chúc mừng
+happy birthday	sinh nhật vui vẻ
+new year	năm mới
+how are you	khỏe không		are you well
+lately	dạo này
+it's been a long time	lâu rồi
+so long	lâu quá		no see
+on the road	đi đường		safe travels
+be careful	cẩn thận
+no need	không cần
+okay	được rồi
+yes	vâng ạ		polite
+yes	dạ vâng	Southern	polite
+really?	thật không
+really?	thật sao
+naturally	dĩ nhiên
+of course	dĩ nhiên
+certainly	chắc chắn
+sure	chắc chắn
+perhaps	có lẽ
+it seems	hình như
+can	có thể
+maybe	có thể
+don't know	không biết
+don't understand	không hiểu
+say again	nói lại
+
+## Agreeing and disagreeing
+I agree	tôi đồng ý
+I disagree	tôi không đồng ý
+that's right	đúng rồi
+that's true	đúng vậy
+exactly right	chính xác
+I think so	tôi nghĩ vậy
+I don't think so	tôi không nghĩ vậy
+I guess so	chắc vậy
+I hope so	hy vọng vậy
+I hope not	mong là không
+not really	không hẳn
+maybe not	có lẽ không
+you're right	bạn nói đúng
+you're wrong	bạn sai rồi
+fair enough	cũng hợp lý
+good idea	ý hay
+sounds good	nghe được đấy
+sounds great	nghe tuyệt đấy
+why not	sao lại không
+no way	không đời nào
+can't possibly	không thể nào
+can't possibly	chẳng thể nào
+not at all	không hề
+me too	tôi cũng vậy
+me neither	tôi cũng không
+same here	tôi cũng thế
+it depends	còn tùy
+up to you	tùy bạn
+either way	sao cũng được
+whatever you want	tùy bạn muốn
+I'm not sure	tôi không chắc
+in my opinion	theo ý tôi
+to be honest	thật lòng mà nói
+to tell the truth	nói thật là
+as far as I know	theo tôi biết
+I believe that	tôi tin rằng
+I feel like	tôi cảm thấy như
+it seems like	có vẻ như
+it looks like	trông có vẻ
+I'm afraid that	tôi e rằng
+on the other hand	mặt khác
+that makes sense	nghe có lý
+that doesn't make sense	không hợp lý
+
+## Time
+right now	ngay bây giờ
+at the moment	lúc này
+these days	dạo này
+this morning	sáng nay
+this afternoon	chiều nay
+this evening	tối nay
+last night	tối qua		evening
+yesterday morning	sáng hôm qua
+tomorrow morning	sáng mai
+the day before yesterday	hôm kia
+the day after tomorrow	ngày kia
+this week	tuần này
+last week	tuần trước
+next week	tuần sau
+this month	tháng này
+last month	tháng trước
+next month	tháng sau
+this year	năm nay
+last year	năm ngoái
+next year	năm sau
+on the weekend	vào cuối tuần
+every day	mỗi ngày
+every morning	mỗi sáng
+every night	mỗi tối
+every week	mỗi tuần
+once a week	mỗi tuần một lần
+twice a day	ngày hai lần
+all day	cả ngày
+all night	cả đêm
+all the time	lúc nào cũng
+most of the time	phần lớn thời gian
+from time to time	thỉnh thoảng
+once in a while	thỉnh thoảng
+at first	lúc đầu
+in the end	cuối cùng
+at last	cuối cùng
+for a while	một lúc
+for a long time	lâu rồi
+a long time ago	ngày xưa
+a few days ago	vài ngày trước
+a little while ago	lúc nãy
+just now	vừa nãy
+not yet	chưa
+so far	cho đến nay
+until now	đến giờ
+from now on	từ nay
+later on	sau này
+in a minute	chút nữa
+in a moment	một lát nữa
+in a few minutes	vài phút nữa
+in the morning	vào buổi sáng
+in the afternoon	vào buổi chiều
+in the evening	vào buổi tối
+at night	vào ban đêm
+at noon	vào buổi trưa
+at midnight	lúc nửa đêm
+on time	đúng giờ
+in time	kịp lúc
+too late	quá muộn
+too early	quá sớm
+as soon as	ngay khi
+as soon as possible	càng sớm càng tốt
+the next day	ngày hôm sau
+the other day	hôm nọ
+one day	một ngày nọ
+some day	một ngày nào đó
+the first time	lần đầu tiên
+the last time	lần cuối
+next time	lần sau
+this time	lần này
+every time	mỗi lần
+at the same time	cùng lúc
+in the past	trong quá khứ
+in the future	trong tương lai
+half an hour	nửa tiếng
+an hour ago	một tiếng trước
+what time is it	mấy giờ rồi
+it's time to	đến lúc phải
+take your time	cứ từ từ
+in a hurry	vội vàng
+running late	sắp trễ
+on my way	đang trên đường
+today	hôm nay
+yesterday	hôm qua
+day before yesterday	hôm kia
+tomorrow	ngày mai
+day after tomorrow	ngày kia
+now	bây giờ
+at this moment	lúc này
+at that time	lúc đó
+when	khi nào
+when	bao giờ
+ever	bao giờ
+what time	mấy giờ
+tonight	tối nay
+last night	đêm qua
+next week	tuần tới
+next year	năm tới
+weekend	cuối tuần
+start of the week	đầu tuần
+midweek	giữa tuần
+end of the month	cuối tháng
+end of the year	cuối năm
+morning	buổi sáng
+noon	buổi trưa
+afternoon	buổi chiều
+evening	buổi tối
+at night	ban đêm
+daytime	ban ngày
+midnight	nửa đêm
+daily	hằng ngày
+daily	hàng ngày
+Monday	thứ hai
+Tuesday	thứ ba
+Wednesday	thứ tư
+Thursday	thứ năm
+Friday	thứ sáu
+Saturday	thứ bảy
+Sunday	chủ nhật
+one hour	một giờ
+one o'clock	một giờ
+a few minutes	mấy phút
+a while	một lúc
+a little	một chút
+a moment	một chút
+in a bit	lát nữa
+in the future	sau này
+before	trước đây
+previously	trước đây
+in the old days	ngày xưa
+as a child	hồi nhỏ
+recently	gần đây
+recently	dạo gần đây
+for a long time	từ lâu
+just recently	mới đây
+earlier	sớm hơn
+later	muộn hơn
+late	trễ giờ
+all day long	suốt ngày
+time	thời gian
+first time	lần đầu
+last time	lần cuối
+last time	lần trước		previous
+many times	nhiều lần
+sometimes	đôi khi
+occasionally	thỉnh thoảng
+regularly	thường xuyên
+always	luôn luôn
+never	không bao giờ
+rarely	ít khi
+long ago	đã lâu
+for a long time	đã lâu
+just now	vừa rồi
+upcoming	sắp tới
+future	tương lai
+past	quá khứ
+present	hiện tại
+
+## Daily routine
+wake up	thức dậy
+get up	dậy
+get up early	dậy sớm
+sleep in	ngủ nướng
+brush my teeth	đánh răng
+wash my face	rửa mặt
+take a shower	tắm
+take a bath	tắm bồn
+get dressed	mặc quần áo
+get ready	chuẩn bị
+have breakfast	ăn sáng
+have lunch	ăn trưa
+have dinner	ăn tối
+make breakfast	làm bữa sáng
+cook dinner	nấu bữa tối
+make coffee	pha cà phê
+drink coffee	uống cà phê
+go to work	đi làm
+go to school	đi học
+come home	về nhà
+get home	về đến nhà
+stay home	ở nhà
+at home	ở nhà
+leave home	rời nhà
+leave work	tan làm
+get off work	tan làm
+do the dishes	rửa bát	Northern
+do the dishes	rửa chén	Southern
+wash the dishes	rửa bát	Northern
+wash the dishes	rửa chén	Southern
+do the laundry	giặt đồ
+clean the house	dọn nhà
+clean my room	dọn phòng
+make the bed	dọn giường
+take out the trash	đổ rác
+go shopping	đi mua sắm
+go grocery shopping	đi chợ
+go to the market	đi chợ
+walk the dog	dắt chó đi dạo
+feed the cat	cho mèo ăn
+pick up the kids	đón con
+drop off the kids	đưa con đi
+take a nap	ngủ trưa
+take a break	nghỉ một chút
+have a rest	nghỉ ngơi
+relax at home	thư giãn ở nhà
+watch TV	xem ti vi
+watch a movie	xem phim
+read a book	đọc sách
+listen to music	nghe nhạc
+check my phone	xem điện thoại
+go to bed	đi ngủ
+go to sleep	đi ngủ
+fall asleep	ngủ thiếp đi
+stay up late	thức khuya
+can't sleep	không ngủ được
+get some sleep	ngủ một chút
+a good night's sleep	một giấc ngủ ngon
+get up late	dậy muộn
+get up	ngủ dậy		after sleep
+brush teeth	đánh răng
+wash one's face	rửa mặt
+wash	tắm rửa
+bathe	tắm rửa
+take a shower	đi tắm
+change clothes	thay đồ
+eat breakfast	ăn sáng
+eat lunch	ăn trưa
+eat dinner	ăn tối
+eat	ăn cơm		a meal
+drink water	uống nước
+finish work	tan làm
+school lets out	tan học
+cook	nấu ăn
+cook rice	nấu cơm
+cook a meal	nấu cơm
+wash dishes	rửa bát	Northern
+wash dishes	rửa chén	Southern
+tidy up	dọn dẹp
+mop the floor	lau nhà
+sweep the house	quét nhà
+do laundry	giặt đồ
+wash clothes	giặt quần áo
+hang clothes to dry	phơi đồ
+go to the supermarket	đi siêu thị
+buy things	mua đồ
+rest	nghỉ ngơi
+midday rest	nghỉ trưa
+sleep well	ngủ ngon
+insomnia	mất ngủ
+can't sleep	mất ngủ
+read books	đọc sách
+scroll on the phone	lướt điện thoại
+exercise	tập thể dục
+jog	chạy bộ
+walk	đi bộ
+go for a stroll	đi dạo
+feed	cho ăn
+take the kids	đưa con
+walk the dog	dắt chó
+
+## Home
+living room	phòng khách
+kitchen table	bàn bếp
+front door	cửa chính
+back yard	sân sau
+air conditioner	máy điều hòa
+washing machine	máy giặt
+turn on the light	bật đèn
+turn off the light	tắt đèn
+turn on	bật
+turn off	tắt
+open the window	mở cửa sổ
+close the door	đóng cửa
+lock the door	khóa cửa
+move house	chuyển nhà
+move in	dọn vào
+move out	dọn đi
+pay the rent	trả tiền nhà
+my place	chỗ tôi
+at my house	ở nhà tôi
+come over	ghé qua
+stop by	ghé qua
+drop by	ghé qua
+house	nhà cửa
+home	nhà cửa
+house	căn nhà
+apartment	căn hộ
+apartment building	chung cư
+bedroom	phòng ngủ
+bathroom	phòng tắm
+kitchen	nhà bếp
+toilet	nhà vệ sinh
+dining room	phòng ăn
+balcony	ban công
+window	cửa sổ
+stairs	cầu thang
+yard	sân nhà
+table	cái bàn
+chair	cái ghế
+bed	cái giường
+fridge	tủ lạnh
+air conditioner	điều hòa
+air conditioner	máy lạnh	Southern
+electric fan	quạt điện
+light bulb	bóng đèn
+furniture	đồ đạc
+belongings	đồ đạc
+key	chìa khóa
+rent a house	thuê nhà
+rent	tiền nhà
+new house	nhà mới
+repair the house	sửa nhà
+
+## Food and drink
+I'm hungry	tôi đói
+I'm thirsty	tôi khát
+I'm full	tôi no rồi
+let's eat	ăn thôi
+something to eat	gì đó để ăn
+something to drink	gì đó để uống
+a cup of coffee	một tách cà phê
+a cup of tea	một tách trà
+a glass of water	một cốc nước
+a bottle of water	một chai nước
+iced coffee	cà phê đá
+milk tea	trà sữa
+orange juice	nước cam
+fried rice	cơm chiên
+fried chicken	gà rán
+noodle soup	món nước
+noodle soup	phở
+spring rolls	chả giò
+spring rolls	gỏi cuốn
+fish sauce	nước mắm
+soy sauce	nước tương
+street food	đồ ăn đường phố
+fast food	đồ ăn nhanh
+home cooking	cơm nhà
+eat out	ăn ngoài
+order food	gọi đồ ăn
+order takeout	đặt đồ mang về
+to go	mang về
+for here	ăn ở đây
+the menu please	cho xem thực đơn
+the bill please	tính tiền
+check please	tính tiền
+it's delicious	ngon quá
+tastes good	ngon
+too spicy	cay quá
+too salty	mặn quá
+too sweet	ngọt quá
+a little bit	một chút
+no sugar	không đường
+less ice	ít đá
+without ice	không đá
+vegetarian food	đồ chay
+a piece of cake	một miếng bánh
+a piece of cake	dễ ợt
+have a snack	ăn vặt
+grab a bite	ăn chút gì
+go out to eat	đi ăn ngoài
+dinner party	tiệc tối
+make a reservation	đặt bàn
+food	đồ ăn
+food	thức ăn
+dish	món ăn
+drinks	đồ uống
+drinking water	nước uống
+meal	bữa ăn
+breakfast	bữa sáng
+lunch	bữa trưa
+dinner	bữa tối
+lunch	cơm trưa		rice meal
+dinner	cơm tối		rice meal
+eating and drinking	ăn uống
+snack	ăn vặt
+snacks	đồ ăn vặt
+hungry	đói bụng
+full already	no rồi
+thirsty	khát nước
+so delicious	ngon quá
+very tasty	rất ngon
+not tasty	không ngon
+coffee	cà phê
+coffee with milk	cà phê sữa
+iced tea	trà đá
+lemonade	nước chanh
+lime juice	nước chanh
+smoothie	sinh tố
+soft drink	nước ngọt
+draught beer	bia hơi
+wine	rượu vang
+bread	bánh mì
+banh mi	bánh mì
+beef pho	phở bò
+chicken pho	phở gà
+bun cha	bún chả
+beef noodle soup	bún bò
+broken rice	cơm tấm
+rice rolls	bánh cuốn
+fresh spring rolls	gỏi cuốn
+fried spring rolls	chả giò
+fried spring rolls	nem rán	Northern
+instant noodles	mì tôm
+chicken porridge	cháo gà
+sticky rice with chicken	xôi gà
+sour soup	canh chua
+beef	thịt bò
+chicken meat	thịt gà
+pork	thịt heo	Southern
+pork	thịt lợn	Northern
+braised fish	cá kho
+chicken egg	trứng gà
+water spinach	rau muống
+fresh herbs	rau sống
+raw vegetables	rau sống
+fruit	hoa quả	Northern
+fruit	trái cây	Southern
+pepper	hạt tiêu
+sugar	đường ăn
+salt	muối ăn
+hot chili	ớt cay
+eat vegetarian	ăn chay
+eatery	quán ăn
+café	quán cà phê
+restaurant	nhà hàng
+order food	gọi món
+menu	thực đơn
+the bill	tính tiền
+pay	tính tiền
+takeaway	mang về
+order food	đặt đồ ăn		delivery
+cook a dish	nấu món
+main dish	món chính
+dessert	tráng miệng
+cake	bánh ngọt
+pastry	bánh ngọt
+eat one's fill	ăn no
+eat a lot	ăn nhiều
+eat a little	ăn ít
+try	ăn thử		food
+taste	nếm thử
+
+## School and study
+go to class	đi học
+in class	trong lớp
+after school	sau giờ học
+do homework	làm bài tập
+finish my homework	làm xong bài tập
+study for a test	ôn thi
+take an exam	đi thi
+take a test	làm bài kiểm tra
+pass the exam	thi đỗ	Northern
+pass the exam	thi đậu	Southern
+fail the exam	thi trượt
+get good grades	được điểm cao
+high school	trường cấp ba
+middle school	trường cấp hai
+elementary school	trường tiểu học
+college student	sinh viên
+graduate from	tốt nghiệp
+study abroad	du học
+learn English	học tiếng Anh
+learn Vietnamese	học tiếng Việt
+practice speaking	luyện nói
+practice writing	luyện viết
+new words	từ mới
+look up a word	tra từ
+write an essay	viết bài luận
+keep a diary	viết nhật ký
+take notes	ghi chép
+pay attention	chú ý
+raise your hand	giơ tay
+ask a question	đặt câu hỏi
+answer the question	trả lời câu hỏi
+make a mistake	mắc lỗi
+make progress	tiến bộ
+work hard	chăm chỉ
+do my best	cố gắng hết sức
+try my best	cố hết sức
+give up	bỏ cuộc
+figure out	tìm ra
+find out	phát hiện ra
+learn about	tìm hiểu về
+read about	đọc về
+the library	thư viện
+a lot to learn	còn nhiều thứ phải học
+school	trường học
+class	lớp học
+classroom	lớp học
+lesson	bài học
+exercise	bài tập
+homework	bài tập
+homework	bài tập về nhà
+do schoolwork	làm bài
+study lessons	học bài
+review lessons	ôn bài
+study for an exam	ôn thi
+exam	kỳ thi
+exams	thi cử
+pass an exam	thi đỗ	Northern
+pass an exam	thi đậu	Southern
+fail an exam	thi trượt
+grade	điểm số
+score	điểm số
+high score	điểm cao
+low score	điểm thấp
+semester	học kỳ
+school year	năm học
+summer vacation	nghỉ hè
+primary school	tiểu học
+secondary school	trung học
+high school	cấp ba
+university	đại học
+college	cao đẳng
+graduate	tốt nghiệp
+scholarship	học bổng
+male teacher	thầy giáo
+female teacher	cô giáo
+schoolmate	bạn học
+school subject	môn học
+mathematics	toán học
+history	lịch sử
+geography	địa lý
+English	tiếng Anh		language
+Vietnamese	tiếng Việt		language
+foreign language	ngoại ngữ
+vocabulary	từ vựng
+grammar	ngữ pháp
+pronunciation	phát âm
+practise speaking	luyện nói
+practise listening	luyện nghe
+write an essay	viết bài
+diary	nhật ký
+journal	nhật ký
+write a diary	viết nhật ký
+reading comprehension	đọc hiểu
+question	câu hỏi
+answer	câu trả lời
+answer	trả lời
+extra classes	học thêm
+studies	học hành
+hard-working	chăm chỉ
+lazy	lười biếng
+library	thư viện
+book	quyển sách
+book	cuốn sách
+notebook	quyển vở
+pencil	bút chì
+papers	giấy tờ
+documents	giấy tờ
+memorise	học thuộc
+explain	giải thích
+example	ví dụ
+knowledge	kiến thức
+experience	kinh nghiệm
+progress	tiến bộ
+try hard	cố gắng
+
+## Work
+at work	ở chỗ làm
+go to the office	đến văn phòng
+work from home	làm việc ở nhà
+full-time job	việc toàn thời gian
+part-time job	việc bán thời gian
+look for a job	tìm việc
+apply for a job	xin việc
+job interview	phỏng vấn xin việc
+get a job	có việc làm
+get hired	được tuyển
+get fired	bị đuổi việc
+quit my job	nghỉ việc
+lose my job	mất việc
+get promoted	được thăng chức
+get a raise	được tăng lương
+work overtime	làm thêm giờ
+day off	ngày nghỉ
+take a day off	xin nghỉ một ngày
+sick leave	nghỉ ốm
+on vacation	đang đi nghỉ
+have a meeting	có cuộc họp
+in a meeting	đang họp
+send an email	gửi email
+reply to	trả lời
+call back	gọi lại
+meet the deadline	kịp hạn
+behind schedule	chậm tiến độ
+on schedule	đúng tiến độ
+busy with work	bận việc
+a lot of work	nhiều việc
+get things done	làm xong việc
+work on	làm
+work on	xử lý
+team meeting	họp nhóm
+my boss	sếp tôi
+my coworker	đồng nghiệp tôi
+make money	kiếm tiền
+earn a living	kiếm sống
+run a business	kinh doanh
+start a business	khởi nghiệp
+customer service	chăm sóc khách hàng
+in charge of	phụ trách
+be responsible for	chịu trách nhiệm
+work experience	kinh nghiệm làm việc
+career goals	mục tiêu nghề nghiệp
+under pressure	chịu áp lực
+burned out	kiệt sức
+work	công việc
+job	công việc
+work	làm việc
+employment	việc làm
+company	công ty
+office	văn phòng
+meeting	cuộc họp
+attend a meeting	đi họp
+meetings	họp hành
+project	dự án
+report	báo cáo
+contract	hợp đồng
+monthly salary	lương tháng
+salary	tiền lương
+pay raise	tăng lương
+overtime	làm thêm
+side job	làm thêm
+overtime	tăng ca
+take leave	nghỉ phép
+ask for time off	xin nghỉ
+quit a job	nghỉ việc
+interview	phỏng vấn
+unemployed	thất nghiệp
+task	nhiệm vụ
+duty	nhiệm vụ
+plan	kế hoạch
+goal	mục tiêu
+result	kết quả
+success	thành công
+succeed	thành công
+failure	thất bại
+fail	thất bại
+pressure	áp lực
+busy	bận rộn
+free	rảnh rỗi		not busy
+time's up	hết giờ
+working hours	giờ làm
+morning shift	ca sáng
+night shift	ca đêm
+work shifts	làm ca
+business	kinh doanh
+trade	buôn bán
+open a shop	mở quán
+shop	cửa hàng
+sell	bán hàng
+sales	bán hàng
+responsibility	trách nhiệm
+skill	kỹ năng
+profession	nghề nghiệp
+career	sự nghiệp
+promotion	thăng chức
+
+## Getting around
+go home	về nhà
+go out	ra ngoài
+go back	quay lại
+come back	trở lại
+get in	lên		xe
+get out	xuống		xe
+get out	ra ngoài
+get on	lên		xe buýt, tàu
+get off	xuống		xe buýt, tàu
+take the bus	đi xe buýt
+take a taxi	đi taxi
+take the train	đi tàu
+by bus	bằng xe buýt
+by car	bằng ô tô
+by bike	bằng xe đạp
+on foot	đi bộ
+ride a motorbike	đi xe máy
+drive to	lái xe đến
+pick me up	đón tôi
+drop me off	cho tôi xuống
+traffic jam	kẹt xe
+stuck in traffic	bị kẹt xe
+rush hour	giờ cao điểm
+bus stop	trạm xe buýt
+train station	ga tàu
+gas station	trạm xăng
+parking lot	bãi đỗ xe
+turn left	rẽ trái
+turn right	rẽ phải
+go straight	đi thẳng
+next to	bên cạnh
+across from	đối diện
+in front of	phía trước
+on the left	bên trái
+on the right	bên phải
+around the corner	ngay góc đường
+far away	xa
+close to	gần
+near here	gần đây
+how far	bao xa
+get lost	bị lạc
+get there	đến đó
+on the way	trên đường
+the way to	đường đến
+ride a vehicle	đi xe
+motorbike	xe máy
+bicycle	xe đạp
+bus	xe buýt
+car	xe ô tô
+car	ô tô
+car	xe hơi	Southern
+train	tàu hỏa
+aeroplane	máy bay
+motorbike taxi	xe ôm
+call a ride	gọi xe
+drive	lái xe
+bus station	bến xe
+airport	sân bay
+train station	nhà ga
+petrol station	trạm xăng
+get petrol	đổ xăng
+traffic jam	tắc đường	Northern
+traffic	giao thông
+street	đường phố
+road	con đường
+crossroads	ngã tư
+red light	đèn đỏ
+turn left	quẹo trái	Southern
+turn right	quẹo phải	Southern
+left side	bên trái
+right side	bên phải
+where	ở đâu
+go where	đi đâu
+arrive	đến nơi
+go to	đi đến
+go out	đi ra
+go in	đi vào
+go up	đi lên
+go down	đi xuống
+go past	đi qua
+go through	đi qua
+come back	quay lại
+turn around	quay lại
+return	trở về
+head back	đi về
+get lost	đi lạc
+lost one's way	lạc đường
+map	bản đồ
+so far	xa quá
+so close	gần quá
+
+## Places
+the city center	trung tâm thành phố
+the countryside	nông thôn
+my hometown	quê tôi
+shopping mall	trung tâm thương mại
+the supermarket	siêu thị
+convenience store	cửa hàng tiện lợi
+coffee shop	quán cà phê
+the hospital	bệnh viện
+the pharmacy	nhà thuốc
+the bank	ngân hàng
+the post office	bưu điện
+the park	công viên
+the beach	bãi biển
+the gym	phòng tập
+movie theater	rạp chiếu phim
+night market	chợ đêm
+the airport	sân bay
+the hotel	khách sạn
+a restaurant	nhà hàng
+city	thành phố
+countryside	nông thôn
+capital city	thủ đô
+centre	trung tâm
+neighbourhood	khu phố
+supermarket	siêu thị
+hospital	bệnh viện
+clinic	phòng khám
+pharmacy	nhà thuốc
+bank	ngân hàng
+post office	bưu điện
+park	công viên
+beach	bãi biển
+coast	bờ biển
+swimming pool	bể bơi	Northern
+swimming pool	hồ bơi	Southern
+gym	phòng tập
+cinema	rạp phim
+cinema	rạp chiếu phim
+museum	bảo tàng
+church	nhà thờ
+pagoda	ngôi chùa
+hotel	khách sạn
+guesthouse	nhà nghỉ
+mother's hometown	quê ngoại
+father's hometown	quê nội
+abroad	nước ngoài
+Vietnam	Việt Nam
+Hanoi	Hà Nội
+Saigon	Sài Gòn
+Da Nang	Đà Nẵng
+the North	miền Bắc
+the South	miền Nam
+central Vietnam	miền Trung
+
+## Shopping and money
+how much is it	bao nhiêu tiền
+how much does it cost	giá bao nhiêu
+too expensive	đắt quá
+very cheap	rẻ quá
+on sale	đang giảm giá
+pay for	trả tiền cho
+pay in cash	trả tiền mặt
+pay by card	trả bằng thẻ
+credit card	thẻ tín dụng
+bank account	tài khoản ngân hàng
+save money	tiết kiệm tiền
+spend money	tiêu tiền
+waste money	phí tiền
+borrow money	vay tiền
+lend money	cho vay tiền
+pay back	trả lại
+can't afford	không đủ tiền
+try on	mặc thử
+the fitting room	phòng thử đồ
+what size	cỡ nào
+a pair of shoes	một đôi giày
+buy online	mua trên mạng
+order online	đặt hàng trên mạng
+shopping list	danh sách mua sắm
+the receipt	hóa đơn
+get a refund	được hoàn tiền
+give change	thối tiền
+just looking	chỉ xem thôi
+shopping	mua sắm
+how much money	bao nhiêu tiền
+prices	giá cả
+so cheap	rẻ quá
+discount	giảm giá
+bargain	mặc cả
+pay	trả tiền
+cash	tiền mặt
+bank transfer	chuyển khoản
+small change	tiền lẻ
+change	tiền thừa		money back
+receipt	hóa đơn
+bill	hóa đơn
+save money	tiết kiệm
+cost money	tốn tiền
+out of money	hết tiền
+lend	cho mượn
+exchange money	đổi tiền
+clothes	quần áo
+jacket	áo khoác
+shirt	áo sơ mi
+footwear	giày dép
+pair of shoes	đôi giày
+handbag	túi xách
+size	kích cỡ
+fits well	vừa vặn
+place an order	đặt hàng
+delivery	giao hàng
+receive a delivery	nhận hàng
+
+## Health and body
+I feel sick	tôi thấy mệt
+feel better	thấy đỡ hơn
+get better	khỏe lại
+get sick	bị ốm	Northern
+catch a cold	bị cảm
+have a cold	bị cảm
+have a fever	bị sốt
+have a headache	bị đau đầu
+have a stomachache	bị đau bụng
+sore throat	đau họng
+runny nose	sổ mũi
+feel tired	thấy mệt
+so tired	mệt quá
+feel dizzy	chóng mặt
+see a doctor	đi khám bác sĩ
+go to the doctor	đi bác sĩ
+take medicine	uống thuốc
+get some rest	nghỉ ngơi đi
+stay in bed	nằm nghỉ
+in the hospital	trong bệnh viện
+get hurt	bị thương
+break my leg	gãy chân
+lose weight	giảm cân
+gain weight	tăng cân
+on a diet	đang ăn kiêng
+work out	tập thể dục
+go to the gym	đi tập gym
+go for a run	đi chạy bộ
+go for a walk	đi dạo
+stay healthy	giữ sức khỏe
+in good shape	khỏe mạnh
+out of breath	hết hơi
+mental health	sức khỏe tinh thần
+health	sức khỏe
+healthy	khỏe mạnh
+be sick	bị ốm	Northern
+be ill	bị bệnh
+flu	cảm cúm
+headache	đau đầu
+stomach ache	đau bụng
+toothache	đau răng
+have a cough	bị ho
+tired	mệt mỏi
+sleepy	buồn ngủ
+dizzy	chóng mặt
+see a doctor	khám bệnh
+get a check-up	đi khám
+medicine	thuốc men
+be in hospital	nằm viện
+get injured	bị thương
+recover	khỏi bệnh
+feel better	đỡ hơn
+diet	ăn kiêng
+body	cơ thể
+head	cái đầu
+eyes	đôi mắt
+hand	cái tay
+hand	bàn tay
+foot	bàn chân
+leg	cái chân
+belly	cái bụng
+heart	trái tim
+hair	mái tóc
+face	khuôn mặt
+
+## Feelings
+I feel happy	tôi thấy vui
+I'm so happy	tôi vui quá
+feel sad	thấy buồn
+feel lonely	thấy cô đơn
+feel bored	thấy chán
+feel stressed	thấy căng thẳng
+feel nervous	thấy hồi hộp
+feel relaxed	thấy thoải mái
+feel good	thấy dễ chịu
+feel bad	thấy tệ
+feel bad	áy náy
+feel sorry for	thấy tội cho
+feel guilty	thấy có lỗi
+feel proud	thấy tự hào
+feel grateful	thấy biết ơn
+feel homesick	nhớ nhà
+miss you	nhớ bạn
+miss my family	nhớ gia đình
+worried about	lo lắng về
+scared of	sợ
+afraid of	sợ
+angry with	giận
+upset about	buồn bực về
+excited about	háo hức về
+interested in	quan tâm đến
+tired of	chán
+sick of	chán ngấy
+fed up with	chán ngấy
+in a good mood	tâm trạng tốt
+in a bad mood	tâm trạng xấu
+cheer up	vui lên
+calm down	bình tĩnh
+don't worry	đừng lo
+look forward to	mong chờ
+can't wait	nóng lòng
+fall in love	phải lòng
+in love with	yêu
+get angry	nổi giận
+lose my temper	mất bình tĩnh
+burst into tears	òa khóc
+make me happy	làm tôi vui
+make me sad	làm tôi buồn
+it hurts	đau
+what a relief	nhẹ cả người
+I'm glad	tôi mừng
+I'm so sorry	tôi rất xin lỗi
+I'm embarrassed	tôi xấu hổ
+feel	cảm thấy
+emotion	cảm xúc
+cheerful	vui vẻ
+so happy	vui quá
+happy	hạnh phúc
+happiness	hạnh phúc
+so sad	buồn quá
+sad	buồn bã
+lonely	cô đơn
+homesick	nhớ nhà
+worried	lo lắng
+so worried	lo quá
+stressed	căng thẳng
+afraid	sợ hãi
+angry	tức giận
+annoyed	bực mình
+uncomfortable	khó chịu
+annoyed	khó chịu
+disappointed	thất vọng
+surprised	ngạc nhiên
+surprising	bất ngờ
+unexpected	bất ngờ
+embarrassed	xấu hổ
+shy	ngại ngùng
+proud	tự hào
+confident	tự tin
+nervous	hồi hộp
+comfortable	thoải mái
+relaxed	thoải mái
+at ease	yên tâm
+calm	bình tĩnh
+satisfied	hài lòng
+delighted	thích thú
+excited	hào hứng
+so bored	chán quá
+bored	buồn chán
+jealous	ghen tị
+grateful	biết ơn
+love	yêu thương
+affection	yêu thương
+hate	ghét bỏ
+really like	thích lắm
+don't like	không thích
+really like	rất thích
+love	yêu quý
+cherish	yêu quý
+miss dearly	thương nhớ
+moved	cảm động
+touched	cảm động
+
+## Weather and nature
+it's raining	trời đang mưa
+it's sunny	trời nắng
+it's hot	trời nóng
+it's cold	trời lạnh
+it's windy	trời có gió
+it's cloudy	trời nhiều mây
+heavy rain	mưa to
+light rain	mưa nhỏ
+rainy season	mùa mưa
+dry season	mùa khô
+weather forecast	dự báo thời tiết
+so hot today	hôm nay nóng quá
+nice weather	trời đẹp
+blue sky	trời xanh
+the sun	mặt trời
+the moon	mặt trăng
+a storm	cơn bão
+climate change	biến đổi khí hậu
+air pollution	ô nhiễm không khí
+fresh air	không khí trong lành
+weather	thời tiết
+sunny	trời nắng
+rainy	trời mưa
+cold weather	trời lạnh
+hot weather	trời nóng
+so hot	nóng quá
+so cold	lạnh quá
+drizzle	mưa phùn
+windy	có gió
+monsoon	gió mùa
+summer	mùa hè
+winter	mùa đông
+spring	mùa xuân
+autumn	mùa thu
+temperature	nhiệt độ
+humidity	độ ẩm
+storms and floods	bão lụt
+storm	cơn bão
+flooding	ngập lụt
+sunlight	ánh nắng
+sun	mặt trời
+moon	mặt trăng
+sky	bầu trời
+star	ngôi sao
+cloud	đám mây
+trees	cây cối
+greenery	cây xanh
+rose	hoa hồng
+dog	con chó
+cat	con mèo
+bird	con chim
+fish	con cá
+pet	thú cưng
+mountains	núi non
+rivers and waters	sông nước
+the sea	biển cả
+nature	thiên nhiên
+environment	môi trường
+air	không khí
+atmosphere	không khí
+pollution	ô nhiễm
+
+## Free time and hobbies
+free time	thời gian rảnh
+in my free time	lúc rảnh
+hang out	đi chơi
+hang out with friends	đi chơi với bạn
+go out with	đi chơi với
+have fun	vui vẻ
+have a good time	có thời gian vui vẻ
+play games	chơi game
+play video games	chơi trò chơi điện tử
+play soccer	đá bóng
+play basketball	chơi bóng rổ
+play the guitar	chơi đàn ghi-ta
+play the piano	chơi đàn piano
+go swimming	đi bơi
+go hiking	đi leo núi
+go camping	đi cắm trại
+go fishing	đi câu cá
+go dancing	đi nhảy
+go to the movies	đi xem phim
+go to a concert	đi xem hòa nhạc
+take photos	chụp ảnh
+take pictures	chụp hình
+listen to podcasts	nghe podcast
+watch videos	xem video
+read the news	đọc tin tức
+surf the internet	lướt mạng
+draw pictures	vẽ tranh
+sing karaoke	hát karaoke
+learn to cook	học nấu ăn
+spend time with	dành thời gian với
+spend the day	dành cả ngày
+favorite food	món ăn yêu thích
+favorite movie	bộ phim yêu thích
+favorite song	bài hát yêu thích
+I'm into	tôi mê
+a big fan of	rất thích
+hobby	sở thích
+entertainment	giải trí
+go out	đi chơi
+travel	đi du lịch
+go to the beach	đi biển
+play sports	chơi thể thao
+play football	đá bóng
+football	bóng đá
+basketball	bóng rổ
+badminton	cầu lông
+swimming	bơi lội
+dance	khiêu vũ
+dance	nhảy múa
+sing	ca hát
+play an instrument	chơi đàn
+paint	vẽ tranh
+draw	vẽ tranh
+photography	nhiếp ảnh
+gardening	làm vườn
+plant trees	trồng cây
+cooking	nấu nướng
+read stories	đọc truyện
+film	bộ phim
+cartoon	phim hoạt hình
+singer	ca sĩ
+song	bài hát
+music	âm nhạc
+concert	buổi hòa nhạc
+festival	lễ hội
+go to see	đi xem
+take part	tham gia
+
+## Travel
+go on a trip	đi du lịch
+take a trip	đi một chuyến
+go on vacation	đi nghỉ
+travel to	đi du lịch đến
+plane ticket	vé máy bay
+book a flight	đặt vé máy bay
+book a hotel	đặt khách sạn
+check in	nhận phòng
+check in	làm thủ tục
+check out	trả phòng
+pack my bags	xếp hành lý
+my luggage	hành lý của tôi
+the passport	hộ chiếu
+take off	cất cánh
+land at	hạ cánh ở
+go sightseeing	đi tham quan
+tourist attraction	điểm du lịch
+local food	đồ ăn địa phương
+a souvenir	quà lưu niệm
+travel abroad	đi nước ngoài
+a road trip	chuyến đi đường dài
+visit my family	thăm gia đình
+visit my grandparents	thăm ông bà
+go back home	về quê
+on the plane	trên máy bay
+jet lag	lệch múi giờ
+have a safe trip	thượng lộ bình an
+tourism	du lịch
+travel	du lịch
+trip	chuyến đi
+holiday	kỳ nghỉ
+public holiday break	nghỉ lễ
+book tickets	đặt vé
+passport	hộ chiếu
+luggage	hành lý
+suitcase	va li
+book a room	đặt phòng
+tourist	khách du lịch
+tour guide	hướng dẫn viên
+sightseeing	tham quan
+place	địa điểm
+location	địa điểm
+scenery	phong cảnh
+beautiful scenery	cảnh đẹp
+souvenir	quà lưu niệm
+culture	văn hóa
+custom	phong tục
+cuisine	ẩm thực
+go abroad	đi nước ngoài
+visit	đến thăm
+visit someone's home	thăm nhà
+go back to visit	về thăm
+
+## Talking and communication
+talk to	nói chuyện với
+talk about	nói về
+speak English	nói tiếng Anh
+speak Vietnamese	nói tiếng Việt
+tell me	nói cho tôi
+tell a story	kể chuyện
+call me	gọi cho tôi
+give me a call	gọi cho tôi nhé
+phone call	cuộc gọi
+text me	nhắn tin cho tôi
+send a message	gửi tin nhắn
+get a message	nhận tin nhắn
+let me know	cho tôi biết
+keep in touch	giữ liên lạc
+get in touch	liên lạc
+catch up	hàn huyên
+have a chat	nói chuyện
+chat with	trò chuyện với
+make a call	gọi điện
+answer the phone	nghe điện thoại
+hang up	cúp máy
+ask for help	nhờ giúp
+ask about	hỏi về
+explain to	giải thích cho
+give advice	cho lời khuyên
+make a promise	hứa
+keep a promise	giữ lời hứa
+tell the truth	nói thật
+tell a lie	nói dối
+make a joke	nói đùa
+just kidding	đùa thôi
+I mean	ý tôi là
+you know	bạn biết đấy
+by the way	nhân tiện
+speaking of	nhắc mới nhớ
+what happened	chuyện gì vậy
+what's wrong	có chuyện gì vậy
+what's going on	chuyện gì đang xảy ra
+guess what	đoán xem
+listen to me	nghe tôi nói
+I heard that	tôi nghe nói
+argue with	cãi nhau với
+make up	làm lành
+apologize for	xin lỗi vì
+introduce myself	giới thiệu bản thân
+my name is	tên tôi là
+I'm from	tôi đến từ
+I live in	tôi sống ở
+talk	nói chuyện
+chat	nói chuyện
+chat	trò chuyện
+confide	tâm sự
+heart-to-heart	tâm sự
+make a phone call	gọi điện
+make a phone call	gọi điện thoại
+send a text	nhắn tin
+text message	tin nhắn
+reply to a message	trả lời tin nhắn
+lie	nói dối
+joke	nói đùa
+story	câu chuyện
+ask after	hỏi thăm		someone
+introduce	giới thiệu
+get acquainted	làm quen
+meet up	gặp mặt
+meet	gặp gỡ
+date	hẹn hò
+appointment	cuộc hẹn
+advice	lời khuyên
+advise	khuyên bảo
+remind	nhắc nhở
+promise	hứa hẹn
+a promise	lời hứa
+agree	đồng ý
+disagree	không đồng ý
+object	phản đối
+argue	tranh cãi
+quarrel	cãi nhau
+ask permission	xin phép
+allow	cho phép
+invite to go	mời đi
+refuse	từ chối
+accept	chấp nhận
+give feedback	góp ý
+discuss	bàn bạc
+discuss	thảo luận
+announce	thông báo
+notice	thông báo
+news	tin tức
+I heard	nghe nói		that
+hear	nghe thấy
+see	nhìn thấy
+notice	để ý
+pay attention	để ý
+listen carefully	lắng nghe
+
+## Thinking and opinions
+I think that	tôi nghĩ rằng
+think about	nghĩ về
+think of	nghĩ đến
+make a decision	đưa ra quyết định
+make up my mind	quyết định
+change my mind	đổi ý
+come up with	nghĩ ra
+remind me	nhắc tôi
+remember to	nhớ phải
+forget to	quên
+forgot about	quên mất
+I wonder if	tôi tự hỏi liệu
+I wonder why	tôi tự hỏi tại sao
+I can't believe	tôi không tin nổi
+I'm sure that	tôi chắc rằng
+it's important	quan trọng
+it's hard to	khó mà
+it's easy to	dễ
+it's worth it	đáng
+not worth it	không đáng
+no idea	không biết nữa
+have no idea	không biết gì
+make sense	hợp lý
+point of view	quan điểm
+the main point	ý chính
+it doesn't matter	không quan trọng
+doesn't matter	sao cũng được
+a good point	ý đúng
+on purpose	cố ý
+by accident	tình cờ
+by mistake	nhầm
+for sure	chắc chắn
+of course not	tất nhiên là không
+kind of	hơi
+kind of	kiểu như
+sort of	hơi
+sort of	đại loại
+a bit	một chút
+pretty good	khá tốt
+not bad	không tệ
+so good	tuyệt quá
+really nice	rất đẹp
+really nice	rất tốt
+very interesting	rất thú vị
+so boring	chán quá
+too difficult	khó quá
+really easy	dễ lắm
+think	suy nghĩ
+thought	suy nghĩ
+think that	nghĩ rằng
+I think	tôi nghĩ
+in my opinion	theo tôi
+opinion	ý kiến
+idea	ý tưởng
+recall	nhớ lại
+remember	nhớ ra		suddenly
+forgot	quên mất
+understand clearly	hiểu rõ
+knowledge	hiểu biết
+understanding	hiểu biết
+know well	biết rõ
+realise	nhận ra
+discover	phát hiện
+trust	tin tưởng
+believe that	tin rằng
+hope	hy vọng
+wish	mong muốn
+expect	mong đợi
+look forward to	mong đợi
+dream	ước mơ
+dream	mơ ước		verb
+decide	quyết định
+decision	quyết định
+choose	lựa chọn
+choice	lựa chọn
+compare	so sánh
+evaluate	đánh giá
+consider	cân nhắc
+imagine	tưởng tượng
+doubt	nghi ngờ
+wonder	băn khoăn
+be uncertain	băn khoăn
+wonder	thắc mắc
+question	thắc mắc
+undecided	phân vân
+probably	chắc là
+seems	có vẻ
+it seems that	hình như là
+right?	đúng không
+isn't it?	phải không
+wrong	sai rồi
+important	quan trọng
+necessary	cần thiết
+useful	có ích
+useless	vô ích
+helpful	hữu ích
+easy	dễ dàng
+difficult	khó khăn
+hardship	khó khăn
+simple	đơn giản
+complicated	phức tạp
+normal	bình thường
+special	đặc biệt
+interesting	thú vị
+boring	nhàm chán
+wonderful	tuyệt vời
+great	tuyệt quá
+terrible	kinh khủng
+so bad	tệ quá
+so good	hay quá		interesting
+
+## Questions
+what is it	cái gì vậy
+what is this	đây là gì
+what is that	đó là gì
+what do you think	bạn nghĩ sao
+what do you do	bạn làm nghề gì
+what are you doing	bạn đang làm gì
+what did you do	bạn đã làm gì
+what kind of	loại gì
+what about you	còn bạn thì sao
+how about	thế còn
+how long	bao lâu
+how many	bao nhiêu
+how much	bao nhiêu
+how often	bao lâu một lần
+how old are you	bạn bao nhiêu tuổi
+where are you from	bạn từ đâu đến
+where do you live	bạn sống ở đâu
+where are you going	bạn đi đâu
+who is that	ai vậy
+which one	cái nào
+can you help me	bạn giúp tôi được không
+can I have	cho tôi
+could you please	bạn làm ơn
+would you like	bạn có muốn
+do you want	bạn có muốn
+do you know	bạn có biết
+do you have	bạn có
+are you sure	bạn chắc không
+are you okay	bạn ổn không
+is that right	đúng không
+is it okay	được không
+have you eaten	bạn ăn chưa
+have you ever	bạn đã bao giờ
+did you know	bạn có biết
+what's your name	bạn tên gì
+how was your day	hôm nay thế nào
+how was it	thế nào
+what	cái gì
+is what	là gì
+do what	làm gì
+why	tại sao
+why	vì sao
+what's wrong	sao vậy
+how	thế nào
+how	như thế nào
+what kind	như thế nào
+how	ra sao		is it
+how's it going	thế nào rồi
+from where	từ đâu
+who is it	ai vậy
+whose	của ai
+how many	mấy cái		things
+is there or not	có không
+can you?	được không
+is that okay?	được không
+is that okay?	có được không
+is it true that	có phải
+is that right?	có đúng không
+and you?	còn bạn
+how about you?	bạn thì sao
+what about	thì sao
+how	làm sao
+how	làm thế nào		to do
+what does it mean	nghĩa là gì
+what's the name	tên là gì
+how old	mấy tuổi
+how old	bao nhiêu tuổi
+yet?	đã chưa
+have you eaten?	ăn cơm chưa
+done yet?	xong chưa
+gone yet?	đi chưa
+
+## Linking phrases
+because of	vì
+in order to	để
+so that	để mà
+as well as	cũng như
+in addition	ngoài ra
+on top of that	thêm vào đó
+as a result	kết quả là
+because of that	vì thế
+that's why	đó là lý do
+even though	mặc dù
+even if	cho dù
+in spite of	bất chấp
+instead of	thay vì
+rather than	thay vì
+as long as	miễn là
+as if	như thể
+as usual	như thường lệ
+for example	ví dụ
+for instance	chẳng hạn
+such as	chẳng hạn như
+in fact	thật ra
+in general	nói chung
+in other words	nói cách khác
+in short	tóm lại
+after all	dù sao thì
+first of all	trước hết
+after that	sau đó
+and then	rồi thì
+at the end	ở cuối
+at the beginning	lúc đầu
+in the beginning	ban đầu
+in the middle of	giữa
+by the end of	vào cuối
+apart from	ngoài
+except for	trừ
+according to	theo
+compared to	so với
+the same as	giống như
+different from	khác với
+similar to	tương tự
+more and more	ngày càng nhiều
+less and less	ngày càng ít
+more or less	ít nhiều
+not only	không chỉ
+but also	mà còn
+either or	hoặc là
+both of them	cả hai
+all of them	tất cả bọn họ
+some of them	một số
+none of them	không ai trong số họ
+each other	nhau
+one another	lẫn nhau
+by myself	một mình
+on my own	tự mình
+at least	ít nhất
+at most	nhiều nhất
+at all	chút nào
+a lot of	nhiều
+lots of	nhiều
+a few	một vài
+a little	một ít
+plenty of	nhiều
+most of	hầu hết
+kind of like	kiểu như
+a couple of	một vài
+as much as	nhiều như
+so much	rất nhiều
+too much	quá nhiều
+too many	quá nhiều
+not enough	không đủ
+more than	hơn
+less than	ít hơn
+better than	tốt hơn
+worse than	tệ hơn
+the best	tốt nhất
+the worst	tệ nhất
+almost all	gần như tất cả
+pretty much	gần như
+right away	ngay lập tức
+all of a sudden	đột nhiên
+at once	ngay lập tức
+over and over	lặp đi lặp lại
+again and again	hết lần này đến lần khác
+little by little	từng chút một
+step by step	từng bước
+one by one	từng cái một
+here and there	chỗ này chỗ kia
+get used to	quen với
+
+## Common phrasal verbs
+look at	nhìn
+look for	tìm
+look after	chăm sóc
+look like	trông giống
+look up	tra cứu
+look out	coi chừng
+watch out	cẩn thận
+put on	mặc vào
+put away	cất đi
+put down	đặt xuống
+pick up	nhặt lên
+pick up	đón
+set up	thiết lập
+clean up	dọn dẹp
+wash up	rửa
+fill out	điền vào
+fill in	điền
+write down	ghi lại
+sit down	ngồi xuống
+stand up	đứng dậy
+lie down	nằm xuống
+slow down	chậm lại
+hurry up	nhanh lên
+come on	thôi nào
+come out	ra
+come from	đến từ
+come across	tình cờ gặp
+go on	tiếp tục
+go away	đi đi
+go over	xem lại
+go through	trải qua
+get along	hòa hợp
+get over	vượt qua
+get through	vượt qua
+get back	trở lại
+get rid of	loại bỏ
+give back	trả lại
+give in	chịu thua
+run out of	hết
+run into	tình cờ gặp
+carry on	tiếp tục
+keep going	cứ tiếp tục
+keep up	theo kịp
+turn up	vặn to
+turn up	xuất hiện
+turn down	vặn nhỏ
+turn down	từ chối
+show up	xuất hiện
+break down	hỏng
+break down	suy sụp
+break up	chia tay
+grow up	lớn lên
+bring up	nuôi nấng
+bring up	nêu ra
+take care of	chăm sóc
+take part in	tham gia
+put off	hoãn lại
+call off	hủy
+check on	kiểm tra
+fall down	ngã
+wake me up	đánh thức tôi
+cut down on	cắt giảm
+end up	rốt cuộc
+deal with	đối phó với
+depend on	phụ thuộc vào
+belong to	thuộc về
+believe in	tin vào
+care about	quan tâm
+wait for	chờ
+listen to	nghe
+think about it	nghĩ về nó
+talk it over	bàn bạc
+try out	thử
+sign up	đăng ký
+log in	đăng nhập
+log out	đăng xuất
+throw away	vứt đi
+give away	cho đi
+hand in	nộp
+point out	chỉ ra
+
+## Describing things
+very good	rất tốt
+really good	rất hay
+so beautiful	đẹp quá
+really cute	dễ thương quá
+very nice	rất tốt
+very kind	rất tốt bụng
+very friendly	rất thân thiện
+really funny	rất buồn cười
+so cool	ngầu quá
+too big	to quá
+too small	nhỏ quá
+brand new	mới tinh
+a little expensive	hơi đắt
+kind of boring	hơi chán
+quite busy	khá bận
+not easy	không dễ
+hard to say	khó nói
+easy to use	dễ dùng
+hard to find	khó tìm
+full of	đầy
+made of	làm bằng
+famous for	nổi tiếng về
+good at	giỏi
+bad at	kém
+proud of	tự hào về
+ready for	sẵn sàng cho
+ready to go	sẵn sàng đi
+the same	giống nhau
+not the same	không giống
+so much fun	vui quá
+a big deal	chuyện lớn
+no big deal	không có gì to tát
+a waste of time	phí thời gian
+worth trying	đáng thử
+crowded with	đông
+in good condition	còn tốt
+out of order	hỏng
+
+## Relationships and social life
+my best friend	bạn thân nhất của tôi
+my family	gia đình tôi
+my parents	bố mẹ tôi
+my husband	chồng tôi
+my wife	vợ tôi
+my boyfriend	bạn trai tôi
+my girlfriend	bạn gái tôi
+my kids	con tôi
+make friends	kết bạn
+get married	kết hôn
+get divorced	ly hôn
+go on a date	đi hẹn hò
+ask someone out	rủ ai đi chơi
+break up with	chia tay với
+have a baby	sinh con
+raise a family	nuôi gia đình
+get along with	hợp với
+hang out together	đi chơi cùng nhau
+spend time together	dành thời gian bên nhau
+have a party	tổ chức tiệc
+birthday party	tiệc sinh nhật
+wedding party	tiệc cưới
+invite someone	mời ai đó
+give a gift	tặng quà
+a family dinner	bữa cơm gia đình
+family reunion	sum họp gia đình
+Lunar New Year	Tết Nguyên đán
+celebrate with	ăn mừng với
+miss each other	nhớ nhau
+take care of each other	chăm sóc nhau
+meet new people	gặp người mới
+friendship	tình bạn
+love	tình yêu
+relationship	mối quan hệ
+know	quen biết		someone
+acquaintance	người quen
+love each other	yêu nhau
+marry each other	cưới nhau
+arrange to meet	hẹn gặp
+get together	tụ tập
+party	liên hoan
+party	bữa tiệc
+gift	món quà
+gift	quà tặng
+invitation card	thiệp mời
+Tet holiday	lễ Tết
+Tet	ngày Tết
+celebrate Tet	ăn Tết
+lucky money	lì xì
+Mid-Autumn Festival	Trung thu
+Christmas	Giáng sinh
+holiday	ngày lễ
+community	cộng đồng
+society	xã hội
+volunteer	tình nguyện
+help each other	giúp nhau
+
+## Technology
+my phone	điện thoại tôi
+cell phone	điện thoại di động
+the internet	mạng internet
+social media	mạng xã hội
+send a text	gửi tin nhắn
+check email	kiểm tra email
+video call	gọi video
+download the app	tải ứng dụng
+log into	đăng nhập vào
+the password	mật khẩu
+my account	tài khoản của tôi
+charge my phone	sạc điện thoại
+battery is dead	hết pin
+no signal	không có sóng
+Wi-Fi password	mật khẩu Wi-Fi
+online class	lớp học trực tuyến
+post a photo	đăng ảnh
+take a screenshot	chụp màn hình
+search for	tìm kiếm
+look it up	tra cứu
+it's not working	nó không chạy
+restart the computer	khởi động lại máy
+phone	điện thoại
+mobile phone	điện thoại di động
+computer	máy tính
+laptop	máy tính xách tay
+social network	mạng xã hội
+website	trang web
+connect	kết nối
+password	mật khẩu
+account	tài khoản
+register	đăng ký
+download	tải về
+update	cập nhật
+app	ứng dụng
+screenshot	chụp màn hình
+battery dead	hết pin
+charge the battery	sạc pin
+broken	bị hỏng
+weak signal	mạng yếu
+software	phần mềm
+game	trò chơi
+go online	lên mạng
+online	trực tuyến
+
+## Plans and life
+I'm planning to	tôi định
+make plans	lên kế hoạch
+have plans	có kế hoạch
+plan to	dự định
+hope to	hy vọng
+try to	cố gắng
+decide to	quyết định
+want to be	muốn trở thành
+dream of	mơ ước
+set a goal	đặt mục tiêu
+reach my goal	đạt mục tiêu
+take a chance	thử vận may
+make it	làm được
+make it	đến kịp
+give it a try	thử xem
+have a chance	có cơ hội
+just in case	phòng khi
+in case of	trong trường hợp
+it happens	chuyện thường
+what if	nếu như
+no matter what	dù thế nào
+in my life	trong đời tôi
+for the first time	lần đầu tiên
+since then	từ đó
+these past few days	mấy ngày qua
+the whole day	cả ngày
+a busy day	một ngày bận rộn
+a long day	một ngày dài
+a good day	một ngày tốt
+a bad day	một ngày tồi tệ
+it was fun	vui lắm
+it was great	tuyệt lắm
+it was okay	cũng được
+I learned that	tôi học được rằng
+I realized that	tôi nhận ra rằng
+I'm looking forward to	tôi mong
+can't wait to	nóng lòng
+
+## People and pronouns
+we	chúng tôi		excluding listener
+we	chúng ta		including listener
+we	chúng mình		friendly
+you	các bạn		plural
+friends	bạn bè
+close friend	bạn thân
+everyone	mọi người
+someone	ai đó
+people	người ta
+they	người ta
+adult	người lớn
+children	trẻ em
+kids	trẻ con
+son	con trai
+boy	con trai
+daughter	con gái
+girl	con gái
+man	đàn ông
+woman	phụ nữ
+young people	thanh niên
+elderly people	người già
+neighbour	hàng xóm
+colleague	đồng nghiệp
+classmate	bạn cùng lớp
+roommate	bạn cùng phòng
+sweetheart	người yêu
+lover	người yêu
+boyfriend	bạn trai
+girlfriend	bạn gái
+foreigner	người nước ngoài
+Vietnamese person	người Việt
+American	người Mỹ
+customer	khách hàng
+teacher	giáo viên
+pupil	học sinh
+university student	sinh viên
+doctor	bác sĩ
+nurse	y tá
+engineer	kỹ sư
+worker	công nhân
+staff member	nhân viên
+employee	nhân viên
+boss	ông chủ
+owner	ông chủ
+director	giám đốc
+driver	tài xế
+police	cảnh sát
+chef	đầu bếp
+
+## Family
+family	gia đình
+parents	bố mẹ	Northern
+parents	ba mẹ	Southern
+parents	cha mẹ
+older siblings	anh chị
+older brother	anh trai
+older sister	chị gái
+younger brother	em trai
+younger sister	em gái
+siblings	anh chị em
+grandparents	ông bà
+paternal grandfather	ông nội
+paternal grandmother	bà nội
+maternal grandfather	ông ngoại
+maternal grandmother	bà ngoại
+aunt and uncle	cô chú
+relatives	họ hàng
+husband and wife	vợ chồng
+children	con cái		offspring
+nephew	cháu trai
+grandson	cháu trai
+niece	cháu gái
+granddaughter	cháu gái
+baby	em bé
+only child	con một
+to start a family	lập gia đình
+marry	lập gia đình
+to marry	kết hôn
+wedding	đám cưới
+divorce	ly hôn
+pregnant	mang thai
+give birth	sinh con
+raise children	nuôi con
+go back to one's hometown	về quê
+homeland	quê hương
+hometown	quê nhà
+
+## Linking and grammar phrases
+but	nhưng mà
+however	tuy nhiên
+although	mặc dù
+anyway	dù sao
+even so	dù vậy
+therefore	vì vậy
+therefore	vì thế
+so	cho nên
+so	nên là		casual
+because	bởi vì
+because	tại vì
+hence	do đó
+if	nếu như
+otherwise	nếu không
+while	trong khi
+when	khi mà
+after	sau khi
+before	trước khi
+until	cho đến khi
+until	cho đến
+since	từ khi
+in order to do	để làm
+even	thậm chí
+besides	ngoài ra
+moreover	hơn nữa
+furthermore	thêm nữa
+besides that	bên cạnh đó
+for example	ví dụ như
+finally	cuối cùng
+first	đầu tiên
+next	tiếp theo
+and then	rồi sau đó
+actually	thật ra
+actually	thực ra
+really	thật sự
+truly	thật sự
+really	thực sự
+truly	thực sự
+indeed	quả thật
+certainly	chắc chắn là
+perhaps	có lẽ là
+seemingly	dường như
+like that	như vậy
+thus	như vậy
+like that	như thế
+like	như là
+such as	như là
+like	giống như
+similar to	giống như
+compared with	so với
+or	hay là
+or	hoặc là
+and also	và cả
+both	cả hai
+only	chỉ có
+just	chỉ là
+only	chỉ là
+still	vẫn còn
+not yet still	vẫn chưa
+never	chưa bao giờ		yet
+have ever	đã từng
+once had	từng có
+about to	sắp sửa
+while	đang lúc
+during	đang lúc
+just	mới vừa		recently
+just now	vừa mới
+on top of that	lại còn
+and more	còn nữa
+let alone	nữa là
+and so	thế là
+so then	vậy là
+fine then	thôi được
+that's okay too	cũng được
+likewise	cũng vậy
+likewise	cũng thế
+about	về việc		the matter
+regarding the issue	về vấn đề
+for	đối với
+towards	đối với
+according to	theo như
+based on	dựa vào
+thanks to	nhờ có
+here	tại đây
+here	ở đây
+there	ở đó
+over there	ở kia
+this place	chỗ này
+that place	chỗ đó
+this side	bên này
+that side	bên kia
+this one	cái này
+that one	cái đó
+that one	cái kia		over there
+this	điều này		matter
+that	điều đó		matter
+this matter	việc này
+whenever	lúc nào
+what time	lúc nào
+any	bất cứ
+any	bất kỳ
+everything	mọi thứ
+everything	mọi việc		matters
+all the time	mọi lúc
+everywhere	mọi nơi
+nobody	không ai
+nothing	không gì
+nobody	chẳng ai
+all	tất cả
+some	một số
+many people	nhiều người
+few people	ít người
+
+## Amount and degree
+very many	rất nhiều
+a lot	nhiều lắm
+quite a lot	khá nhiều
+a little bit	hơi hơi
+very few	rất ít
+too few	quá ít
+more	nhiều hơn
+less	ít hơn
+better	tốt hơn
+worse	tệ hơn
+bigger	lớn hơn
+smaller	nhỏ hơn
+especially	nhất là
+especially	đặc biệt là
+completely	hoàn toàn
+almost	gần như
+almost	hầu như
+about	khoảng chừng
+approximately	khoảng chừng
+everyone	tất cả mọi người
+the whole family	cả nhà
+the whole class	cả lớp
+half	một nửa
+double	gấp đôi
+alone	một mình
+together	cùng nhau
+with each other	với nhau
+mutually	lẫn nhau
+
+## Describing people and things
+pretty	xinh đẹp
+handsome	đẹp trai
+cute	dễ thương
+lovely	đáng yêu
+tall and big	cao lớn
+short and small	thấp bé
+so fat	béo quá
+so thin	gầy quá
+intelligent	thông minh
+silly	ngốc nghếch
+kind-hearted	tốt bụng
+gentle	hiền lành
+fun-loving	vui tính
+humorous	hài hước
+serious	nghiêm túc
+strict	nghiêm khắc
+polite	lịch sự
+friendly	thân thiện
+enthusiastic	nhiệt tình
+patient	kiên nhẫn
+careless	cẩu thả
+honest	trung thực
+selfish	ích kỷ
+generous	hào phóng
+stingy	keo kiệt
+famous	nổi tiếng
+rich	giàu có
+poor	nghèo khó
+old already	già rồi
+youthful	trẻ trung
+new	mới mẻ
+fresh	mới mẻ
+old	cũ kỹ		things
+clean	sạch sẽ
+dirty	bẩn thỉu
+tidy	gọn gàng
+messy	bừa bộn
+quiet	yên tĩnh
+noisy	ồn ào
+crowded	đông người
+deserted	vắng vẻ
+spacious	rộng rãi
+cramped	chật chội
+convenient	tiện lợi
+quick	nhanh chóng
+slow	chậm chạp
+strong	mạnh mẽ
+weak	yếu đuối
+heavy	nặng nề
+gentle	nhẹ nhàng
+light	nhẹ nhàng
+colour	màu sắc
+red	màu đỏ
+blue	màu xanh
+green	màu xanh
+yellow	màu vàng
+white	màu trắng
+black	màu đen
+pink	màu hồng
+purple	màu tím
+brown	màu nâu
+grey	màu xám
+
+## Common actions
+begin	bắt đầu
+end	kết thúc
+complete	hoàn thành
+continue	tiếp tục
+stop	dừng lại
+prepare	chuẩn bị
+arrange	sắp xếp
+change	thay đổi
+improve	cải thiện
+develop	phát triển
+help	giúp đỡ
+help me	giúp tôi
+need help	cần giúp
+learn	học hỏi
+try and see	thử xem
+try doing	làm thử
+search	tìm kiếm
+find	tìm thấy
+lose	đánh mất
+lose	làm mất		something
+lost	bị mất
+be lost	bị mất
+open the door	mở cửa
+switch on	bật lên
+switch off	tắt đi
+bring along	mang theo
+take hold of	cầm lấy
+give to	đưa cho
+send to	gửi cho
+receive	nhận được
+get back	lấy lại
+leave behind	để lại
+skip	bỏ qua
+let go	bỏ qua
+wait	chờ đợi
+wait a moment	đợi chút
+wait a moment	chờ một chút
+arrive late	đến muộn
+arrive early	đến sớm
+meet each other	gặp nhau
+stay	ở lại
+leave	rời khỏi
+go outside	ra ngoài
+go inside	vào trong
+look back	nhìn lại
+review	xem lại
+look again	xem lại
+check	kiểm tra
+test	kiểm tra
+repair	sửa chữa
+clean	làm sạch
+rewrite	viết lại
+reread	đọc lại
+listen again	nghe lại
+translate into	dịch sang
+use	sử dụng
+used to	dùng để
+obtain	có được
+achieve	đạt được
+become	trở thành
+become	trở nên		state
+happen	xảy ra
+take place	diễn ra
+run into	gặp phải
+solve	giải quyết
+avoid	tránh xa
+protect	bảo vệ
+support	ủng hộ
+organise	tổ chức
+attend	tham dự
+share	chia sẻ
+exchange	trao đổi
+learn	học được		gain
+manage to do	làm được
+not allowed	không được
+can't	không được
+miss	bị lỡ		a chance
+missed	lỡ mất
+forget about	quên đi
+remember forever	nhớ mãi
+
+## Plans, events and life
+make a plan	lên kế hoạch
+intend	dự định
+plan	dự định
+intend	có ý định
+will do	sẽ làm
+want to do	muốn làm
+need to do	cần làm
+have to do	phải làm
+should do	nên làm
+doing	đang làm
+did	đã làm
+just did	vừa làm
+haven't done	chưa làm
+life	cuộc sống
+one's life	cuộc đời
+daily life	đời sống
+live in	sống ở
+be born	sinh ra
+grow up	trưởng thành
+mature	trưởng thành
+childhood	tuổi thơ
+memory	kỷ niệm
+souvenir	kỷ niệm
+habit	thói quen
+purpose	mục đích
+opportunity	cơ hội
+problem	vấn đề
+issue	vấn đề
+reason	lý do
+cause	nguyên nhân
+conclusion	kết luận
+event	sự kiện
+accident	tai nạn
+lucky	may mắn
+unlucky	xui xẻo
+what happened	chuyện gì
+something's up	có chuyện
+nothing's wrong	không có chuyện gì
+everything	mọi chuyện
+that matter	chuyện đó
+one day	một ngày
+one day	một hôm		story
+today	ngày hôm nay
+someday	một ngày nào đó
+from the beginning	từ đầu
+to date	đến nay
+until	cho tới

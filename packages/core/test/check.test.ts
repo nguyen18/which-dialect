@@ -226,6 +226,16 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
       'Toi→Tôi', 'muon→muốn', 'an→ăn', 'the→', 'ice cream→kem', 'but→nhưng', 'it→nó', 'was→là', 'very→rất', 'expensive→mắc',
     ])
     assert.deepEqual(await fixes('Hôm nay tôi đi market.'), ['market→chợ'])
+    // English phrases from the phrasebook are translated whole, in the region's words.
+    assert.deepEqual(await fixes('Tôi rất thích wash the dishes.', { region: 'Southern' }), ['wash the dishes→rửa chén'])
+    // Words that are also Vietnamese ("go", "to") are English when they make an English phrase with
+    // English beside them; on their own they stay Vietnamese.
+    assert.deepEqual(await fixes('Hôm nay tôi go home sớm.'), ['go home→về nhà'])
+    assert.deepEqual(await fixes('Tôi muốn go to bed sớm.'), ['go to bed→đi ngủ'])
+    assert.deepEqual(await fixes('Tôi thích cái bàn to.'), [])
+    // Phrases of up to five words: "go" and "to" are Vietnamese syllables too.
+    assert.deepEqual(await fixes('Sau đó tôi go to the market với chị gái.'), ['go to the market→đi chợ'])
+    assert.deepEqual(await fixes('Bạn biết how much does it cost không?'), ['how much does it cost→giá bao nhiêu'])
     // The region's word: "expensive" is đắt in the North.
     assert.deepEqual(await fixes('Nó expensive.', { region: 'Northern' }), ['expensive→đắt'])
     // "but" is English here, not a misspelled "bút"; regions and pronouns aren't checked by default.
@@ -246,13 +256,32 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Tôi muốm ăn.'), ['muốm→muốn'])
     // A word with its neighbors: "cảm ơn", not "cảm ôm".
     assert.deepEqual(await fixes('Cảm ơm bạn.'), ['Cảm ơm→Cảm ơn'])
+    // A mark that shouldn't be there: dropping it is offered too, and makes the word with a neighbor.
+    assert.deepEqual((await spell('suỹ')).issues[0]?.suggestions, ['quỹ', 'suy', 'sỹ'])
+    assert.deepEqual(await fixes('Tôi đang suỹ nghĩ.'), ['suỹ nghĩ→suy nghĩ'])
+    // Its plain-letter neighbor may be missing accents too.
+    assert.deepEqual(await fixes('Tôi đang suỹ nghi.'), ['suỹ nghi→suy nghĩ'])
+    // Accent slips before letter typos: "có là", not "cỡ là"; "không những", not "không ngừng".
+    assert.deepEqual(await fixes('cõ là'), ['cõ là→có là'])
+    assert.deepEqual(await fixes('không nhừng'), ['không nhừng→không những'])
+    // A common plain syllable beside accented ones, for a clearly more common form: not "cho con" → "chó con".
+    assert.deepEqual(await fixes('Anh ấy thanh công rồi.'), ['thanh công→thành công'])
+    assert.deepEqual(await fixes('Tôi cho con ăn.'), [])
+    // English "the" next to Vietnamese that makes a word with it.
+    assert.deepEqual(await fixes('Tôi không the đi.'), ['không the→không thể'])
+    assert.deepEqual(await fixes('Tôi co the đi.'), ['co the→có thể'])
+    // The word before decides between fixes that differ in part of speech (posCues).
+    assert.deepEqual(await fixes('Nhà nước đã cong nhan trường này.'), ['cong nhan→công nhận'])
+    assert.deepEqual(await fixes('Các cong nhan làm việc.'), ['cong nhan→công nhân'])
+    assert.deepEqual(await fixes('Trái đất này là của chung minh.'), ['chung minh→chúng mình'])
     assert.deepEqual(await fixes('Bộ GĐ-ĐT đã công bố.'), [])
     assert.deepEqual(await fixes('Chữ 詩 là thơ.'), [])
   })
 
   it('suggests accents for rare plain-letter words, more readily in text typed without accents', async () => {
     assert.deepEqual(await fixes('Toi đã ăn cơm.'), ['Toi→Tôi'])
-    assert.deepEqual(await fixes('toi di cho'), ['toi→tôi', 'di→đi'])
+    // "đi chợ" (go to the market) is a phrasebook phrase: alone, "cho" would be left as it is.
+    assert.deepEqual(await fixes('toi di cho'), ['toi→tôi', 'di cho→đi chợ'])
     // Common plain words and listed pronouns stay ("cho", "con", Southern "tui").
     assert.deepEqual(await fixes('Tui cho con ăn cơm.'), [])
   })
@@ -261,7 +290,8 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     // "rat" is "rất" (far more common than English "rat"); "met" is a close call, Vietnamese among Vietnamese.
     assert.deepEqual(await fixes('Tôi rat vui.'), ['rat→rất'])
     assert.deepEqual(await fixes('Hôm nay tôi rat met.'), ['rat→rất', 'met→mệt'])
-    assert.deepEqual(await fixes('Ket qua thi rat tot.'), ['Ket qua→Kết quả', 'thi→thì', 'rat→rất', 'tot→tốt'])
+    // "rất tốt" (very good) is a phrasebook phrase, fixed as one.
+    assert.deepEqual(await fixes('Ket qua thi rat tot.'), ['Ket qua→Kết quả', 'thi→thì', 'rat tot→rất tốt'])
     // English stays English: "but" is much more common in English than "bút" in Vietnamese, and "met" among
     // English words is English.
     assert.deepEqual(await fixes('Tôi muốn ăn thịt lợn but tui không có tiền.', { region: 'Southern' }), ['but→nhưng'])
@@ -270,7 +300,7 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
 
   it('fixes accents by the word a syllable makes with its neighbors', async () => {
     // Alone, "nay" would become "này" ("this"); with "hom" it's "hôm nay" ("today").
-    assert.deepEqual(await fixes('Hom nay toi di cho.'), ['Hom nay→Hôm nay', 'toi→tôi', 'di→đi'])
+    assert.deepEqual(await fixes('Hom nay toi di cho.'), ['Hom nay→Hôm nay', 'toi→tôi', 'di cho→đi chợ'])
     assert.deepEqual(await fixes('Chung toi se di Ha Noi.'), ['Chung toi→Chúng tôi', 'se→sẽ', 'di→đi'])
     assert.deepEqual(await fixes('Toi an com voi ma.'), ['Toi→Tôi', 'an com→ăn cơm', 'voi→với', 'ma→mà'])
     // Real but rarer words written without accents that make a word together: "sam" is a word, "mua sắm" the
@@ -278,11 +308,26 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Hôm nay tôi đi mua sam.'), ['mua sam→mua sắm'])
     assert.deepEqual(await fixes('Tôi đi nha sach.'), ['nha sach→nhà sách'])
     // A word with no accents at all was probably typed without them, even when its syllables are common:
-    // "nha bang" is "nhà băng" (bank), "nha hang" "nhà hàng" (restaurant); "nha tho" could be "nhà thơ" (poet)
-    // or "nhà thờ" (church), so it's left alone.
+    // "nha bang" is "nhà băng" (bank), "nha hang" "nhà hàng" (restaurant). "nha tho" could be "nhà thơ" (poet)
+    // or "nhà thờ" (church), equally common, but only the church is an everyday phrase (the phrasebook's).
     assert.deepEqual(await fixes('Tôi đi nha bang.'), ['nha bang→nhà băng'])
     assert.deepEqual(await fixes('Tôi đi nha hang với má.'), ['nha hang→nhà hàng'])
-    assert.deepEqual(await fixes('Tôi đi nha tho.'), [])
+    assert.deepEqual(await fixes('Tôi đi nha tho.'), ['nha tho→nhà thờ'])
+    // "nau" is a Vietnamese syllable never seen as written (an obsolete word) and a rare English word: it's
+    // Vietnamese without its accents, "nấu" (cook), or "nâu" in the phrasebook's "màu nâu" (brown); a
+    // one-syllable phrase fix waits for the words around it ("đã lam chu" is "làm chủ", not "đã làm").
+    assert.deepEqual(await fixes('Mẹ tôi nau cơm.'), ['nau→nấu'])
+    assert.deepEqual(await fixes('Tôi thích màu nau.'), ['nau→nâu'])
+    assert.deepEqual(await fixes('Du kích đã lam chu thị trấn.'), ['lam chu→làm chủ'])
+    // The next word decides: "lúc" (at) before a time, "nhưng" (but) before a pronoun, "những" before a noun.
+    assert.deepEqual(await fixes('Tôi thức dậy luc 8 giờ.'), ['luc→lúc'])
+    assert.deepEqual(await fixes('Tôi muốn đi nhung tôi bận.'), ['nhung→nhưng'])
+    assert.deepEqual(await fixes('Tôi thích nhung con mèo.'), ['nhung→những'])
+    // After "một", a classifier and a noun: "cái áo" (a shirt), not the dictionary's "cài áo" (button up).
+    assert.deepEqual(await fixes('Tôi mua một cai ao mới.'), ['cai ao→cái áo'])
+    // "hot" is Vietnamese for popular: a hint, never a change.
+    const [hot] = (await spell('Trời hot quá.')).issues
+    assert.deepEqual([hot.severity, hot.suggestions], ['suggestion', ['nóng']])
     // Common words written without accents stay ("cho con" isn't "chó con"), and so do runs that could be
     // two words equally ("ban an": bản án or bàn ăn).
     assert.deepEqual(await fixes('Mẹ cho con đi chơi.'), [])

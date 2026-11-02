@@ -60,8 +60,8 @@ export type Translation = Hit & {
   /**
    * How this word was found: the English term that linked it, "synonym" for a same-language synonym,
    * "table" for Wiktionary's translation table, "picked" for the target language's hand-picked words
-   * for this meaning (see PickRow), or "pronouns" for a pronoun-table row's words (the `listener`'s or
-   * `about`'s row, or the default row).
+   * for this meaning (see PickRow), "pronouns" for a pronoun-table row's words (the `listener`'s or
+   * `about`'s row, or the default row), or "phrasebook" for the language's everyday phrases (see PhraseRow).
    */
   bridge: string
   /** Example sentences for this word in the matched sense, when the dictionary has them. */
@@ -197,7 +197,7 @@ export function regularBaseForms(word: string): string[] {
   for (const [suffix, replacements] of [
     ['ies', ['y']], ['ied', ['y']], ['ier', ['y']], ['iest', ['y']],
     ['es', ['', 'e']], ['ing', ['', 'e']], ['ed', ['', 'e']], ['er', ['', 'e']], ['est', ['', 'e']],
-    ['s', ['']], ['d', ['']],
+    ['s', ['']],
   ] as const) {
     if (!w.endsWith(suffix) || w.length <= suffix.length + 1) continue
     const stem = w.slice(0, -suffix.length)
@@ -412,6 +412,12 @@ function overlap(a: Set<string>, text: string): number {
   let n = 0
   for (const w of contentWords(text)) if (a.has(w)) n++
   return n
+}
+
+// How a phrase is matched: case, curly apostrophes, spacing and surrounding punctuation don't count
+// ("Have you eaten?" is "have you eaten").
+export function phraseKey(text: string): string {
+  return text.normalize('NFC').toLowerCase().replace(/[’‘]/g, "'").replace(/^[\s"“”.,!?…;:]+|[\s"“”.,!?…;:]+$/g, '').replace(/\s+/g, ' ')
 }
 
 function intersects(regions: string[], wanted: Set<string> | null): boolean {
@@ -742,6 +748,47 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
     }
   }
 
+  // A phrasebook entry, for translating multi-word input between English and a language with an everyday
+  // phrasebook (phrases.json): "go home" → "về nhà", "ăn cơm chưa" → "have you eaten?". The phrasebook is
+  // a speaker's choice of the natural way to say it, so its group comes before the dictionary's senses.
+  // Single words are left to the dictionary.
+  async function phrasebookGroup(word: string, from: string, to: string, fromMeta: LanguageMeta, toMeta: LanguageMeta, toWanted: Set<string> | null, limit: number): Promise<TranslationGroup | null> {
+    if (from === to || (from !== 'en' && to !== 'en')) return null
+    const key = phraseKey(word)
+    if (!key.includes(' ')) return null
+    const lang = from === 'en' ? to : from
+    if (!(from === 'en' ? toMeta : fromMeta).phrases) return null
+    const toEnglish = to === 'en'
+    const rows = (await dict(lang).phrases()).filter((r) => phraseKey(toEnglish ? r.text : r.en) === key)
+    if (!rows.length) return null
+    // Into the language: with a target region, phrases tagged for it lead and phrases tagged only for
+    // other regions are left out; rows with a usage note ("to a friend") come after plain ones.
+    const ranked = rows
+      .map((r, i) => ({ r, i, region: !toEnglish && toWanted && r.regionTagged ? (intersects(r.regions, toWanted) ? 1 : -1) : 0 }))
+      .filter((x) => x.region >= 0)
+      .sort((a, b) => b.region - a.region || (toEnglish ? 0 : Number(Boolean(a.r.note)) - Number(Boolean(b.r.note))) || a.i - b.i)
+    const seen = new Set<string>()
+    const translations: Translation[] = []
+    for (const { r } of ranked) {
+      const out = toEnglish ? r.en : r.text
+      if (seen.has(phraseKey(out))) continue
+      seen.add(phraseKey(out))
+      translations.push({
+        word: out, pos: 'phrase', gloss: r.note ? `${r.en} (${r.note})` : r.en,
+        regions: toEnglish ? toMeta.regions : r.regions, regionTagged: !toEnglish && r.regionTagged,
+        labels: [], senseIndex: 0, senses: 1, primary: true, phrase: true,
+        score: ranked.length - translations.length, bridge: 'phrasebook',
+      })
+    }
+    if (!translations.length) return null
+    const english = [...new Set(rows.map((r) => r.en))]
+    const source: SourceSense = {
+      word, lemma: word.trim(), pos: 'phrase', glosses: toEnglish ? english : [english[0]],
+      regions: fromMeta.regions, regionTagged: false, labels: [],
+    }
+    return { source, bridge: english, translations: translations.slice(0, limit) }
+  }
+
   // The source word's uses in a pronoun table, with the definition each came from.
   function pronounUses(rows: PronounRow[], word: string): { gloss?: string; use: PronounUse }[] {
     const w = word.trim()
@@ -816,6 +863,7 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
       if (listener && toMeta.pronouns) await dict(to).pronouns({ listener })
       if (about && toMeta.pronouns) await dict(to).pronouns({ listener: about })
       const toWanted = resolveRegion(toMeta, toRegion)
+      const phrase = await phrasebookGroup(word, from, to, fromMeta, toMeta, toWanted, limit)
       const hasFrequencies = Boolean(toMeta.frequencySource)
       const meaningWords = meaning ? contentWords(meaning, new Set(meaning.toLowerCase().split(/[^a-z']+/))) : null
 
@@ -1105,6 +1153,7 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
         .map((g, i) => ({ g, i, r: relevance(g) - (g.translations.length ? 0 : 100) }))
         .sort((a, b) => b.r - a.r || a.i - b.i)
         .map((x) => x.g)
+      if (phrase) ordered.unshift(phrase)
       if (allSenses) return ordered
       // Senses that translate to the same words add nothing; keep the first.
       const seen = new Set<string>()

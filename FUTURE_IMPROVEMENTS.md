@@ -190,6 +190,42 @@ definition (2026-10-05). Ideas:
 - **Lookup without accents and case** for phrases too (*thiet la* → *thiệt là*), as `variants` does for
   words.
 
+## Vietnamese: everyday phrasebook and checker (from the 2026-11-02 practice entry)
+
+A beginner-style journal entry (mixed English, mostly without accents) went from 7 to 12 of 14 sentences
+right with the phrasebook, longer English phrases, next-word cues and classifiers (see `ARCHITECTURE.md`,
+*Everyday phrasebook*). What's left, roughly by value:
+
+- **Native-speaker review of `languages/phrases/vi.tsv`** (~2,350 pairs, drafted, not reviewed). Most
+  important: the translator and the checker now treat its phrases as the natural answer. The file is
+  plain text by topic; a review page like the picks one would also work.
+- **Grow the phrasebook from real use:** opt-in mai-tutor journal text would show which phrases learners
+  actually write and which fixes they reject; plain-letter runs the checker leaves alone are candidates.
+  Also more classifier + noun pairs and everyday collocations (*bạn bè* for "my friends").
+- **English translated word by word:** *it was a little expensive* → *nó là hơi đắt* (natural: *nhưng hơi
+  đắt*), *study for my exam* → *học cho tôi kiểm tra* (*ôn thi*). Ideas: more clause frames ("it was
+  {quality}"), dropping *it was* / *there is* before an adjective, and English phrasebook keys with slots
+  ("for my {noun}").
+- **Common words that are wrong in context:** *Cho rất đông người* is *Chợ* (*cho* is a correct, far more
+  common word, so the checker never doubts it). Needs sentence context: a noun is expected as the subject
+  before *rất* + adjective; or phrasebook pairs used as evidence even when nothing is misspelled
+  (*chợ đông*), with a high bar to keep false alarms at zero.
+- **Rarer readings the phrasebook outvotes:** *công đồng* (council) now always becomes *cộng đồng*, and
+  *thể nào* becomes *thế nào* outside *chẳng/không thể nào* (10 spelling-eval cases). Fine for learners; a
+  few more context phrases (*thì thể nào cũng*) would recover the rest.
+- **Classifiers without a cue:** *Tôi mua cai ao* still gives *cài áo*; classifier + noun is only tried
+  after *một*, *các*, *những*… (everywhere it broke *còn lại*, *bộ hành*). A verb-object cue (*mua*, *mặc*,
+  *có* + classifier) might be safe; measure with `npm run evaluate:spelling`.
+- **False friends:** only *hot* so far, hinted on every use. Others to consider (*cool*, *fan*, *hot girl*
+  is fine); limiting the hint to weather/temperature context would cut noise on correct uses.
+- **More next-word cues:** the two so far (*lúc* before times, *nhưng* before pronouns) came from one
+  entry; the spelling eval's sentence cases and real journals would show more (*đã* vs *đá*, *có* vs
+  *cỏ*).
+- **Speed:** English runs of up to five words cost ~20% on an all-English paragraph (~840 ms vs ~680 ms);
+  skip lengths with no phrasebook key starting with that word.
+- **Measure translation of phrases:** `npm run evaluate` only has single words; add phrase cases (both
+  directions) so phrasebook edits are checked like picks.
+
 ## Pronouns
 
 - **Possessives:** plain "her" leads with its possessive sense ("belonging to her"), Wiktionary's first,

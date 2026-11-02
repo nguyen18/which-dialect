@@ -99,6 +99,8 @@ export type LanguageMeta = {
   syllables?: boolean
   /** true when the language has sentence frames (frames.json, see FramesData). */
   frames?: boolean
+  /** true when the language has an everyday phrasebook (phrases.json, see PhraseRow). */
+  phrases?: boolean
   /**
    * The language's inflected forms are in a compact index (forms/<shard>.json, see FormShard) rather than
    * stored as entries: Spanish's conjugations and plurals are most of its source and would triple its
@@ -194,6 +196,53 @@ export type CheckerConfig = {
    * alike). The spellchecker counts swapping within a group as half a change, so "họk" → "học" before "họ".
    */
   similarLetters?: string[]
+  /**
+   * Words that tell what part of speech comes next, for choosing between spelling fixes that differ in it:
+   * Vietnamese "đã" before a verb ("đã công nhận", recognized), "các" before a noun ("các công nhân",
+   * workers). `pos` lists the parts of speech (Entry.pos) the words point to.
+   */
+  posCues?: { before: string[]; pos: string[] }[]
+  /**
+   * Forms a syllable takes by the word after it, when its accents are missing or wrong: Vietnamese "luc" is
+   * "lúc" (time) before a number ("luc 8 gio"), not "lực" (force); "nhung" is "nhưng" (but) before a
+   * pronoun ("nhung tôi"), not "những" (plural). `before` lists the next words; "#number" is any number.
+   */
+  nextCues?: { forms: string[]; before: string[] }[]
+  /**
+   * Classifiers: a classifier and a noun count as a word when fixing accents ("cai ao" → "cái áo", shirt,
+   * not the dictionary's "cài áo", to button up), though the dictionary doesn't list such pairs.
+   */
+  classifiers?: string[]
+  /**
+   * Words the language borrowed from the learner's with a narrower meaning: written in the language's text,
+   * they get a hint (severity 'suggestion'), e.g. Vietnamese "hot" means popular, not warm ("nóng").
+   */
+  falseFriends?: { word: string; means: string; say: string[]; for: string }[]
+}
+
+/**
+ * One everyday phrase and an English way to say it (phrases.json): a speaker-written phrasebook of common
+ * multi-word phrases ("ở nhà" "at home", "have you eaten?" "ăn cơm chưa"), read in both directions. A
+ * phrase or an English phrase can have several rows; earlier rows are preferred.
+ */
+export type PhraseRow = {
+  /** The English, e.g. "at home". */
+  en: string
+  /** The phrase in the language, e.g. "ở nhà". */
+  text: string
+  /** Where the phrase is said; every region when untagged. */
+  regions: string[]
+  regionTagged: boolean
+  /** When it's used or what it adds, e.g. "polite", "to a friend". */
+  note?: string
+  /** The phrasebook topic, e.g. "Daily routine". */
+  topic: string
+}
+
+/** PhraseRow as stored: topics are indexes into `topics`, untagged rows have no `regions`. */
+export type StoredPhrases = {
+  topics: string[]
+  rows: { en: string; text: string; topic: number; regions?: string[]; note?: string }[]
 }
 
 /**

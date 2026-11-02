@@ -136,6 +136,10 @@ type Context = {
   /** Whether a unit is in the base language (by its start offset). */
   inBase: (u: Unit) => boolean
   translator: Translator
+  /** The language's phrasebook phrases of several units, by lower-case text, as written there ("việt nam" → "Việt Nam"). */
+  phrasebook: Map<string, string>
+  /** The same phrases' lower-case texts by their letters without accents ("thuc day" → ["thức dậy"]). */
+  phrasebookByPlain: Map<string, string[]>
 }
 
 const quote = (s: string) => `“${s}”`
@@ -181,6 +185,14 @@ const PLAIN_RUN_MARGIN = 0.5
 // "tháng sáu", June). A run with no accents at all ("nha bang") was probably typed without them, so any of
 // its syllables may change ("nhà băng", bank), still only when one word clearly wins.
 const PLAIN_RUN_MAX_ZIPF = 5
+// Zipf points by which an accented form must be more common than a common plain-letter syllable written
+// beside accented ones for the run to change it.
+const COMMONER_ACCENTED_GAP = 0.3
+// How common (Zipf) a word must be for such a change.
+const COMMONER_MIN_WORD_ZIPF = 5
+// How common a phrasebook phrase counts as, at least, when its accents are chosen: the phrasebook lists
+// everyday phrases, many of which aren't headwords ("thức dậy", "đông người"), so have no frequency.
+const PHRASEBOOK_ZIPF = 5
 // A plain-letter non-syllable with no accented form is checked as a typo only if a one-letter fix gives a
 // syllable at least this common (Zipf); otherwise it's probably a name or a foreign word.
 const PLAIN_TYPO_MIN_ZIPF = 4
@@ -216,8 +228,24 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
     // Each non-syllable's candidates: accents and one-letter changes, the writer's own accents first.
     const candidatesOf = new Map<Unit, string[]>()
     const similar = ctx.config.similarLetters ?? []
-    const candidates = (u: Unit, limit = SPELLING_CANDIDATES) =>
-      spellingCandidates(lowerOf(u), syllables, byPlain, { limit, similar }).map((c) => c.word)
+    // The writer's syllable with a typed mark dropped keeps a place: a wrongly accented syllable often had a
+    // mark it shouldn't ("suỹ": quỹ, then suy), which ranks below fixes keeping the writer's marks.
+    const marksOf = (s: string) => [...s.normalize('NFD')].filter((c) => /\p{M}/u.test(c))
+    const dropsMarks = (written: string, w: string) => {
+      const left = marksOf(written)
+      const mine = marksOf(w)
+      return mine.length < left.length && mine.every((m) => left.includes(m) && left.splice(left.indexOf(m), 1))
+    }
+    const candidates = (u: Unit, limit = SPELLING_CANDIDATES) => {
+      const all = spellingCandidates(lowerOf(u), syllables, byPlain, { limit: 50, similar })
+      const top = all.slice(0, limit).map((c) => c.word)
+      const same = all.find((c) => c.edits === 0 && dropsMarks(lowerOf(u), c.word))?.word
+      if (same && !top.includes(same)) top.splice(Math.min(1, top.length), 0, same)
+      return top.slice(0, limit)
+    }
+    // The same letters with any other accents (or none), most common first.
+    const sameLetters = (u: Unit) =>
+      (byPlain.get(plain(lowerOf(u))) ?? []).filter((c) => c !== lowerOf(u)).sort((a, b) => syllables[b] - syllables[a]).slice(0, COMPOUND_FORMS_PER_SYLLABLE)
     // For words with neighbors, only the best-ranked candidates: "muốm ăn" mustn't become "muối ăn" (salt)
     // through a worse fix of "muốm" than "muốn" just because "muối ăn" is a dictionary word.
     const bestCandidates = (u: Unit, limit: number) => {
@@ -248,6 +276,24 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
       return (byPlain.get(lower) ?? []).filter((c) => c !== lower && syllables[c] >= syllables[lower] + gap - 1e-9).slice(0, 3)
     }
     const suspect = (u: Unit) => unknown.has(u) || (plainWords.has(u) && betterForms(u).length > 0)
+    // What a unit most likely is: its best fix when it's misspelled or missing accents, else as written.
+    const asFixed = (u: Unit) => candidatesOf.get(u)?.[0] ?? (plainWords.has(u) ? betterForms(u)[0] : undefined) ?? lowerOf(u)
+    // The form the next word says a misspelled or plain-letter unit is (CheckerConfig.nextCues): "luc 8 gio"
+    // → "lúc", "nhung toi" → "nhưng" (the next word counts as fixed: "toi" is "tôi").
+    const cueOf = (u: Unit): string | undefined => {
+      if (!unknown.has(u) && !plainWords.has(u)) return undefined
+      const next = sentence.units[sentence.units.indexOf(u) + 1]
+      if (!next || !joined(ctx.text, u, next)) return undefined
+      const nextWord = /^\d/.test(next.text) ? '#number' : asFixed(next)
+      const lower = lowerOf(u)
+      for (const cue of ctx.config.nextCues ?? []) {
+        if (!cue.before.includes(nextWord)) continue
+        const form = cue.forms.find((f) => f !== lower && plain(f) === plain(lower))
+        if (form) return form
+      }
+      return undefined
+    }
+    const classifiers = new Set(ctx.config.classifiers ?? [])
 
     // First, runs of syllables with a doubtful one that make a word once their accents are fixed: "hom nay"
     // → "hôm nay", "an com" → "ăn cơm", "hôm nây" → "hôm nay". The word decides between forms a syllable
@@ -258,6 +304,55 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
     const covered = new Set<Unit>()
     const loneSet = new Set(checked)
     const maxUnits = ctx.config.maxWordUnits ?? 3
+    // The parts of speech the word before a unit points to (posCues), when it's one of the language's cues.
+    // Cues may be two syllables ("có thể"); the longer match wins.
+    const cuedPos = (at: number) => {
+      const units = sentence.units
+      for (const n of [2, 1]) {
+        const before = units.slice(at - n, at)
+        if (before.length < n || before.some((b, j) => !joined(ctx.text, b, before[j + 1] ?? units[at]))) continue
+        // As written, or as fixed when typed without accents ("mot cai ao": một).
+        const written = before.map(lowerOf).join(' ')
+        const fixed = before.map(asFixed).join(' ')
+        const cue = ctx.config.posCues?.find((c) => c.before.includes(written) || c.before.includes(fixed))
+        if (cue) return new Set(cue.pos)
+      }
+      return undefined
+    }
+    // The issue for a run's fixes (best first), and its units marked as covered.
+    // A phrase only the phrasebook has may include syllables that are right as written, as context:
+    // "chẳng the nao" is "chẳng thể nào" (can't possibly), not "thế nào" (how). Those stay out of the
+    // issue, which covers what changes: "the nao" → "thể nào". (A dictionary word is suggested whole:
+    // "Hom nay" → "Hôm nay".)
+    const emit = async (span: Unit[], written: string[], found: { word: string; phraseOnly: boolean }[], plainOnly: boolean) => {
+      const k = span.length
+      const fixes = found.map((f) => f.word.split(' '))
+      const same = (j: number) => fixes.every((f) => f[j]?.toLowerCase() === written[j])
+      let first = 0
+      let last = k - 1
+      if (found[0].phraseOnly) {
+        while (first < last && same(first)) first++
+        while (last > first && same(last)) last--
+        // But not into a word: "đi mua sam" is "mua sam" → "mua sắm", "Cảm ơm bạn" is "Cảm ơm" → "Cảm ơn".
+        const isWord = async (from: number, to: number) => (await ctx.dict.lookup(fixes[0].slice(from, to + 1).join(' '))).length > 0
+        while (first > 0 && (await isWord(first - 1, first))) first--
+        while (last < k - 1 && (await isWord(last, last + 1))) last++
+      }
+      const at = { start: span[first].start, end: span[last].end, text: ctx.text.slice(span[first].start, span[last].end) }
+      const suggestions = unique(fixes.map((f) => matchCase(at.text, f.slice(first, last + 1).join(' '))))
+      const quoted = listOf(suggestions.map(quote), 'or')
+      issues.push({
+        rule: 'spelling', severity: 'warning', ...at, suggestions,
+        message: plainOnly
+          ? `${quote(at.text)} looks typed without accents. Did you mean ${quoted}?`
+          : `${quote(at.text)} isn't spelled right. Did you mean ${quoted}?`,
+      })
+      span.forEach((u) => covered.add(u))
+    }
+    // Phrasebook phrases that change one syllable beside syllables kept as written wait until every run has
+    // been tried: they apply only if no word fixed that syllable ("màu nau" → "màu nâu", but "đã lam chu" is
+    // "làm chủ", not the phrase "đã làm").
+    const deferred: { span: Unit[]; written: string[]; found: { word: string; phraseOnly: boolean }[]; plainOnly: boolean }[] = []
     for (let i = 0; i < sentence.units.length; i++) {
       for (let k = Math.min(maxUnits, sentence.units.length - i); k >= 2; k--) {
         const span = sentence.units.slice(i, i + k)
@@ -265,59 +360,140 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
         const doubtful = span.some(suspect)
         const allPlain = span.every(isPlain)
         const rarePlain = (u: Unit) => plainWords.has(u) && (allPlain || (syllables[lowerOf(u)] ?? 0) < PLAIN_RUN_MAX_ZIPF)
-        const mayChange = (u: Unit) => suspect(u) || rarePlain(u)
-        if (!doubtful && !span.some(rarePlain)) continue
+        // Next to a misspelled syllable, plain-letter syllables may be missing their accents too, however
+        // common they are on their own: "suỹ nghi" → "suy nghĩ".
+        const nearMisspelled = span.some((u) => unknown.has(u))
+        // Beside syllables written with accents, a common plain-letter one may still be missing its own,
+        // but only for forms clearly more common than it: "thanh công" → "thành công" (thành is more common
+        // than thanh), never "cho con" → "chó con" (cho is far more common than chó).
+        const commoner = (u: Unit) =>
+          !allPlain && plainWords.has(u)
+            ? (byPlain.get(lowerOf(u)) ?? []).filter((c) => syllables[c] >= syllables[lowerOf(u)] + COMMONER_ACCENTED_GAP)
+            : []
+        const mayChange = (u: Unit) => suspect(u) || rarePlain(u) || (nearMisspelled && plainWords.has(u)) || commoner(u).length > 0
+        if (!doubtful && !span.some((u) => rarePlain(u) || commoner(u).length)) continue
         const written = span.map(lowerOf)
-        const combos = accentCombinations(written, byPlain, {
-          fixed: span.map((u) => !mayChange(u)),
-          // Misspelled syllables may change letters too ("cảm ơm" → "cảm ơn").
-          forms: span.map((u) => (unknown.has(u) ? bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE) : undefined)),
-          perUnit: COMPOUND_FORMS_PER_SYLLABLE,
-          max: COMPOUND_MAX_COMBINATIONS,
-        }).filter((c) => c !== written.join(' '))
-        const found = (await Promise.all(combos.map(async (c) => ({ word: c, entries: await ctx.dict.lookup(c) }))))
+        const nounCued = cuedPos(i)?.has('noun')
+        // Phrasebook phrases count when a syllable is in doubt; a common word changed only for a commoner form
+        // beside accented ones is left to the dictionary ("con dao này", this knife, isn't "dạo này", lately).
+        const phrases = doubtful || span.some(rarePlain) || nearMisspelled
+        const words = async (forms: (u: Unit) => string[]) => {
+          const combos = accentCombinations(written, byPlain, {
+            fixed: span.map((u) => !mayChange(u)),
+            // Misspelled syllables may change letters too ("cảm ơm" → "cảm ơn").
+            forms: span.map((u) => (unknown.has(u) ? forms(u) : mayChange(u) && !suspect(u) && !rarePlain(u) && !nearMisspelled ? commoner(u) : undefined)),
+            perUnit: COMPOUND_FORMS_PER_SYLLABLE,
+            max: COMPOUND_MAX_COMBINATIONS,
+          }).filter((c) => c !== written.join(' '))
+          // Phrasebook phrases with the same letters, however far down each syllable's forms they are ("pho
+          // bo": phở and bò are 7th and 5th among pho's and bo's forms), keeping the syllables that may not change.
+          for (const c of phrases ? (ctx.phrasebookByPlain.get(plain(written.join(' '))) ?? []) : []) {
+            const syllablesOf = c.split(' ')
+            if (!combos.includes(c) && span.every((u, j) => mayChange(u) || syllablesOf[j] === written[j])) combos.push(c)
+          }
+          // After a word that's followed by a noun ("một", "các"), a classifier and a noun count as a word:
+          // "một cái áo" (a shirt) isn't a headword, "cài áo" (to button up) is. Only there: classifiers are
+          // everyday words too ("con lai" is "còn lại", "trái banh" a ball).
+          const lookup = async (c: string): Promise<Entry[]> => {
+            const entries = await ctx.dict.lookup(c)
+            const [first, second, ...rest] = c.split(' ')
+            if (entries.length || rest.length || !second || !nounCued || !classifiers.has(first)) return entries
+            const nouns = (await ctx.dict.lookup(second)).filter((e) => e.pos === 'noun')
+            return nouns.length ? [{ word: c, pos: 'noun', senses: [], frequency: Math.max(...nouns.map((e) => e.frequency ?? -1)) }] : []
+          }
+          return (await Promise.all(combos.map(async (c) => ({ word: c, entries: await lookup(c), phrase: phrases ? ctx.phrasebook.get(c) : undefined }))))
           // Names (found through a capitalized headword) only for a misspelled run: "nhat ban" → "Nhật Bản",
           // but "hoa lan" (orchid, every syllable a word) isn't "Hòa Lan" (the Netherlands).
-          .map((f) => ({ ...f, entries: doubtful ? f.entries : f.entries.filter((e) => e.word === e.word.toLowerCase()) }))
-          .filter((f) => f.entries.length)
-          // Spelled as the headword: names keep their capitals ("nhat ban" → "Nhật Bản").
-          .map((f) => ({ word: f.entries[0].word.toLowerCase() === f.word ? f.entries[0].word : f.word, frequency: Math.max(-1, ...f.entries.map((e) => e.frequency ?? -1)) }))
-          .sort((a, b) => b.frequency - a.frequency)
-          .slice(0, 3)
+            .map((f) => ({ ...f, entries: doubtful ? f.entries : f.entries.filter((e) => e.word === e.word.toLowerCase()) }))
+            .filter((f) => f.entries.length || f.phrase)
+            // A unit the next word decides keeps that form ("luc 8": lúc).
+            .filter((f) => span.every((u, j) => {
+              const cue = cueOf(u)
+              return !cue || f.word.split(' ')[j] === cue
+            }))
+            // Spelled as the phrasebook or the headword has it: names keep their capitals ("nhat ban" → "Nhật Bản").
+            .map((f) => ({
+              word: f.phrase ?? (f.entries[0].word.toLowerCase() === f.word ? f.entries[0].word : f.word),
+              frequency: Math.max(f.phrase ? PHRASEBOOK_ZIPF : -1, ...f.entries.map((e) => e.frequency ?? -1)),
+              pos: new Set(f.entries.map((e) => e.pos)),
+              phrase: Boolean(f.phrase),
+              phraseOnly: Boolean(f.phrase) && !f.entries.length,
+              // A phrase only the phrasebook has that changes one syllable, keeping its neighbors as written
+              // ("màu nau" → "màu nâu"): see `deferred`.
+              contextOne: !f.entries.length && f.word.split(' ').filter((x, j) => x !== written[j]).length === 1,
+            }))
+            // Everyday phrases first: "gia dinh" is "gia đình", not the place Gia Định; "noi tieng viet" is
+            // "nói tiếng Việt", not "nổi tiếng" (famous) + Việt.
+            .sort((a, b) => Number(b.phrase) - Number(a.phrase) || b.frequency - a.frequency)
+            .slice(0, 3)
+        }
+        // Accent slips first, then letter typos: a word made by fixing a misspelled syllable's accents
+        // ("cõ là" → "có là", "không nhừng" → "không những") beats one made by changing its letters ("cỡ",
+        // "ngừng": they keep the typed mark, so the syllable alone ranks them first).
+        const misspelled = span.some((u) => unknown.has(u))
+        let found = misspelled ? await words(sameLetters) : []
+        if (!found.length) found = await words((u) => bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE))
+        if (found.length && found.every((f) => f.contextOne)) {
+          deferred.push({ span, written, found, plainOnly: span.filter(mayChange).every(isPlain) })
+          continue
+        }
+        found = found.filter((f) => !f.contextOne)
         if (!found.length) continue
-        if (!doubtful && found.length > 1 && found[0].frequency - found[1].frequency < PLAIN_RUN_MARGIN) continue
-        const at = { start: span[0].start, end: span[k - 1].end, text: ctx.text.slice(span[0].start, span[k - 1].end) }
-        const suggestions = found.map((f) => matchCase(at.text, f.word))
-        const quoted = listOf(suggestions.map(quote), 'or')
-        issues.push({
-          rule: 'spelling', severity: 'warning', ...at, suggestions,
-          message: span.filter(mayChange).every(isPlain)
-            ? `${quote(at.text)} looks typed without accents. Did you mean ${quoted}?`
-            : `${quote(at.text)} isn't spelled right. Did you mean ${quoted}?`,
-        })
-        span.forEach((u) => covered.add(u))
+        // Fixes that differ in part of speech: the word before tells which ("đã cong nhan": công nhận, a
+        // verb; "các cong nhan": công nhân, a noun). The ones it points to come first, and a single one is
+        // a clear winner however close the frequencies.
+        const cued = cuedPos(i)
+        const fits = (f: (typeof found)[number]) => [...f.pos].some((p) => cued?.has(p))
+        // A single everyday phrase among the fixes wins too.
+        const decided = (cued && found.length > 1 && found.filter(fits).length === 1 && !found.every(fits)) ||
+          (found[0].phrase && !found[1]?.phrase)
+        if (cued) found = [...found.filter(fits), ...found.filter((f) => !fits(f))]
+        // Changed only for a commoner form: the word must be common too, since the written one may be a
+        // word the dictionary lacks ("kỳ thi", exam, isn't a headword; "kỳ thị", discrimination, is).
+        if (!doubtful && !span.some(rarePlain) && found[0].frequency < COMMONER_MIN_WORD_ZIPF) continue
+        if (!doubtful && !decided && found.length > 1 && found[0].frequency - found[1].frequency < PLAIN_RUN_MARGIN) continue
+        await emit(span, written, found, span.filter(mayChange).every(isPlain))
         break
       }
+    }
+    // Then the deferred phrases, for syllables no run fixed.
+    for (const d of deferred) {
+      const changed = d.span.filter((_, j) => d.found[0].word.split(' ')[j] !== d.written[j])
+      if (!changed.some((u) => covered.has(u))) await emit(d.span, d.written, d.found, d.plainOnly)
     }
 
     // Then each remaining syllable on its own.
     for (const u of checked) {
       if (covered.has(u)) continue
       const lower = lowerOf(u)
+      const cue = cueOf(u)
+      const cueFirst = (forms: string[]) => (cue ? [cue, ...forms.filter((f) => f !== cue)].slice(0, SPELLING_CANDIDATES) : forms)
       if (unknown.has(u)) {
-        const found = candidatesOf.get(u) ?? []
+        const found = cueFirst(candidatesOf.get(u) ?? [])
         const accented = !isPlain(u)
         // Missing accents on plain letters is the common learner slip; a wrong accent is more surely wrong.
         suggest(u, found, accented ? 'error' : 'warning', found.length
           ? `${quote(u.text)} isn't a ${ctx.meta.name} syllable. Did you mean ${options(u, found)}?`
           : `${quote(u.text)} isn't a ${ctx.meta.name} syllable. Check the spelling and accents.`)
       } else if (plainWords.has(u)) {
-        const better = betterForms(u)
+        const better = cueFirst(betterForms(u))
         if (!better.length) continue
         suggest(u, better, 'warning', unaccented
           ? `${quote(u.text)} looks typed without accents. Did you mean ${options(u, better)}?`
           : `${quote(u.text)} is a rare word; did you mean ${options(u, better)}?`)
       }
+    }
+
+    // Loanwords with a narrower meaning than the learner's word (CheckerConfig.falseFriends): a hint only,
+    // since they're often used right ("bài hát hot", a hit song).
+    for (const u of target) {
+      const friend = ctx.config.falseFriends?.find((f) => f.word === u.text.toLowerCase())
+      if (!friend) continue
+      issues.push({
+        rule: 'spelling', severity: 'suggestion', start: u.start, end: u.end, text: u.text,
+        message: `In ${ctx.meta.name}, ${quote(u.text)} means ${friend.means}; for ${friend.for}, say ${listOf(friend.say.map(quote), 'or')}.`,
+        suggestions: friend.say.map((w) => matchCase(u.text, w)),
+      })
     }
   }
   return issues
@@ -376,9 +552,10 @@ async function wordSpelling(ctx: Context): Promise<CheckIssue[]> {
 }
 
 // Words in the learner's own language (English by default), with the target-language word to use: "market"
-// → "chợ". Runs of base units are split into the longest phrases the base dictionary knows ("ice cream"),
-// each translated in the region and register. Words the language usually has no word for
-// (CheckerConfig.leaveOut: Vietnamese has no articles) are suggested to be left out.
+// → "chợ". Runs of base units are split into the longest phrases the language's phrasebook has or the base
+// dictionary knows ("wash the dishes", "ice cream"), each translated in the region and register. Words the
+// language usually has no word for (CheckerConfig.leaveOut: Vietnamese has no articles) are suggested to
+// be left out.
 async function foreignWord(ctx: Context): Promise<CheckIssue[]> {
   const base = ctx.base
   if (!base) return []
@@ -403,10 +580,13 @@ async function foreignWord(ctx: Context): Promise<CheckIssue[]> {
             found = { k, words: [], leave: true }
             break
           }
-          if (k > 1 && !(await ctx.translator.senses(phrase, { from: base }).catch(() => [])).length) continue
           const [group] = await ctx.translator.translate(phrase, {
             from: base, to: ctx.options.lang, toRegion: ctx.options.region, register: ctx.options.register, listener: ctx.options.listener, limit: 3,
           }).catch(() => [])
+          // A phrase of several words counts when the language's phrasebook has it ("wash the dishes") or
+          // the base dictionary knows it ("ice cream").
+          const inPhrasebook = group?.translations[0]?.bridge === 'phrasebook'
+          if (k > 1 && !inPhrasebook && !(await ctx.translator.senses(phrase, { from: base }).catch(() => [])).length) continue
           const words = unique((group?.translations ?? []).map((t) => t.word))
           if (words.length || k === 1) found = { k, words, leave: false }
         }
@@ -604,8 +784,9 @@ async function politeEnding(ctx: Context): Promise<CheckIssue[]> {
   return issues
 }
 
-// The longest base-language phrase looked up as one ("ice cream", "take care of").
-const MAX_FOREIGN_UNITS = 3
+// The longest base-language phrase looked up as one ("ice cream", "go to the market", "how much does it cost":
+// the phrasebook's longest English phrases have five words).
+const MAX_FOREIGN_UNITS = 5
 
 const RULES: Record<CheckRule, (ctx: Context) => Promise<CheckIssue[]>> = {
   spelling,
@@ -618,6 +799,23 @@ const RULES: Record<CheckRule, (ctx: Context) => Promise<CheckIssue[]>> = {
 }
 
 const SEVERITY_ORDER = { error: 0, warning: 1, suggestion: 2 }
+
+// A language's phrasebook phrases of several units, by lower-case text: built once per dictionary.
+type Phrasebook = { byText: Map<string, string>; byPlain: Map<string, string[]> }
+const phrasebooks = new WeakMap<Dictionary, Promise<Phrasebook>>()
+const phrasebookOf = (d: Dictionary) => {
+  let p = phrasebooks.get(d)
+  if (!p) {
+    p = d.phrases().then((rows) => {
+      const byText = new Map(rows.filter((r) => r.text.includes(' ')).map((r) => [r.text.toLowerCase(), r.text]))
+      const byPlain = new Map<string, string[]>()
+      for (const lower of byText.keys()) byPlain.set(plain(lower), [...(byPlain.get(plain(lower)) ?? []), lower])
+      return { byText, byPlain }
+    })
+    phrasebooks.set(d, p)
+  }
+  return p
+}
 
 export function createChecker(options: CheckerOptions = {}): Checker {
   const cache = new Map<string, Dictionary>()
@@ -651,11 +849,19 @@ export function createChecker(options: CheckerOptions = {}): Checker {
         }
         return pending
       }
+      // Phrasebook phrases count as words: written right, their syllables aren't checked one by one ("kỳ
+      // thi" isn't "kỳ thị"), and spelling fixes can make them ("o nha" → "ở nhà").
+      const { byText: phrasebook, byPlain: phrasebookByPlain } = await phrasebookOf(d)
+      const lookupOrPhrase = async (phrase: string): Promise<Entry[]> => {
+        const entries = await lookup(phrase)
+        const text = entries.length ? undefined : phrasebook.get(phrase.toLowerCase())
+        return text ? [{ word: text, pos: 'phrase', senses: [] }] : entries
+      }
       const base = (opts.base ?? 'en') === opts.lang ? undefined : (opts.base ?? 'en')
       const sentences: Sentence[] = []
       for (const list of sentencesOf(text, units(text))) {
         const langs = base ? await markLanguages(list, { lang: opts.lang, base, target: d, baseDictionary: dict(base), translator }) : list.map(() => opts.lang)
-        sentences.push({ units: list, langs, words: await segment(text, list, config.maxWordUnits ?? 3, lookup) })
+        sentences.push({ units: list, langs, words: await segment(text, list, config.maxWordUnits ?? 3, lookupOrPhrase) })
       }
       const baseUnits = new Set(sentences.flatMap((s) => s.units.filter((_, i) => s.langs[i] !== opts.lang).map((u) => u.start)))
 
@@ -673,6 +879,8 @@ export function createChecker(options: CheckerOptions = {}): Checker {
         // units directly so pronouns the dictionary doesn't list as one word ("tụi mày") are found too.
         pronounMatches: () => (matches ??= findPronouns(text, sentences, config)),
         base,
+        phrasebook,
+        phrasebookByPlain,
         inBase: (u) => baseUnits.has(u.start),
         translator,
         suggestRegional: async (word, region) => {
