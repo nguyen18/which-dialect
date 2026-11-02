@@ -722,8 +722,9 @@ async function politeEnding(ctx: Context): Promise<CheckIssue[]> {
   return issues
 }
 
-// The longest base-language phrase looked up as one ("ice cream", "take care of").
-const MAX_FOREIGN_UNITS = 3
+// The longest base-language phrase looked up as one ("ice cream", "go to the market", "how much does it cost":
+// the phrasebook's longest English phrases have five words).
+const MAX_FOREIGN_UNITS = 5
 
 const RULES: Record<CheckRule, (ctx: Context) => Promise<CheckIssue[]>> = {
   spelling,

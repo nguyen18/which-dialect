@@ -233,6 +233,9 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Hôm nay tôi go home sớm.'), ['go home→về nhà'])
     assert.deepEqual(await fixes('Tôi muốn go to bed sớm.'), ['go to bed→đi ngủ'])
     assert.deepEqual(await fixes('Tôi thích cái bàn to.'), [])
+    // Phrases of up to five words: "go" and "to" are Vietnamese syllables too.
+    assert.deepEqual(await fixes('Sau đó tôi go to the market với chị gái.'), ['go to the market→đi chợ'])
+    assert.deepEqual(await fixes('Bạn biết how much does it cost không?'), ['how much does it cost→giá bao nhiêu'])
     // The region's word: "expensive" is đắt in the North.
     assert.deepEqual(await fixes('Nó expensive.', { region: 'Northern' }), ['expensive→đắt'])
     // "but" is English here, not a misspelled "bút"; regions and pronouns aren't checked by default.

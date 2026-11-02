@@ -27,8 +27,9 @@ const BASE_MARGIN = 2
 // For a base word that's a target word only with accents added, a smaller lead keeps it the base's: it was
 // typed exactly as the base word ("but" is 1.9 more common in English than "bút" in Vietnamese).
 const BASE_MARGIN_ACCENTS = 1
-// The longest base phrase a word is joined to its base neighbors by (see the phrase pass below).
-const BASE_PHRASE_UNITS = 3
+// The longest base phrase a word is joined to its base neighbors by (see the phrase pass below): the
+// phrasebook's longest English phrases have five words ("how much does it cost").
+const BASE_PHRASE_UNITS = 5
 
 // The English of a target language's phrasebook, as phrase keys: built once per dictionary.
 const phrasebookEnglish = new WeakMap<Dictionary, Promise<Set<string>>>()
