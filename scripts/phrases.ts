@@ -4,7 +4,8 @@
 //
 // Rows live in languages/phrases/<lang>.tsv, one English–phrase pair per line:
 //   English<TAB>phrase<TAB>regions (optional, comma-separated)<TAB>note (optional)
-// "## Topic" lines start a topic; other "#" lines are comments. This checks regions against the config
+// "## Topic" lines start a topic; other "#" lines are comments. Regions may be region groups ("Latin America").
+// This checks regions against the config
 // and, for languages written in syllables, every syllable against the built syllable list (unknown ones
 // are reported, not dropped: loanwords like "video" are real usage), and writes
 // packages/<lang>/data/phrases.json.
@@ -24,7 +25,7 @@ export const phrasesSource = (lang: string) => join(ROOT, 'languages', 'phrases'
 
 export type PhrasesReport = { rows: number; topics: number; problems: string[]; unknownSyllables: string[] }
 
-export function parsePhrases(tsv: string, regions: string[], syllables: Record<string, number> | null): { data: StoredPhrases; report: PhrasesReport } {
+export function parsePhrases(tsv: string, regions: string[], syllables: Record<string, number> | null, regionGroups: Record<string, string[]> = {}): { data: StoredPhrases; report: PhrasesReport } {
   const data: StoredPhrases = { topics: [], rows: [] }
   const report: PhrasesReport = { rows: 0, topics: 0, problems: [], unknownSyllables: [] }
   const seen = new Set<string>()
@@ -38,9 +39,11 @@ export function parsePhrases(tsv: string, regions: string[], syllables: Record<s
     const where = `line ${i + 1}`
     if (!en || !text) return void report.problems.push(`${where}: needs English and the phrase, tab-separated`)
     if (!data.topics.length) return void report.problems.push(`${where}: before the first "## Topic"`)
-    const rowRegions = tags ? tags.split(',').map((t) => t.trim()) : []
-    const bad = rowRegions.filter((r) => !regions.includes(r))
-    if (bad.length) return void report.problems.push(`${where}: unknown region ${bad.join(', ')} (regions: ${regions.join(', ')})`)
+    // A tag is a region or a region group ("Latin America"), which stands for its regions.
+    const rowTags = tags ? tags.split(',').map((t) => t.trim()) : []
+    const bad = rowTags.filter((r) => !regions.includes(r) && !regionGroups[r])
+    if (bad.length) return void report.problems.push(`${where}: unknown region ${bad.join(', ')} (regions: ${[...regions, ...Object.keys(regionGroups)].join(', ')})`)
+    const rowRegions = rowTags.flatMap((t) => regionGroups[t] ?? [t])
     const key = `${phraseKey(en)}\t${phraseKey(text)}`
     if (seen.has(key)) return void report.problems.push(`${where}: repeats "${en}" / "${text}"`)
     seen.add(key)
@@ -66,7 +69,7 @@ export async function writePhrases(config: LanguageConfig): Promise<void> {
   await rm(join(dir, 'phrases.json'), { force: true })
   if (existsSync(phrasesSource(config.lang))) {
     const syllables = meta.syllables ? JSON.parse(await readFile(join(dir, 'syllables.json'), 'utf8')) as Record<string, number> : null
-    const { data, report } = parsePhrases(await readFile(phrasesSource(config.lang), 'utf8'), config.regions, syllables)
+    const { data, report } = parsePhrases(await readFile(phrasesSource(config.lang), 'utf8'), config.regions, syllables, config.regionGroups)
     await writeFile(join(dir, 'phrases.json'), JSON.stringify(data))
     meta.phrases = true
     console.log(`Phrasebook: ${report.rows} phrases in ${report.topics} topics`)

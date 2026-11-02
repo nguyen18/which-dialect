@@ -241,6 +241,25 @@ describe('Spanish data', { skip: !existsSync(esData) && 'run `npm run build:data
     // "Tambien" is listed only as a misspelling; "escuche" and "mama" are real words (left alone).
     assert.deepEqual(fixes, { Tambien: 'También', cancion: 'canción', nino: 'niño' })
   })
+
+  it('checks spelling: old spellings, much commoner accented words, confused letters, false friends', { skip: !existsSync(join(esData, '..', '..', 'en', 'data')) && 'needs the English build' }, async () => {
+    const load = (lang: string) => async (p: string) => JSON.parse(await readFile(join(esData, '..', '..', lang, 'data', p), 'utf8'))
+    const checker = createChecker({ load })
+    const fixes = async (text: string) =>
+      Object.fromEntries((await checker.check(text, { lang: 'es', base: 'en' })).issues.filter((i) => i.rule === 'spelling').map((i) => [i.text, i.suggestions[0]]))
+    // "jardin" and "mediodia" are only obsolete spellings; "trafico" (I traffic) is far rarer than "tráfico".
+    assert.deepEqual(await fixes('Al mediodia fui al jardin y había mucho trafico.'), { mediodia: 'mediodía', jardin: 'jardín', trafico: 'tráfico' })
+    // After an article, the noun: "la practica" → "práctica"; but "Ella practica yoga" is the verb.
+    assert.deepEqual(await fixes('Tengo la practica mañana.'), { practica: 'práctica' })
+    assert.deepEqual(await fixes('Ella practica yoga.'), {})
+    // Both common: "esta"/"está", "mas"/"más" are left alone.
+    assert.deepEqual(await fixes('Esta casa es mas grande.'), {})
+    // Letters heard alike and the silent h.
+    assert.deepEqual(await fixes('Comimos en la cosina y voy a ablar con ella.'), { cosina: 'cocina', ablar: 'hablar' })
+    const [hint] = (await checker.check('Estaba un poco embarazada.', { lang: 'es', base: 'en' })).issues
+    assert.equal(hint.severity, 'suggestion')
+    assert.deepEqual(hint.suggestions, ['avergonzada', 'apenada'])
+  })
 })
 
 describe('hand-picked words (fake data)', () => {
@@ -410,6 +429,12 @@ describe('translator (real data)', { skip: !built && 'build en and vi data first
     assert.equal((await tr.senses('walked', { from: 'en' }))[0].lemma, 'walk')
     assert.equal((await tr.senses('running', { from: 'en', pos: 'verb' }))[0].lemma, 'run')
     assert.equal((await tr.senses('dont', { from: 'en' }))[0].lemma, "don't")
+    // Past tenses are the verb before nouns spelled alike ("ate": an elder sister; "drove": a herd), and
+    // "had" is have before the past-perfect helper; adjectives keep their place ("excited", above).
+    for (const [past, base] of [['ate', 'eat'], ['drove', 'drive'], ['had', 'have'], ['saw', 'see'], ['smiled', 'smile']]) {
+      const [group] = await tr.translate(past, { from: 'en', to: 'vi' })
+      assert.equal(group.source.lemma, base, past)
+    }
   })
 
   it('follows regional variants and keeps their region', async () => {
@@ -536,6 +561,36 @@ describe('translator with Spanish (real data)', { skip: !builtEs && 'build en, v
 
   it('translates between dialects of one language', async () => {
     assert.ok((await top('coche', { from: 'es', fromRegion: 'Spain', to: 'es', toRegion: 'Mexico' })).includes('carro'))
+  })
+
+  it('translates everyday phrases through the Spanish phrasebook, by region', async () => {
+    assert.equal((await top('take the bus', { from: 'en', to: 'es', toRegion: 'Spain' }))[0], 'coger el autobús')
+    // A row tagged for the country comes before one tagged for its region group (Latin America).
+    assert.equal((await top('take the bus', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'tomar el camión')
+    assert.equal((await top('miss you', { from: 'en', to: 'es', toRegion: 'Colombia' }))[0], 'te extraño')
+    // Into a region group, its own row before a narrower one inside it.
+    assert.equal((await top('in the morning', { from: 'en', to: 'es', toRegion: 'Latin America' }))[0], 'en la mañana')
+    assert.equal((await top('in the morning', { from: 'en', to: 'es', toRegion: 'Argentina' }))[0], 'a la mañana')
+    // A row tagged for one country doesn't lead for the whole group: Mexico's "ahorita" isn't Latin America's.
+    assert.equal((await top('right away', { from: 'en', to: 'es', toRegion: 'Latin America' }))[0], 'enseguida')
+    assert.equal((await top('right away', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'ahorita')
+    // English phrases with an inflected first word.
+    assert.equal((await top('went to bed', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'acostarse')
+    assert.ok((await top('took pictures', { from: 'en', to: 'es', toRegion: 'Mexico' })).includes('tomar fotos'))
+    assert.equal((await top('¿En serio?', { from: 'es', to: 'en' }))[0], 'seriously?')
+    // Hand-picked words for common English words (languages/es.ts picks).
+    for (const [en, es] of [['nice', 'agradable'], ['for', 'para'], ['but', 'pero'], ['the', 'el'], ['people', 'gente'], ['miss', 'extrañar'], ['dancing', 'baile'], ['please', 'por favor']]) {
+      assert.equal((await top(en, { from: 'en', to: 'es', toRegion: 'Latin America' }))[0], es, en)
+    }
+    // Irregular plurals and possessives the English data has no entry for.
+    assert.equal((await top('feet', { from: 'en', to: 'es' }))[0], 'pie')
+    assert.equal((await top('teeth', { from: 'en', to: 'es' }))[0], 'diente')
+    assert.equal((await top("friend's", { from: 'en', to: 'es' }))[0], 'amigo')
+    // Days and phrases with an inflected first word.
+    assert.equal((await top('on Sunday', { from: 'en', to: 'es' }))[0], 'el domingo')
+    assert.equal((await top('went to', { from: 'en', to: 'es' }))[0], 'ir a')
+    // Punctuation around a single word: "really?" is "really".
+    assert.ok((await top('really?', { from: 'en', to: 'es' })).length > 0)
   })
 
   it('ranks the everyday word first', async () => {

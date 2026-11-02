@@ -103,7 +103,7 @@ Single words translate through the dictionary, but everyday phrases often don't:
 
 The spellchecker uses it too: a phrase written right isn't corrected syllable by syllable (*kỳ thi*, exam, isn't changed to *kỳ thị*), and when accents are missing, an everyday phrase is preferred (*thuc day* → *thức dậy*, *gia dinh* → *gia đình*, *pho bo* → *phở bò*, *chẳng the nao* → *chẳng thể nào*).
 
-Vietnamese has about 2,350 phrase pairs in 32 topics (greetings, time, daily routine, food, school, work, feelings, linking phrases, phrasal verbs…), drafted for journal writing and not yet reviewed by a native speaker. The file is plain tab-separated text, one pair per line, so it's easy to review and edit; `npm run build:phrases -- vi` rebuilds it.
+Vietnamese has about 2,350 phrase pairs in 32 topics (greetings, time, daily routine, food, school, work, feelings, linking phrases, phrasal verbs…) and Spanish about 2,900 in 25, drafted for journal writing and not yet reviewed by native speakers. Region tags can name a country or a group (*Latin America*); the closest match to `toRegion` comes first (into Mexico, *tomar el camión* before Latin America's *tomar el autobús*; into Latin America as a whole, an untagged phrase before one tagged for a single country). English phrases match with their first word inflected (*went to bed* → *go to bed*). The file is plain tab-separated text, one pair per line, so it's easy to review and edit; `npm run build:phrases -- <code>` rebuilds it.
 
 ### How accurate is it?
 

@@ -74,10 +74,64 @@ const config: LanguageConfig = {
   // (forms/de.json), too much to parse per word in a serverless function (Mai's journal check ran out of CPU).
   shardLength: 3,
   // Spaces separate words; the checker fixes accents from the words and forms ("cancion" → "canción").
-  checker: { units: 'words' },
+  checker: {
+    units: 'words',
+    // Letters Spanish learners mix up by sound: b/v, c/s/z (seseo), g/j, y/ll; and the silent h.
+    similarLetters: ['bv', 'csz', 'gj', 'iy'],
+    silentLetters: ['h'],
+    // Words before a noun, for accent fixes on real words: "el trafico" (I traffic) → "el tráfico".
+    posCues: [{ before: ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'al', 'del', 'mi', 'mis', 'tu', 'tus', 'su', 'sus', 'nuestro', 'nuestra', 'este', 'estos', 'estas', 'ese', 'esa', 'esos', 'esas'], pos: ['noun'] }],
+    // English speakers' classic false friends: a hint wherever the word appears.
+    falseFriends: [
+      { word: 'embarazada', means: 'pregnant', say: ['avergonzada', 'apenada'], for: 'embarrassed' },
+      { word: 'embarazado', means: 'pregnant (or obstructed)', say: ['avergonzado', 'apenado'], for: 'embarrassed' },
+      { word: 'excitado', means: 'sexually aroused', say: ['emocionado'], for: 'excited' },
+      { word: 'excitada', means: 'sexually aroused', say: ['emocionada'], for: 'excited' },
+      { word: 'constipado', means: 'having a cold (Spain)', say: ['estreñido'], for: 'constipated' },
+      { word: 'constipada', means: 'having a cold (Spain)', say: ['estreñida'], for: 'constipated' },
+    ],
+  },
   // Country and city names translate ("Japan" ↔ "Japón").
   placeNames: {},
   wordfreq: 'large',
+  // Hand-picked first choices for English meanings (see scripts/picks.ts), drafted by Claude on 2026-11-02 from
+  // a practice journal written in English (language-powerup), where word-by-word translation gave
+  // "chulisnais" for nice, "por cuanto" for for, "lo" for the, "Francia" for dancing. To be reviewed by a
+  // speaker (/word-review es). `first` puts the meaning first for a bare word, as the checker translates one.
+  picks: [
+    { word: 'nice', pos: 'adj', gloss: /^Pleasant, satisfactory, complimentary\./, picks: ['agradable', 'bonito', { word: 'lindo', tags: ['Latin America'] }, 'bueno'], first: true },
+    { word: 'nice', pos: 'adj', gloss: /^Of a person: friendly, attractive\./, picks: ['simpático', 'amable', { word: 'majo', tags: ['Spain'] }] },
+    { word: 'on', pos: 'prep', gloss: /^Positioned at the upper surface of/, picks: ['en', 'sobre'], first: true },
+    { word: 'to', pos: 'prep', gloss: /^Indicating destination or final position/, picks: ['a', 'hacia'], first: true },
+    { word: 'the', pos: 'article', gloss: /because it has already been mentioned/, picks: ['el', 'la', 'los', 'las'] },
+    { word: 'a', pos: 'article', gloss: /^An unspecified example of/, picks: ['un', 'una'], first: true },
+    { word: 'for', pos: 'prep', gloss: /^Directed at; intended to belong to\./, picks: ['para'], first: true },
+    { word: 'for', pos: 'prep', gloss: /^Towards; in the direction of\./, picks: ['para', 'hacia'] },
+    { word: 'but', pos: 'conj', gloss: /^However, although, nevertheless/, picks: ['pero'], first: true },
+    { word: 'people', pos: 'noun', gloss: /^People in general/, picks: ['gente', 'personas'], first: true },
+    { word: 'start', pos: 'verb', gloss: /^To begin\./, picks: ['empezar', 'comenzar'], first: true },
+    { word: 'great', pos: 'adj', gloss: /^Very good; excellent; wonderful/, picks: ['genial', 'muy bueno', 'excelente'], first: true },
+    { word: 'picture', pos: 'noun', gloss: /^A photograph\./, picks: ['foto', 'fotografía'], first: true },
+    { word: 'plan', pos: 'noun', gloss: /^A set of intended actions/, picks: ['plan'], first: true },
+    { word: 'tell', pos: 'verb', gloss: /^To convey by speech; to say\./, picks: ['decir'], first: true },
+    { word: 'tell', pos: 'verb', gloss: /^To narrate, to recount\./, picks: ['contar'] },
+    { word: 'smile', pos: 'verb', gloss: /^To have \(a smile\) on one's face\./, picks: ['sonreír'] },
+    { word: 'answer', pos: 'verb', gloss: /^To make a reply or response to\./, picks: ['responder', 'contestar'] },
+    { word: 'miss', pos: 'verb', gloss: /^To become aware of the loss or absence of/, picks: ['extrañar', { word: 'echar de menos', tags: ['Spain'] }], first: true },
+    { word: 'dancing', pos: 'noun', gloss: /^The activity of taking part in a dance\./, picks: ['baile'], first: true },
+    { word: 'home', pos: 'noun', gloss: /^One’s own dwelling place/, picks: ['casa', 'hogar'], first: true },
+    { word: 'home', pos: 'adv', gloss: /^To one's place of residence/, picks: ['a casa'] },
+    { word: 'home', pos: 'adv', gloss: /^At or in one's place of residence/, picks: ['en casa'] },
+    { word: 'want', pos: 'verb', gloss: /^To wish for or desire \(something\)/, picks: ['querer', 'desear'], first: true },
+    { word: 'need', pos: 'verb', gloss: /^To have an absolute requirement for\./, picks: ['necesitar'], first: true },
+    { word: 'watch', pos: 'verb', gloss: /^To look at, see, or view for a period of time\./, picks: ['ver', 'mirar'], first: true },
+    { word: 'make', pos: 'verb', gloss: /^To build, construct, produce, or originate\./, picks: ['hacer'] },
+    { word: 'with', pos: 'prep', gloss: /^In the company of; alongside/, picks: ['con'], first: true },
+    { word: 'about', pos: 'prep', gloss: /^Concerning; with regard to/, picks: ['sobre', 'de', 'acerca de'], first: true },
+    { word: 'sorry', pos: 'intj', gloss: /^Expresses regret, remorse, or sorrow\./, picks: ['lo siento', 'perdón'], first: true },
+    { word: 'please', pos: 'adv', gloss: /^Used to make a polite request\./, picks: ['por favor'], first: true },
+    { word: 'evening', pos: 'noun', gloss: /^The time of day between afternoon and night\./, picks: ['noche', 'tarde'] },
+  ],
   // Sentence frames (the shared catalog is languages/frames.ts), in tú, with vos where it's the everyday
   // "you" (querés, podés). Spanish verbs change with the person and tense, so frames whose verb slot would
   // need conjugating ("Today I {action}", "Do you {action}?") are left out: the others take an infinitive

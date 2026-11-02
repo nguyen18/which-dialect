@@ -1,0 +1,2983 @@
+# Everyday phrases, Spanish <-> English (which-dialect phrasebook). Written for which-dialect; CC BY-SA 4.0
+# like the rest of the data package. Drafted by Claude (2026-11-02), not yet reviewed by a native speaker.
+# One pair per line, tab-separated:
+#   English<TAB>Spanish<TAB>regions (optional: countries or region groups such as Spain, Mexico, Latin America,
+#   Río de la Plata; comma-separated)<TAB>note (optional)
+# The same English or Spanish can appear on several lines; earlier lines are preferred. "## Topic" starts a topic.
+# Build with: npm run build:phrases -- es
+
+## Greetings and politeness
+good morning	buenos días
+good afternoon	buenas tardes
+good evening	buenas noches
+good night	buenas noches
+how are you	cómo estás
+how are you	cómo está usted		formal
+how's it going	qué tal
+how's it going	cómo te va
+what's up	qué tal
+what's up	qué pasa	Spain	casual
+what's up	qué onda	Mexico,Central America,Río de la Plata,Chile	casual
+nice to meet you	mucho gusto
+nice to meet you	encantado de conocerte		a woman says encantada
+nice to meet you	un placer
+see you later	hasta luego
+see you later	nos vemos		casual
+see you soon	hasta pronto
+see you soon	nos vemos pronto
+see you tomorrow	hasta mañana
+see you tomorrow	nos vemos mañana
+take care	cuídate
+take care	cuídese		formal
+have a nice day	que tengas un buen día
+have a nice day	que tenga un buen día		formal
+have a good weekend	buen fin de semana
+have a good weekend	que tengas un buen fin de semana
+thank you	gracias
+thanks a lot	muchas gracias
+thank you so much	muchísimas gracias
+thank you so much	mil gracias
+you're welcome	de nada
+you're welcome	no hay de qué
+no problem	no hay problema
+no problem	no pasa nada
+no worries	no te preocupes
+no worries	tranquilo		casual
+excuse me	perdón
+excuse me	disculpe		formal
+excuse me	con permiso		to get past someone
+I'm sorry	lo siento
+I'm sorry	perdón
+my bad	culpa mía		casual
+my bad	perdón, fue mi culpa
+never mind	no importa
+never mind	olvídalo
+never mind	da igual
+it's okay	está bien
+it's okay	no pasa nada
+of course	claro
+of course	por supuesto
+of course	claro que sí
+sure thing	claro que sí
+sure thing	cómo no	Latin America
+all right	está bien
+all right	vale	Spain
+all right	dale	Río de la Plata	casual
+long time no see	cuánto tiempo sin verte
+long time no see	cuánto tiempo		casual
+good luck	buena suerte
+good luck	suerte
+congratulations on	felicidades por
+congratulations on	enhorabuena por	Spain
+happy birthday	feliz cumpleaños
+happy new year	feliz año nuevo
+merry Christmas	feliz Navidad
+welcome back	bienvenido de nuevo		bienvenida to a woman
+come in	pasa
+come in	adelante
+come in	pase		formal
+after you	tú primero
+after you	pase usted		formal
+bless you	salud
+bless you	Jesús	Spain
+go ahead	adelante
+go ahead	dale	South America,Caribbean	casual
+help yourself	sírvete
+help yourself	sírvase		formal
+please wait	espera, por favor
+please wait	espere, por favor		formal
+hold on	espera
+hold on	un momento
+just a moment	un momento
+just a moment	un momentito
+just a second	un segundo
+just a second	un segundito
+I see	ya veo
+I see	ah, ya
+got it	entendido
+got it	ya entendí
+I don't know	no sé
+I don't know	no lo sé
+I don't understand	no entiendo
+I don't understand	no lo entiendo
+could you repeat that	puedes repetirlo
+could you repeat that	me lo puedes repetir
+could you repeat that	podría repetirlo		formal
+what do you mean	qué quieres decir
+what do you mean	a qué te refieres
+say that again	dilo otra vez
+say that again	repítelo
+pardon me	perdón
+pardon me	cómo dice		formal
+pardon me	mande	Mexico	asking someone to repeat
+hello there	hola, buenas		casual
+good morning	buen día	Río de la Plata
+how are you?	qué tal
+how's it going?	cómo andas	Río de la Plata	casual
+what's up?	qué hay		casual
+what's up?	qué más	Colombia	casual
+what's new?	qué hay de nuevo
+what's new?	qué cuentas		casual
+all good?	todo bien
+fine, thanks	bien, gracias
+very well, and you?	muy bien, y tú
+can't complain	no me puedo quejar
+so-so	más o menos
+the pleasure is mine	el gusto es mío
+what's your name?	cómo te llamas
+where are you from?	de dónde eres
+how old are you?	cuántos años tienes
+what are you doing?	qué haces
+what's wrong?	qué te pasa
+what happened?	qué pasó
+how have you been?	cómo has estado
+see you	nos vemos
+take care	cuídate mucho
+have a good trip	buen viaje
+say hi to your family for me	saludos a tu familia
+thank you very much	muchas gracias
+thanks a million	mil gracias
+don't mention it	no hay de qué
+my pleasure	con mucho gusto
+please	por favor
+excuse me (to get past)	con permiso
+i'm so sorry	lo siento mucho
+don't worry	no te preocupes
+could you speak more slowly?	puedes hablar más despacio
+do you speak english?	hablas inglés
+
+## Agreeing and disagreeing
+I agree	estoy de acuerdo
+I disagree	no estoy de acuerdo
+that's right	así es
+that's right	eso es
+that's true	es verdad
+that's true	es cierto
+exactly right	exactamente
+exactly right	exacto
+I think so	creo que sí
+I don't think so	creo que no
+I don't think so	no creo
+I guess so	supongo que sí
+I hope so	espero que sí
+I hope so	ojalá
+I hope not	espero que no
+I hope not	ojalá que no
+not really	no mucho
+not really	la verdad es que no
+not really	no exactamente
+maybe not	quizás no
+maybe not	tal vez no
+you're right	tienes razón
+you're wrong	te equivocas
+you're wrong	no tienes razón
+fair enough	me parece justo
+fair enough	es razonable
+good idea	buena idea
+sounds good	me parece bien
+sounds good	suena bien
+sounds good	vale	Spain
+sounds great	me parece genial
+sounds great	suena genial
+why not	por qué no
+no way	ni hablar
+no way	de ninguna manera
+no way	ni de broma		casual
+not at all	para nada
+not at all	en absoluto
+me too	yo también
+me neither	yo tampoco
+same here	yo igual
+same here	lo mismo digo
+it depends	depende
+up to you	como quieras
+up to you	tú decides
+either way	de cualquier forma
+either way	me da igual
+whatever you want	lo que quieras
+whatever you want	como quieras
+I'm not sure	no estoy seguro		said by a man
+I'm not sure	no estoy segura		said by a woman
+in my opinion	en mi opinión
+in my opinion	a mi parecer
+to be honest	la verdad
+to be honest	para ser sincero
+to be honest	sinceramente
+to tell the truth	a decir verdad
+to tell the truth	la verdad es que
+as far as I know	que yo sepa
+as far as I know	según tengo entendido
+I believe that	creo que
+I feel like	me parece que
+I feel like	siento que
+I feel like	tengo ganas de		feel like doing something
+it seems like	parece que
+it looks like	parece que
+it looks like	al parecer
+I'm afraid that	me temo que
+on the other hand	por otro lado
+on the other hand	por otra parte
+that makes sense	tiene sentido
+that doesn't make sense	no tiene sentido
+okay	vale	Spain
+okay	está bien
+agreed	de acuerdo
+sure	claro que sí
+of course	cómo no	Latin America
+of course not	claro que no
+i don't agree	no estoy de acuerdo
+agree with someone	estar de acuerdo con alguien
+be right	tener razón
+be wrong	estar equivocado
+admit someone is right	darle la razón a alguien
+i hope so	eso espero
+that's it	eso es
+without a doubt	sin duda
+no way	ni loco		casual
+not in your dreams	ni en sueños
+come on, no way	qué va	Spain	casual
+i don't care	me da igual
+i don't care	me da lo mismo
+i don't mind	no me importa
+maybe	a lo mejor
+maybe	tal vez
+what do you think?	qué te parece
+what's your opinion?	qué opinas
+change your mind	cambiar de opinión
+be sure	estar seguro
+you don't say!	no me digas
+seriously?	en serio
+really?	de verdad
+just kidding	es broma
+that's not true	no es verdad
+on the contrary	al contrario
+on the one hand	por un lado
+that's a good idea	es buena idea
+deal!	trato hecho
+great!	qué bien
+cool!	qué padre	Mexico	casual
+cool!	qué chévere	Colombia,Venezuela,Peru,Caribbean	casual
+cool!	qué guay	Spain	casual
+cool!	qué bacán	Chile,Peru	casual
+cool!	qué copado	Río de la Plata	casual
+
+## Time
+right now	ahora mismo
+right now	ahorita	Mexico,Central America
+at the moment	en este momento
+at the moment	ahora mismo
+these days	estos días
+these days	últimamente
+these days	hoy en día
+this morning	esta mañana
+this afternoon	esta tarde
+this evening	esta noche
+this evening	esta tarde		early evening
+last night	anoche
+yesterday morning	ayer por la mañana	Spain
+yesterday morning	ayer en la mañana	Latin America
+yesterday morning	ayer a la mañana	Río de la Plata
+tomorrow morning	mañana por la mañana	Spain
+tomorrow morning	mañana en la mañana	Latin America
+tomorrow morning	mañana a la mañana	Río de la Plata
+the day before yesterday	anteayer
+the day before yesterday	antier	Mexico,Colombia,Central America
+the day after tomorrow	pasado mañana
+this week	esta semana
+last week	la semana pasada
+next week	la semana que viene
+next week	la próxima semana
+this month	este mes
+last month	el mes pasado
+next month	el mes que viene
+next month	el próximo mes
+this year	este año
+last year	el año pasado
+next year	el año que viene
+next year	el próximo año
+on the weekend	el fin de semana
+on the weekend	los fines de semana		habitually
+on Monday	el lunes
+on Tuesday	el martes
+on Wednesday	el miércoles
+on Thursday	el jueves
+on Friday	el viernes
+on Saturday	el sábado
+on Sunday	el domingo
+on Tuesdays	los martes
+on Wednesdays	los miércoles
+on Thursdays	los jueves
+on Fridays	los viernes
+on Saturdays	los sábados
+on Sundays	los domingos
+every day	todos los días
+every day	cada día
+every morning	todas las mañanas
+every morning	cada mañana
+every night	todas las noches
+every night	cada noche
+every week	todas las semanas
+every week	cada semana
+once a week	una vez a la semana
+once a week	una vez por semana
+twice a day	dos veces al día
+all day	todo el día
+all night	toda la noche
+all the time	todo el tiempo
+all the time	siempre
+most of the time	la mayor parte del tiempo
+most of the time	casi siempre
+from time to time	de vez en cuando
+once in a while	de vez en cuando
+once in a while	cada tanto	Río de la Plata
+at first	al principio
+in the end	al final
+at last	por fin
+at last	al fin
+for a while	un rato
+for a while	por un tiempo
+for a long time	durante mucho tiempo
+for a long time	desde hace mucho tiempo
+a long time ago	hace mucho tiempo
+a few days ago	hace unos días
+a little while ago	hace un rato
+just now	hace un momento
+just now	justo ahora
+just now	recién	Latin America
+not yet	todavía no
+not yet	aún no
+so far	hasta ahora
+so far	hasta el momento
+until now	hasta ahora
+from now on	de ahora en adelante
+from now on	a partir de ahora
+later on	más adelante
+later on	más tarde
+in a minute	en un minuto
+in a minute	ahorita	Mexico,Central America
+in a moment	en un momento
+in a moment	enseguida
+in a few minutes	en unos minutos
+in a few minutes	dentro de unos minutos
+in the morning	por la mañana
+in the morning	en la mañana	Latin America
+in the morning	a la mañana	Río de la Plata
+in the afternoon	por la tarde
+in the afternoon	en la tarde	Latin America
+in the afternoon	a la tarde	Río de la Plata
+in the evening	por la noche
+in the evening	en la noche	Latin America
+in the evening	a la noche	Río de la Plata
+at night	de noche
+at night	por la noche
+at noon	al mediodía
+at midnight	a medianoche
+on time	a tiempo
+on time	a la hora
+in time	a tiempo
+too late	demasiado tarde
+too early	demasiado temprano
+as soon as	en cuanto
+as soon as	tan pronto como
+as soon as	apenas	Latin America
+as soon as possible	lo antes posible
+as soon as possible	cuanto antes
+the next day	al día siguiente
+the other day	el otro día
+one day	un día
+some day	algún día
+the first time	la primera vez
+the last time	la última vez
+next time	la próxima vez
+this time	esta vez
+every time	cada vez
+every time	siempre que
+at the same time	al mismo tiempo
+at the same time	a la vez
+in the past	en el pasado
+in the past	antes
+in the future	en el futuro
+half an hour	media hora
+an hour ago	hace una hora
+what time is it	qué hora es
+what time is it	qué horas son	Mexico,Central America,Colombia
+it's time to	es hora de
+it's time to	ya es hora de
+take your time	tómate tu tiempo
+take your time	sin prisa
+in a hurry	con prisa
+in a hurry	apurado	Latin America
+running late	voy tarde
+running late	se me hace tarde
+on my way	voy en camino
+on my way	estoy de camino
+on my way	ya voy
+it's one o'clock	es la una
+it's three o'clock	son las tres
+at what time?	a qué hora
+what's the date today?	qué fecha es hoy
+what day is it today?	qué día es hoy
+just in time	justo a tiempo
+be late	llegar tarde
+be early	llegar temprano
+be in a hurry	tener prisa
+be in a hurry	estar apurado	Latin America
+later	más tarde
+in a while	dentro de un rato
+wait a second	espera un segundo
+soon	dentro de poco
+two days ago	hace dos días
+it's been ages	hace siglos		casual
+sometimes	a veces
+often	a menudo
+almost never	casi nunca
+again	otra vez
+meanwhile	mientras tanto
+done, that's it	ya está
+tonight	esta noche
+on weekends	los fines de semana
+on mondays	los lunes
+in the small hours	de madrugada
+how long?	cuánto tiempo
+how long does it take?	cuánto tarda
+take a long time	tardar mucho
+spend time	pasar tiempo
+waste time	perder el tiempo
+have time	tener tiempo
+be about to	estar a punto de
+have just done something	acabar de hacer algo
+what's the weather like?	qué tiempo hace
+it's hot	hace calor
+it's cold	hace frío
+it's freezing	hace un frío que pela		casual
+it's sunny	hace sol
+it's windy	hace viento
+the weather's nice	hace buen tiempo
+the weather's bad	hace mal tiempo
+it's raining	está lloviendo
+it's pouring	llueve a cántaros
+it's cloudy	está nublado
+it's snowing	está nevando
+
+## Daily routine
+wake up	despertarse
+get up	levantarse
+get up early	levantarse temprano
+get up early	madrugar
+sleep in	dormir hasta tarde
+brush my teeth	lavarme los dientes
+brush my teeth	cepillarme los dientes
+wash my face	lavarme la cara
+take a shower	ducharse
+take a shower	darse una ducha
+take a shower	bañarse	Latin America
+take a bath	darse un baño
+take a bath	bañarse en la bañera	Spain
+take a bath	bañarse en la tina	Latin America
+get dressed	vestirse
+get ready	arreglarse
+get ready	prepararse
+get ready	alistarse	Latin America
+have breakfast	desayunar
+have lunch	almorzar
+have lunch	comer	Spain,Mexico	the main midday meal
+have dinner	cenar
+make breakfast	hacer el desayuno
+make breakfast	preparar el desayuno
+cook dinner	hacer la cena
+cook dinner	preparar la cena
+make coffee	hacer café
+make coffee	preparar café
+drink coffee	tomar café
+go to work	ir al trabajo
+go to work	ir a trabajar
+go to school	ir a la escuela
+go to school	ir al colegio
+go to school	ir al cole	Spain	casual
+come home	volver a casa
+come home	regresar a casa
+come home	venir a casa
+get home	llegar a casa
+stay home	quedarse en casa
+at home	en casa
+leave home	salir de casa
+leave home	irse de casa		to move out for good
+leave work	salir del trabajo
+get off work	salir del trabajo
+get off work	salir de trabajar
+do the dishes	lavar los platos
+do the dishes	fregar los platos	Spain
+do the dishes	lavar los trastes	Mexico,Central America
+wash the dishes	lavar los platos
+wash the dishes	fregar los platos	Spain
+do the laundry	lavar la ropa
+do the laundry	poner la lavadora	Spain
+clean the house	limpiar la casa
+clean my room	limpiar mi cuarto
+clean my room	ordenar mi cuarto
+make the bed	hacer la cama
+make the bed	tender la cama	Latin America
+take out the trash	sacar la basura
+go shopping	ir de compras
+go grocery shopping	hacer la compra	Spain
+go grocery shopping	hacer las compras	Latin America
+go grocery shopping	hacer el súper	Mexico
+go to the market	ir al mercado
+walk the dog	pasear al perro
+walk the dog	sacar al perro
+feed the cat	darle de comer al gato
+pick up the kids	recoger a los niños
+pick up the kids	ir a buscar a los chicos	Río de la Plata
+drop off the kids	dejar a los niños
+drop off the kids	llevar a los niños
+take a nap	echarse una siesta
+take a nap	dormir la siesta
+take a nap	tomar una siesta	Latin America
+take a break	tomarse un descanso
+take a break	descansar un rato
+take a break	hacer una pausa
+have a rest	descansar
+have a rest	descansar un rato
+relax at home	relajarse en casa
+relax at home	descansar en casa
+watch TV	ver la tele
+watch TV	ver la televisión
+watch a movie	ver una película
+watch a movie	ver una peli	Spain	casual
+read a book	leer un libro
+listen to music	escuchar música
+check my phone	mirar el móvil	Spain
+check my phone	revisar el celular	Latin America
+go to bed	acostarse
+go to bed	irse a la cama
+go to bed	ir a dormir
+go to sleep	irse a dormir
+go to sleep	dormirse
+fall asleep	dormirse
+fall asleep	quedarse dormido
+stay up late	quedarse despierto hasta tarde
+stay up late	trasnochar
+stay up late	desvelarse	Mexico,Central America
+can't sleep	no puedo dormir
+get some sleep	dormir un poco
+a good night's sleep	una buena noche de sueño
+a good night's sleep	dormir bien
+wake up early	despertarse temprano
+get up late	levantarse tarde
+get up on the wrong side of the bed	levantarse con el pie izquierdo
+i overslept	se me pegaron las sábanas	Spain	casual
+set the alarm	poner el despertador
+brush your teeth	lavarse los dientes
+wash your face	lavarse la cara
+wash your hands	lavarse las manos
+comb your hair	peinarse
+put on your clothes	ponerse la ropa
+have breakfast	tomar el desayuno
+leave the house	salir de casa
+exercise	hacer ejercicio
+go for a run	salir a correr
+go for a walk	dar un paseo
+go for a walk	dar una vuelta
+go to the gym	ir al gimnasio
+get some fresh air	tomar el aire
+check your phone	mirar el móvil	Spain
+check your phone	revisar el celular	Latin America
+watch a series	ver una serie
+take it easy	tomárselo con calma
+meet up with friends	quedar con amigos	Spain
+go out with friends	salir con amigos
+make plans	hacer planes
+be busy	estar ocupado
+be bored	estar aburrido
+be fed up	estar harto
+have free time	tener tiempo libre
+feel like doing something	tener ganas de hacer algo
+as usual	como siempre
+the usual	lo de siempre
+day-to-day life	el día a día
+spend the day	pasar el día
+be sleepy	tener sueño
+be tired	estar cansado
+go to bed early	acostarse temprano
+go to bed late	acostarse tarde
+sleep well	dormir bien
+not sleep a wink	no pegar ojo
+pull an all-nighter	pasar la noche en blanco
+realize	darse cuenta de
+remember	acordarse de
+forget	olvidarse de
+think about	pensar en
+dream about	soñar con
+miss someone	echar de menos	Spain
+miss someone	extrañar a alguien	Latin America
+
+## Home
+living room	la sala de estar
+living room	el salón	Spain
+living room	la sala	Latin America
+kitchen table	la mesa de la cocina
+front door	la puerta principal
+front door	la puerta de entrada
+back yard	el patio trasero
+back yard	el patio de atrás
+air conditioner	el aire acondicionado
+washing machine	la lavadora
+washing machine	el lavarropas	Río de la Plata
+turn on the light	encender la luz
+turn on the light	prender la luz	Latin America
+turn off the light	apagar la luz
+turn on	encender
+turn on	prender	Latin America
+turn off	apagar
+open the window	abrir la ventana
+close the door	cerrar la puerta
+lock the door	cerrar la puerta con llave
+lock the door	echar la llave	Spain
+move house	mudarse
+move house	mudarse de casa
+move in	mudarse
+move in	instalarse
+move out	mudarse
+move out	irse de casa
+pay the rent	pagar el alquiler
+pay the rent	pagar la renta	Mexico
+pay the rent	pagar el arriendo	Colombia,Chile
+my place	mi casa
+my place	mi piso	Spain
+at my house	en mi casa
+come over	venir a casa
+come over	pasarse por casa
+stop by	pasar por
+stop by	darse una vuelta por
+drop by	pasarse
+drop by	pasar a ver
+go home	ir a casa
+make yourself at home	estás en tu casa
+feel at home	sentirse como en casa
+home sweet home	hogar, dulce hogar
+do the housework	hacer las tareas de la casa
+tidy up your room	ordenar el cuarto
+tidy up your room	recoger la habitación	Spain
+do a load of laundry	poner la lavadora	Spain
+hang out the laundry	tender la ropa
+iron clothes	planchar la ropa
+sweep the floor	barrer el suelo	Spain
+sweep the floor	barrer el piso	Latin America
+mop the floor	fregar el suelo	Spain
+mop the floor	trapear el piso	Latin America
+vacuum	pasar la aspiradora
+set the table	poner la mesa
+clear the table	quitar la mesa	Spain
+clear the table	levantar la mesa	Latin America
+turn on the heat	poner la calefacción
+turn on the air conditioning	poner el aire acondicionado
+water the plants	regar las plantas
+lock the door	cerrar con llave
+lose your keys	perder las llaves
+ring the doorbell	tocar el timbre
+someone's at the door	llaman a la puerta	Spain
+someone's at the door	tocan la puerta	Latin America
+take off your shoes	quitarse los zapatos
+be cold	tener frío
+be hot	tener calor
+it's cold in here	hace frío aquí
+the power went out	se fue la luz
+there's no hot water	no hay agua caliente
+it doesn't work	no funciona
+it's broken	está roto
+call the plumber	llamar al fontanero	Spain
+call the plumber	llamar al plomero	Latin America
+live alone	vivir solo
+rent an apartment	alquilar un piso	Spain
+rent an apartment	rentar un departamento	Mexico
+rent an apartment	alquilar un departamento	Argentina,Peru
+rent an apartment	arrendar un departamento	Chile
+rent an apartment	arrendar un apartamento	Colombia
+share an apartment	compartir piso	Spain
+the living room	la sala de estar
+the bathroom	el cuarto de baño
+
+## Food and drink
+I'm hungry	tengo hambre
+I'm thirsty	tengo sed
+I'm full	estoy lleno		said by a man
+I'm full	estoy llena		said by a woman
+I'm full	ya no puedo más
+let's eat	vamos a comer
+let's eat	a comer
+something to eat	algo de comer
+something to eat	algo para comer
+something to drink	algo de beber
+something to drink	algo para tomar
+a cup of coffee	una taza de café
+a cup of coffee	un café
+a cup of tea	una taza de té
+a cup of tea	un té
+a glass of water	un vaso de agua
+a bottle of water	una botella de agua
+iced coffee	café con hielo
+iced coffee	café helado
+milk tea	té con leche
+orange juice	zumo de naranja	Spain
+orange juice	jugo de naranja	Latin America
+fried rice	arroz frito
+fried rice	arroz chaufa	Peru
+fried chicken	pollo frito
+noodle soup	sopa de fideos
+spring rolls	rollitos de primavera
+spring rolls	rollos primavera	Mexico
+fish sauce	salsa de pescado
+soy sauce	salsa de soja	Spain
+soy sauce	salsa de soya	Latin America
+soy sauce	sillao	Peru
+street food	comida callejera
+street food	comida de la calle
+fast food	comida rápida
+home cooking	comida casera
+eat out	comer fuera	Spain
+eat out	comer afuera	Latin America
+eat out	salir a comer
+order food	pedir comida
+order takeout	pedir comida para llevar
+order takeout	pedir comida a domicilio		delivery
+to go	para llevar
+for here	para comer aquí
+for here	para tomar aquí		drinks
+the menu please	la carta, por favor
+the menu please	el menú, por favor
+the bill please	la cuenta, por favor
+check please	la cuenta, por favor
+it's delicious	está delicioso
+it's delicious	está buenísimo
+it's delicious	está riquísimo
+tastes good	sabe bien
+tastes good	está rico
+tastes good	está bueno
+too spicy	demasiado picante
+too spicy	pica mucho
+too salty	demasiado salado
+too salty	está muy salado
+too sweet	demasiado dulce
+a little bit	un poco
+a little bit	un poquito
+no sugar	sin azúcar
+less ice	con menos hielo
+less ice	con poco hielo
+without ice	sin hielo
+vegetarian food	comida vegetariana
+a piece of cake	un trozo de tarta	Spain
+a piece of cake	un pedazo de pastel	Latin America
+a piece of cake	pan comido		idiom: very easy
+have a snack	picar algo
+have a snack	merendar		afternoon snack
+grab a bite	comer algo
+grab a bite	picar algo
+go out to eat	salir a comer
+go out to eat	salir a cenar		for dinner
+dinner party	una cena en casa
+dinner party	una cena con amigos
+make a reservation	hacer una reserva
+make a reservation	hacer una reservación	Mexico,Central America
+can you pass me the salt?	me pasas la sal
+yum, delicious!	qué rico
+it's really good	está buenísimo
+it tastes good	sabe bien
+it tastes like chicken	sabe a pollo
+my mouth is watering	se me hace la boca agua	Spain
+my mouth is watering	se me hace agua la boca	Latin America
+be hungry	tener hambre
+i'm starving	me muero de hambre
+be thirsty	tener sed
+enjoy your meal	buen provecho
+enjoy your meal	que aproveche	Spain
+what's for dinner?	qué hay de cenar
+what's for dessert?	qué hay de postre
+book a table	reservar una mesa
+a table for two, please	una mesa para dos, por favor
+the menu, please	la carta, por favor
+what do you recommend?	qué me recomiendas
+what are you having?	qué vas a pedir
+the set lunch menu	el menú del día	Spain
+the check, please	la cuenta, por favor
+leave a tip	dejar propina
+is the tip included?	está incluida la propina
+have a coffee	tomar un café
+grab a drink	tomar algo
+go out for drinks	ir de copas	Spain
+go out for tapas	ir de tapas	Spain
+grab a beer	tomar una caña	Spain	casual
+grab a beer	tomar una chela	Mexico,Peru	slang
+make a toast	hacer un brindis
+a glass of wine	una copa de vino
+coffee with milk	café con leche
+black coffee	café solo	Spain
+black coffee	café negro	Latin America
+black coffee	un tinto	Colombia
+tap water	agua del grifo	Spain
+tap water	agua de la llave	Mexico,Colombia
+tap water	agua de la canilla	Río de la Plata
+sparkling water	agua con gas
+still water	agua sin gas
+it's spicy	está picante
+it's too salty	está muy salado
+i'm vegetarian	soy vegetariano
+be allergic to nuts	ser alérgico a los frutos secos
+be on a diet	estar a dieta
+eat healthy	comer sano
+junk food	comida basura	Spain
+junk food	comida chatarra	Latin America
+homemade food	comida casera
+heat up the food	calentar la comida
+make a sandwich	hacer un bocadillo	Spain
+make a sandwich	hacer un sándwich
+follow a recipe	seguir una receta
+
+## School and study
+go to class	ir a clase
+in class	en clase
+after school	después de clase
+after school	a la salida del colegio
+do homework	hacer los deberes	Spain
+do homework	hacer la tarea	Latin America
+finish my homework	terminar los deberes	Spain
+finish my homework	terminar la tarea	Latin America
+study for a test	estudiar para un examen
+take an exam	hacer un examen	Spain
+take an exam	presentar un examen	Mexico,Colombia
+take an exam	dar un examen	Río de la Plata,Chile,Peru
+take a test	hacer una prueba
+take a test	hacer un examen	Spain
+pass the exam	aprobar el examen
+pass the exam	pasar el examen		casual
+fail the exam	suspender el examen	Spain
+fail the exam	reprobar el examen	Mexico,Central America
+fail the exam	no pasar el examen
+get good grades	sacar buenas notas
+get good grades	sacar buenas calificaciones	Mexico
+high school	el instituto	Spain
+high school	la preparatoria	Mexico
+high school	el liceo	Chile,Uruguay,Venezuela
+middle school	la secundaria	Mexico,Central America
+middle school	la ESO	Spain	compulsory secondary, ages 12–16
+elementary school	la escuela primaria
+elementary school	la primaria
+college student	estudiante universitario
+college student	universitario		casual
+graduate from	graduarse en	Spain
+graduate from	graduarse de	Latin America
+study abroad	estudiar en el extranjero
+learn English	aprender inglés
+learn Vietnamese	aprender vietnamita
+practice speaking	practicar la conversación
+practice speaking	practicar la expresión oral		in class
+practice writing	practicar la escritura
+practice writing	practicar la expresión escrita		in class
+new words	palabras nuevas
+new words	vocabulario nuevo
+look up a word	buscar una palabra
+look up a word	buscar una palabra en el diccionario
+write an essay	escribir un ensayo
+write an essay	escribir una redacción		school essay
+keep a diary	llevar un diario
+keep a diary	escribir un diario
+take notes	tomar apuntes
+take notes	tomar notas
+pay attention	prestar atención
+pay attention	poner atención	Latin America
+raise your hand	levanta la mano
+raise your hand	levantar la mano
+ask a question	hacer una pregunta
+answer the question	responder la pregunta
+answer the question	contestar la pregunta
+make a mistake	equivocarse
+make a mistake	cometer un error
+make progress	progresar
+make progress	avanzar
+make progress	hacer progresos
+work hard	trabajar duro
+work hard	esforzarse
+do my best	hacer lo mejor que pueda
+do my best	dar lo mejor de mí
+do my best	hacer todo lo posible
+try my best	esforzarme al máximo
+try my best	hacer todo lo que pueda
+give up	rendirse
+give up	darse por vencido
+give up	tirar la toalla
+figure out	averiguar
+figure out	entender
+figure out	resolver
+find out	enterarse
+find out	averiguar
+find out	descubrir
+learn about	aprender sobre
+learn about	informarse sobre
+read about	leer sobre
+the library	la biblioteca
+a lot to learn	mucho que aprender
+a lot to learn	mucho por aprender
+go to college	ir a la universidad
+skip class	faltar a clase
+skip class	saltarse una clase
+skip class	hacer novillos	Spain	casual
+skip class	irse de pinta	Mexico	slang
+skip class	hacerse la rata	Argentina	slang
+skip class	capar clase	Colombia	slang
+skip class	hacer la cimarra	Chile	slang
+study for an exam	estudiar para un examen
+take an exam	rendir un examen	Río de la Plata,Chile
+pass an exam	aprobar un examen
+pass an exam	pasar un examen	Latin America
+fail an exam	suspender un examen	Spain
+fail an exam	reprobar un examen	Latin America
+fail an exam	perder un examen	Colombia
+fail an exam	jalar un examen	Peru	slang
+get a good grade	sacar una buena nota
+get a good grade	sacar una buena calificación	Mexico
+get a bad grade	sacar una mala nota
+i have a question	tengo una pregunta
+learn by heart	aprender de memoria
+read out loud	leer en voz alta
+look up a word in the dictionary	buscar una palabra en el diccionario
+hand in an assignment	entregar un trabajo
+give a presentation	hacer una presentación
+burn the midnight oil	quemarse las pestañas
+study hard	estudiar mucho
+be good at math	ser bueno en matemáticas
+be bad at languages	ser malo para los idiomas
+learn spanish	aprender español
+practice spanish	practicar español
+improve my spanish	mejorar mi español
+speak spanish fluently	hablar español con fluidez
+how do you say that in spanish?	cómo se dice eso en español
+what does that mean?	qué significa eso
+how do you spell it?	cómo se escribe
+can you help me?	me puedes ayudar
+what are you studying?	qué estudias
+sign up for a course	apuntarse a un curso	Spain
+sign up for a course	inscribirse en un curso
+apply for a scholarship	solicitar una beca
+finish your degree	terminar la carrera
+drop out of school	dejar los estudios
+
+## Work
+at work	en el trabajo
+at work	en la oficina
+go to the office	ir a la oficina
+work from home	trabajar desde casa
+work from home	teletrabajar
+full-time job	un trabajo a tiempo completo
+full-time job	un trabajo de tiempo completo	Latin America
+full-time job	un trabajo a jornada completa	Spain
+part-time job	un trabajo a tiempo parcial
+part-time job	un trabajo de medio tiempo	Latin America
+part-time job	un trabajo de media jornada	Spain
+look for a job	buscar trabajo
+look for a job	buscar empleo
+apply for a job	solicitar un trabajo
+apply for a job	postularse a un trabajo	Latin America
+job interview	una entrevista de trabajo
+get a job	conseguir trabajo
+get a job	encontrar trabajo
+get hired	ser contratado
+get hired	conseguir el puesto
+get fired	ser despedido
+get fired	que te echen del trabajo		casual
+quit my job	dejar mi trabajo
+quit my job	renunciar a mi trabajo
+lose my job	perder mi trabajo
+lose my job	quedarme sin trabajo
+get promoted	ser ascendido
+get promoted	conseguir un ascenso
+get a raise	conseguir un aumento de sueldo
+get a raise	que te suban el sueldo
+work overtime	hacer horas extra
+work overtime	trabajar horas extra
+day off	un día libre
+day off	un día de descanso
+take a day off	tomarse el día libre
+take a day off	pedir el día libre
+take a day off	cogerse un día libre	Spain
+sick leave	la baja por enfermedad	Spain
+sick leave	la incapacidad	Mexico,Colombia
+sick leave	la licencia médica	Chile,Río de la Plata
+on vacation	de vacaciones
+have a meeting	tener una reunión
+in a meeting	en una reunión
+in a meeting	estar reunido
+send an email	enviar un correo electrónico
+send an email	mandar un correo
+send an email	mandar un mail	Río de la Plata	casual
+reply to	responder a
+reply to	contestar a
+call back	devolver la llamada
+call back	volver a llamar
+meet the deadline	cumplir el plazo
+meet the deadline	cumplir con la fecha de entrega
+behind schedule	con retraso
+behind schedule	atrasado
+on schedule	según lo previsto
+on schedule	dentro del plazo
+busy with work	con mucho trabajo
+busy with work	ocupado con el trabajo
+busy with work	liado con el trabajo	Spain	casual
+a lot of work	mucho trabajo
+a lot of work	un montón de trabajo		casual
+get things done	sacar las cosas adelante
+get things done	terminar lo pendiente
+work on	trabajar en
+team meeting	una reunión de equipo
+my boss	mi jefe
+my boss	mi jefa		female boss
+my coworker	mi compañero de trabajo
+my coworker	mi compañera de trabajo		female coworker
+my coworker	mi colega
+make money	ganar dinero
+make money	ganar plata	South America	casual
+earn a living	ganarse la vida
+run a business	tener un negocio
+run a business	llevar un negocio
+run a business	dirigir una empresa
+start a business	montar un negocio
+start a business	abrir un negocio
+start a business	emprender
+customer service	atención al cliente
+customer service	servicio al cliente	Latin America
+in charge of	a cargo de
+in charge of	encargado de
+be responsible for	ser responsable de
+be responsible for	encargarse de
+work experience	experiencia laboral
+career goals	objetivos profesionales
+career goals	metas profesionales
+under pressure	bajo presión
+burned out	estar quemado		casual
+burned out	estar agotado
+what do you do for a living?	a qué te dedicas
+where do you work?	dónde trabajas
+work full time	trabajar a tiempo completo
+work part time	trabajar a tiempo parcial
+work part time	trabajar medio tiempo	Latin America
+look for a job	buscar chamba	Mexico,Peru	slang
+look for a job	buscar pega	Chile	slang
+go to work	ir a currar	Spain	slang
+go to work	ir a laburar	Río de la Plata	slang
+find a job	encontrar trabajo
+have a job interview	tener una entrevista de trabajo
+send your résumé	mandar el currículum
+send your résumé	mandar la hoja de vida	Colombia
+sign a contract	firmar un contrato
+be unemployed	estar en paro	Spain
+be unemployed	estar sin trabajo
+lose your job	perder el trabajo
+quit your job	dejar el trabajo
+earn money	ganar dinero
+work overtime	hacer horas extras
+work shifts	trabajar por turnos
+be self-employed	trabajar por cuenta propia
+start a business	poner un negocio
+be in a meeting	estar en una reunión
+be late for work	llegar tarde al trabajo
+take the day off	tomarse el día libre
+ask for a day off	pedir el día libre
+be on sick leave	estar de baja	Spain
+go on vacation	irse de vacaciones
+be on a business trip	estar de viaje de negocios
+be in charge of	estar a cargo de
+take care of something	encargarse de algo
+have a lot of work	tener mucho trabajo
+be swamped with work	estar hasta arriba de trabajo	Spain	casual
+get down to work	ponerse a trabajar
+get your act together	ponerse las pilas		casual
+give it your all	echarle ganas	Mexico	casual
+reply to an email	contestar un correo
+make a phone call	hacer una llamada
+working hours	el horario de trabajo
+lunch break	la hora de comer
+good job	buen trabajo
+be retired	estar jubilado
+
+## Getting around
+go to	ir a
+on the way back	de regreso
+on the way back	de vuelta
+on the way home	de camino a casa
+go home	irse a casa
+go home	volver a casa
+go out	salir
+go back	volver
+go back	regresar	Mexico
+come back	volver
+come back	regresar	Mexico
+get in	subirse al coche	Spain
+get in	subirse al carro	Latin America
+get in	entrar		into a place
+get out	bajarse		from a vehicle
+get out	salir		from a place
+get on	subirse
+get on	subir al tren
+get off	bajarse
+get off	bajarse del tren
+take the bus	coger el autobús	Spain
+take the bus	tomar el autobús	Latin America
+take the bus	tomar el colectivo	Río de la Plata
+take a taxi	coger un taxi	Spain
+take a taxi	tomar un taxi	Latin America
+take the train	coger el tren	Spain
+take the train	tomar el tren	Latin America
+by bus	en autobús
+by bus	en camión	Mexico
+by bus	en colectivo	Río de la Plata
+by car	en coche	Spain
+by car	en carro	Latin America
+by car	en auto	Río de la Plata,Chile
+by bike	en bicicleta
+by bike	en bici		casual
+on foot	a pie
+on foot	andando	Spain
+on foot	caminando	Latin America
+ride a motorbike	ir en moto
+ride a motorbike	andar en moto	Latin America
+drive to	ir en coche a	Spain
+drive to	manejar hasta	Latin America
+pick me up	recógeme
+pick me up	pasa por mí
+pick me up	pasá a buscarme	Río de la Plata	casual
+drop me off	déjame
+drop me off	déjame aquí
+traffic jam	un atasco	Spain
+traffic jam	un embotellamiento
+traffic jam	un trancón	Colombia
+stuck in traffic	atrapado en el tráfico
+stuck in traffic	metido en un atasco	Spain
+rush hour	la hora punta	Spain
+rush hour	la hora pico	Latin America
+bus stop	la parada de autobús
+bus stop	la parada del camión	Mexico
+bus stop	la parada del colectivo	Río de la Plata
+train station	la estación de tren
+gas station	la gasolinera
+gas station	la estación de servicio
+gas station	la bomba	Colombia,Venezuela
+parking lot	el aparcamiento	Spain
+parking lot	el estacionamiento	Latin America
+parking lot	el parqueadero	Colombia
+turn left	gira a la izquierda
+turn left	dobla a la izquierda	Latin America
+turn left	gire a la izquierda		formal
+turn right	gira a la derecha
+turn right	dobla a la derecha	Latin America
+turn right	gire a la derecha		formal
+go straight	sigue recto
+go straight	sigue derecho	Latin America
+next to	al lado de
+next to	junto a
+across from	enfrente de
+across from	frente a
+in front of	delante de
+in front of	frente a
+on the left	a la izquierda
+on the right	a la derecha
+around the corner	a la vuelta de la esquina
+far away	lejos
+far away	muy lejos
+close to	cerca de
+near here	cerca de aquí
+near here	por aquí cerca
+near here	cerca de acá	Latin America
+how far	a qué distancia
+how far	qué tan lejos	Latin America
+how far	cómo de lejos	Spain
+get lost	perderse
+get lost	lárgate		rude: go away
+get there	llegar
+get there	llegar allí
+get there	llegar allá	Latin America
+on the way	de camino
+on the way	en el camino
+the way to	el camino a
+the way to	cómo llegar a
+take the bus	tomar el camión	Mexico
+take the bus	tomar la micro	Chile
+take the bus	tomar la guagua	Caribbean
+take the subway	tomar el metro
+take the subway	coger el metro	Spain
+take the subway	tomar el subte	Argentina
+catch the train	tomar el tren	Latin America
+get on the bus	subirse al autobús
+get off the bus	bajarse del autobús	Spain
+miss the bus	perder el autobús
+next stop	la próxima parada
+where's the bus stop?	dónde está la parada de autobús
+drive a car	conducir un coche	Spain
+drive a car	manejar un carro	Mexico,Colombia,Venezuela,Central America
+drive a car	manejar un auto	Río de la Plata,Chile
+give someone a ride	llevar a alguien
+give someone a ride	dar un aventón	Mexico
+give someone a ride	dar una cola	Venezuela
+park the car	aparcar el coche	Spain
+park the car	estacionar el carro	Mexico,Colombia,Venezuela
+park the car	estacionar el auto	Río de la Plata,Chile
+get gas	echar gasolina
+get gas	cargar nafta	Río de la Plata
+get gas	echar bencina	Chile
+get a flat tire	pinchar una rueda	Spain
+get a flat tire	ponchar una llanta	Mexico
+fasten your seatbelt	abrocharse el cinturón
+be stuck in traffic	estar en un atasco	Spain
+be stuck in traffic	estar en el tráfico	Mexico
+be stuck in traffic	estar en un trancón	Colombia
+be stuck in traffic	estar en un taco	Chile
+how do i get to the station?	cómo llego a la estación
+is it far?	está lejos
+is it close?	está cerca
+how long does it take to get there?	cuánto se tarda en llegar
+turn left	girar a la izquierda
+turn left	doblar a la izquierda	Latin America
+turn right	girar a la derecha
+turn right	doblar a la derecha	Latin America
+go straight ahead	seguir recto	Spain
+go straight ahead	seguir derecho	Latin America
+cross the street	cruzar la calle
+walk there	ir andando	Spain
+walk there	ir caminando	Latin America
+ride a bike	montar en bici	Spain
+ride a bike	andar en bici	Latin America
+be lost	estar perdido
+go on a trip	ir de viaje
+travel by plane	viajar en avión
+catch a flight	tomar un vuelo
+miss your flight	perder el vuelo
+the flight is delayed	el vuelo está retrasado
+pack your suitcase	hacer la maleta	Spain
+pack your suitcase	hacer la valija	Río de la Plata
+check your luggage	facturar el equipaje	Spain
+check your luggage	documentar el equipaje	Mexico
+buy a ticket	comprar un billete	Spain
+buy a ticket	comprar un boleto	Latin America
+buy a ticket	comprar un pasaje	South America
+round-trip ticket	billete de ida y vuelta	Spain
+round-trip ticket	boleto de ida y vuelta	Latin America
+get carsick	marearse en el coche
+
+## Places
+the city center	el centro
+the city center	el centro de la ciudad
+the countryside	el campo
+my hometown	mi pueblo
+my hometown	mi ciudad natal
+my hometown	mi tierra
+shopping mall	el centro comercial
+shopping mall	el mall	Chile,Peru,Central America
+shopping mall	el shopping	Río de la Plata
+the supermarket	el supermercado
+the supermarket	el súper		casual
+convenience store	la tienda de conveniencia
+convenience store	la tienda de la esquina
+convenience store	la tiendita	Mexico	casual
+coffee shop	una cafetería
+coffee shop	un café
+the hospital	el hospital
+the pharmacy	la farmacia
+the bank	el banco
+the post office	la oficina de correos
+the post office	correos	Spain
+the park	el parque
+the beach	la playa
+the gym	el gimnasio
+the gym	el gym		casual
+movie theater	el cine
+night market	el mercado nocturno
+the airport	el aeropuerto
+the hotel	el hotel
+a restaurant	un restaurante
+where's the bathroom?	dónde está el baño
+is there a pharmacy nearby?	hay una farmacia cerca
+where do you live?	dónde vives
+where are you?	dónde estás
+i'm on my way	voy de camino
+i'm on my way	voy para allá
+i live downtown	vivo en el centro
+go downtown	ir al centro
+in the city	en la ciudad
+in the suburbs	en las afueras
+in the countryside	en el campo
+in my neighborhood	en mi barrio
+in my neighborhood	en mi colonia	Mexico
+in my hometown	en mi pueblo
+at a friend's place	en casa de un amigo
+at my parents' place	en casa de mis padres
+on the corner	en la esquina
+across the street	al otro lado de la calle
+opposite	enfrente de
+behind	detrás de
+near	cerca de
+far from	lejos de
+at the end of the street	al final de la calle
+in the middle of	en medio de
+around here	por aquí cerca
+over here	por aquí
+over there	por allá
+everywhere	por todas partes
+somewhere else	en otro lado
+is it open?	está abierto
+what time does it close?	a qué hora cierra
+go to the beach	ir a la playa
+go to the mountains	ir a la montaña
+go to the movies	ir al cine
+go to the park	ir al parque
+go to a museum	ir al museo
+go to a concert	ir a un concierto
+go to the bank	ir al banco
+go to the supermarket	ir al supermercado
+go to mass	ir a misa
+go sightseeing	hacer turismo
+go out partying	salir de fiesta
+go out partying	ir de marcha	Spain	casual
+go clubbing	ir al antro	Mexico	casual
+go out partying	ir de rumba	Colombia	casual
+go clubbing	ir al boliche	Argentina	casual
+the main square	la plaza mayor	Spain
+the main square	la plaza principal
+the train station	la estación de tren
+the bus station	la estación de autobuses
+the shopping mall	el centro comercial
+
+## Shopping and money
+how much is it	cuánto es
+how much is it	cuánto cuesta
+how much is it	cuánto vale
+how much does it cost	cuánto cuesta
+how much does it cost	cuánto vale
+too expensive	demasiado caro
+too expensive	muy caro
+too expensive	carísimo
+very cheap	muy barato
+very cheap	baratísimo
+on sale	en oferta
+on sale	rebajado	Spain
+pay for	pagar
+pay in cash	pagar en efectivo
+pay in cash	pagar en metálico	Spain
+pay by card	pagar con tarjeta
+credit card	la tarjeta de crédito
+bank account	la cuenta bancaria
+bank account	la cuenta de banco
+save money	ahorrar dinero
+save money	ahorrar plata	South America	casual
+spend money	gastar dinero
+spend money	gastar plata	South America	casual
+waste money	malgastar dinero
+waste money	tirar el dinero
+waste money	desperdiciar dinero
+borrow money	pedir dinero prestado
+lend money	prestar dinero
+pay back	devolver el dinero
+pay back	devolver lo prestado
+can't afford	no me lo puedo permitir
+can't afford	no me alcanza	Latin America
+try on	probarse
+try on	probármelo
+the fitting room	el probador
+what size	qué talla
+what size	qué número		for shoes
+a pair of shoes	un par de zapatos
+buy online	comprar por internet
+buy online	comprar en línea
+order online	pedir por internet
+order online	pedir en línea
+shopping list	la lista de la compra	Spain
+shopping list	la lista de compras	Latin America
+shopping list	la lista del súper	Mexico
+the receipt	el recibo
+the receipt	el ticket	Spain
+the receipt	la boleta	Chile,Peru
+get a refund	que te devuelvan el dinero
+get a refund	conseguir un reembolso
+give change	dar el cambio
+give change	dar la vuelta	Spain
+give change	dar el vuelto	South America
+just looking	solo estoy mirando	Spain
+just looking	solo estoy viendo	Latin America
+do the grocery shopping	hacer la compra	Spain
+do the grocery shopping	hacer el súper	Mexico
+do the grocery shopping	hacer mercado	Colombia
+do the grocery shopping	hacer las compras	South America
+how much do i owe you?	cuánto te debo
+it's very expensive	está muy caro
+it's cheap	está barato
+what a rip-off!	qué robo
+it costs an arm and a leg	cuesta un ojo de la cara
+cost a fortune	costar una pasta	Spain	casual
+it's a bargain	es una ganga
+it's worth it	vale la pena
+it's not worth it	no vale la pena
+be on sale	estar en oferta
+the sales	las rebajas	Spain
+ask for a discount	pedir un descuento
+can i pay by card?	puedo pagar con tarjeta
+pay in installments	pagar a plazos
+pay in installments	pagar en cuotas	South America
+pay in installments	pagar a meses sin intereses	Mexico
+keep the change	quédate con el cambio
+i'm just looking	solo estoy mirando	Spain
+i'm just looking	solo estoy viendo	Latin America
+can i try it on?	me lo puedo probar
+try on clothes	probarse la ropa
+what size are you?	qué talla tienes
+it looks good on you	te queda bien
+it doesn't fit me	no me queda bien
+do you have it in another color?	lo tienes en otro color
+anything else?	algo más
+that's all	nada más
+return something	devolver algo
+ask for a refund	pedir un reembolso
+stand in line	hacer cola	Spain
+stand in line	hacer fila	Latin America
+pay at the register	pagar en la caja
+window shopping	ver escaparates	Spain
+window shopping	ver vitrinas	Latin America
+shop online	comprar por internet
+withdraw money	sacar dinero
+get cash from the atm	sacar dinero del cajero
+borrow money	pedir plata prestada	South America
+owe money	deber dinero
+pay the bills	pagar las cuentas
+make ends meet	llegar a fin de mes
+be broke	estar sin blanca	Spain	casual
+be broke	andar bruja	Mexico	slang
+be broke	estar sin un mango	Río de la Plata	slang
+be broke	estar pelado	Colombia	slang
+be broke	estar sin plata	South America	casual
+it's on me	yo invito
+split the bill	pagar a medias
+go dutch	cada uno paga lo suyo
+
+## Health and body
+I feel sick	me siento mal
+I feel sick	no me encuentro bien	Spain
+I feel sick	tengo náuseas		nauseous
+feel better	sentirse mejor
+feel better	me siento mejor
+get better	mejorarse
+get better	recuperarse
+get better	que te mejores		wishing someone well
+get sick	enfermarse
+get sick	ponerse enfermo	Spain
+get sick	caer enfermo
+catch a cold	resfriarse
+catch a cold	pillar un resfriado	Spain	casual
+catch a cold	agarrar un resfriado	Latin America	casual
+have a cold	estar resfriado
+have a cold	tener un resfriado
+have a fever	tener fiebre
+have a fever	tener calentura	Mexico	casual
+have a headache	tener dolor de cabeza
+have a headache	me duele la cabeza
+have a stomachache	tener dolor de estómago
+have a stomachache	me duele la barriga	Spain	casual
+have a stomachache	me duele la panza	Latin America	casual
+sore throat	dolor de garganta
+sore throat	me duele la garganta
+runny nose	goteo nasal
+runny nose	tener mocos		casual
+feel tired	sentirse cansado
+feel tired	estar cansado
+so tired	muy cansado
+so tired	agotado
+so tired	hecho polvo	Spain	casual
+feel dizzy	estar mareado
+feel dizzy	marearse
+see a doctor	ir al médico
+see a doctor	ver a un médico
+see a doctor	consultar a un médico
+go to the doctor	ir al médico
+go to the doctor	ir al doctor	Latin America
+take medicine	tomar medicamentos
+take medicine	tomarse la medicina
+get some rest	descansa un poco
+get some rest	descansar un poco
+stay in bed	quedarse en cama
+stay in bed	guardar cama		on doctor's orders
+in the hospital	en el hospital
+in the hospital	hospitalizado
+in the hospital	ingresado	Spain
+get hurt	hacerse daño
+get hurt	lastimarse	Latin America
+break my leg	romperme la pierna
+break my leg	quebrarme la pierna	Latin America
+lose weight	bajar de peso
+lose weight	adelgazar
+gain weight	subir de peso
+gain weight	engordar
+on a diet	a dieta
+on a diet	estar a dieta
+on a diet	hacer dieta
+work out	hacer ejercicio
+work out	entrenar
+work out	resolver		to solve a problem
+go to the gym	ir al gym		casual
+go for a run	ir a correr
+go for a walk	salir a caminar
+stay healthy	mantenerse sano
+stay healthy	cuidarse
+stay healthy	mantenerse saludable
+in good shape	en forma
+in good shape	en buena forma
+out of breath	sin aliento
+out of breath	sin aire
+mental health	la salud mental
+how do you feel?	cómo te sientes
+i feel bad	me siento mal
+i feel better	me siento mejor
+get well soon	que te mejores
+be sick	estar enfermo
+catch a cold	pescar un resfriado		casual
+have the flu	tener gripe
+have the flu	tener gripa	Mexico,Colombia
+have a cough	tener tos
+have a runny nose	tener mocos		casual
+my head hurts	me duele la cabeza
+my stomach hurts	me duele el estómago
+my tummy hurts	me duele la panza	Latin America	casual
+my back hurts	me duele la espalda
+have a sore throat	tener dolor de garganta
+it hurts a lot	me duele mucho
+feel nauseous	tener náuseas
+blow your nose	sonarse la nariz
+it's nothing serious	no es nada grave
+make a doctor's appointment	pedir cita con el médico
+make a doctor's appointment	sacar turno con el médico	Río de la Plata
+make a doctor's appointment	pedir hora al médico	Chile
+take a pill	tomarse una pastilla
+get a shot	ponerse una inyección
+call an ambulance	llamar a una ambulancia
+break your leg	romperse la pierna
+sprain your ankle	torcerse el tobillo
+cut your finger	cortarse el dedo
+have an allergy	tener alergia
+have high blood pressure	tener la presión alta
+be pregnant	estar embarazada
+be healthy	estar sano
+be in good shape	estar en forma
+get in shape	ponerse en forma
+be careful	tener cuidado
+be scared	tener miedo
+be stressed	estar estresado
+be exhausted	estar agotado
+be wiped out	estar hecho polvo	Spain	casual
+be hungover	tener resaca
+be hungover	tener cruda	Mexico	casual
+be hungover	tener guayabo	Colombia	casual
+be hungover	tener ratón	Venezuela	casual
+be hungover	tener caña	Chile	casual
+
+## Feelings
+I feel happy	me siento feliz
+I'm so happy	estoy muy feliz
+I'm so happy	estoy tan contento
+feel sad	sentirse triste
+feel lonely	sentirse solo
+feel bored	estar aburrido
+feel bored	aburrirse
+feel stressed	estar estresado
+feel stressed	sentirse estresado
+feel nervous	estar nervioso
+feel nervous	ponerse nervioso
+feel relaxed	sentirse relajado
+feel relaxed	estar relajado
+feel good	sentirse bien
+feel bad	sentirse mal
+feel sorry for	sentir lástima por
+feel sorry for	sentir pena por
+feel guilty	sentirse culpable
+feel proud	sentirse orgulloso
+feel grateful	sentirse agradecido
+feel grateful	estar agradecido
+feel homesick	sentir nostalgia de casa
+feel homesick	echar de menos mi casa	Spain
+feel homesick	extrañar mi casa	Latin America
+miss you	te extraño	Latin America
+miss you	te echo de menos	Spain
+miss my family	extraño a mi familia	Latin America
+miss my family	echo de menos a mi familia	Spain
+worried about	preocupado por
+scared of	tener miedo de
+scared of	asustado por
+afraid of	tener miedo de
+afraid of	temerle a
+angry with	enojado con	Latin America
+angry with	enfadado con	Spain
+upset about	molesto por
+upset about	disgustado por
+excited about	emocionado por
+excited about	ilusionado con	Spain
+interested in	interesado en
+interested in	tener interés en
+tired of	cansado de
+tired of	harto de
+sick of	harto de
+fed up with	harto de
+fed up with	hasta la coronilla de		casual
+in a good mood	de buen humor
+in a bad mood	de mal humor
+cheer up	ánimo
+cheer up	anímate
+calm down	cálmate
+calm down	tranquilízate
+don't worry	no se preocupe		formal
+look forward to	tener muchas ganas de
+look forward to	esperar con ganas
+can't wait	tengo muchas ganas
+can't wait	no veo la hora	Latin America
+can't wait	estoy deseando	Spain
+fall in love	enamorarse
+in love with	enamorado de
+get angry	enojarse	Latin America
+get angry	enfadarse	Spain
+lose my temper	perder los estribos
+lose my temper	perder la paciencia
+burst into tears	romper a llorar
+burst into tears	echarse a llorar
+make me happy	me hace feliz
+make me sad	me pone triste
+make me sad	me da tristeza
+it hurts	me duele
+it hurts	duele
+what a relief	qué alivio
+I'm glad	me alegro
+I'm glad	me da gusto	Latin America
+I'm so sorry	cuánto lo siento
+I'm embarrassed	me da vergüenza
+I'm embarrassed	qué vergüenza
+I'm embarrassed	me da pena	Mexico,Central America
+be happy	estar contento
+be sad	estar triste
+be afraid of	tener miedo de
+be fed up with	estar harto de
+be in a good mood	estar de buen humor
+be in a bad mood	estar de mal humor
+be nervous	estar nervioso
+get nervous	ponerse nervioso
+be worried	estar preocupado
+be worried about	preocuparse por
+be excited	estar emocionado
+be looking forward to	tener ganas de
+not feel like it	no tener ganas
+be dying to	morirse de ganas de
+be embarrassed	tener vergüenza
+be jealous	tener celos
+miss someone	echar de menos a alguien	Spain
+lose one's temper	perder los estribos
+lose patience	perder la paciencia
+calm down	calmarse
+cheer up	animarse
+get sad	ponerse triste
+i'm so glad	me alegro mucho
+i'm happy for you	me alegro por ti
+what a shame	qué pena
+what a pity	qué lástima
+it makes me sad	me da pena	Central America,Mexico
+it bothers me	me molesta
+i can't stand it	no lo soporto
+it drives me crazy	me vuelve loco
+i couldn't care less	me importa un pepino		casual
+be proud of	estar orgulloso de
+be scared to death	estar muerto de miedo
+be in love	estar enamorado
+be grateful	estar agradecido
+have a bad day	tener un mal día
+be over the moon	estar feliz como una lombriz		casual
+
+## Weather and nature
+it's raining	llueve
+it's sunny	está soleado
+heavy rain	lluvia fuerte
+heavy rain	un aguacero
+light rain	lluvia ligera
+light rain	llovizna
+rainy season	temporada de lluvias
+rainy season	época de lluvias
+dry season	temporada seca
+dry season	estación seca
+weather forecast	el pronóstico del tiempo
+weather forecast	la previsión del tiempo	Spain
+so hot today	qué calor hace hoy
+so hot today	hoy hace muchísimo calor
+nice weather	buen tiempo
+nice weather	hace buen tiempo
+blue sky	cielo azul
+the sun	el sol
+the moon	la luna
+a storm	una tormenta
+climate change	el cambio climático
+air pollution	la contaminación del aire
+fresh air	aire fresco
+fresh air	aire puro
+it's chilly	hace fresco
+the weather is nice	hace buen tiempo
+the weather is bad	hace mal tiempo
+it's boiling hot	hace un calor insoportable
+it's drizzling	está lloviznando
+it's drizzling	está garuando	Peru,Río de la Plata
+it's foggy	hay niebla
+it's very humid	hay mucha humedad
+there's a storm	hay tormenta
+it's clearing up	se está despejando
+it's below zero	estamos bajo cero
+looks like it's going to rain	parece que va a llover
+get wet	mojarse
+get soaked	quedarse empapado
+the weather forecast	el pronóstico del tiempo
+heat wave	la ola de calor
+clear sky	el cielo despejado
+starry sky	el cielo estrellado
+full moon	la luna llena
+sunrise	la salida del sol
+sunset	la puesta de sol
+the sun is coming up	está saliendo el sol
+the sun is setting	se está poniendo el sol
+it's getting light	está amaneciendo
+it's getting dark	se está haciendo de noche
+spring is coming	llega la primavera
+outdoors	al aire libre
+sunbathe	tomar el sol
+go to the countryside	ir al campo
+what a nice day	qué día tan bonito
+what a nice day	qué lindo día	Latin America
+
+## Free time and hobbies
+free time	tiempo libre
+in my free time	en mi tiempo libre
+hang out	pasar el rato
+hang out	salir
+hang out with friends	salir con amigos
+hang out with friends	quedar con amigos	Spain
+hang out with friends	juntarse con amigos	Latin America
+go out with	salir con
+have fun	divertirse
+have fun	pasarla bien	Latin America
+have fun	pasarlo bien	Spain
+have a good time	pasar un buen rato
+have a good time	pasarla bien	Latin America
+have a good time	pasarlo bien	Spain
+play games	jugar juegos	Latin America
+play games	jugar a juegos	Spain
+play video games	jugar videojuegos	Latin America
+play video games	jugar a los videojuegos	Spain
+play soccer	jugar al fútbol
+play soccer	jugar fútbol	Mexico,Colombia,Central America
+play basketball	jugar al baloncesto	Spain
+play basketball	jugar al básquet	Latin America
+play the guitar	tocar la guitarra
+play the piano	tocar el piano
+go swimming	ir a nadar
+go hiking	hacer senderismo
+go hiking	ir de excursión
+go camping	ir de campamento
+go camping	acampar
+go camping	ir de acampada	Spain
+go fishing	ir a pescar
+go fishing	ir de pesca
+go dancing	ir a bailar
+go dancing	salir a bailar
+take photos	sacar fotos
+take photos	tomar fotos	Latin America
+take photos	hacer fotos	Spain
+take pictures	sacar fotos
+take pictures	tomar fotos	Latin America
+take pictures	hacer fotos	Spain
+listen to podcasts	escuchar podcasts
+watch videos	ver videos	Latin America
+watch videos	ver vídeos	Spain
+read the news	leer las noticias
+surf the internet	navegar por internet
+draw pictures	dibujar
+draw pictures	hacer dibujos
+sing karaoke	cantar karaoke
+sing karaoke	cantar en el karaoke
+learn to cook	aprender a cocinar
+spend time with	pasar tiempo con
+favorite food	comida favorita
+favorite food	comida preferida
+favorite movie	película favorita
+favorite song	canción favorita
+I'm into	me gusta mucho
+I'm into	me encanta
+I'm into	me mola	Spain	slang
+a big fan of	un gran fan de
+a big fan of	muy fan de		casual
+have a great time	pasarlo genial	Spain	casual
+have a great time	pasarla genial	Latin America	casual
+have fun	divertirse mucho
+kill time	matar el tiempo
+laze around	hacer el vago	Spain	casual
+play sports	hacer deporte
+go camping	ir a acampar
+binge-watch a series	ver una serie de un tirón
+play an instrument	tocar un instrumento
+play cards	jugar a las cartas
+board games	los juegos de mesa
+have a drink	tomar algo
+go out partying	salir de parranda	Latin America	casual
+go out for drinks	salir de copas	Spain
+have a barbecue	hacer una barbacoa	Spain
+have a barbecue	hacer un asado	Río de la Plata,Chile
+have a barbecue	hacer una carne asada	Mexico
+be a fan of	ser aficionado a
+be really into	estar muy metido en		casual
+sign up for	apuntarse a	Spain
+sign up for	inscribirse en
+sign up for	anotarse en	Río de la Plata
+go for a drive	dar una vuelta en coche	Spain
+go for a drive	dar una vuelta en carro	Mexico,Colombia,Venezuela,Central America
+go for a drive	dar una vuelta en auto	Argentina,Chile,Uruguay
+
+## Travel
+go on a trip	irse de viaje
+take a trip	hacer un viaje
+go on vacation	ir de vacaciones
+travel to	viajar a
+plane ticket	boleto de avión	Latin America
+plane ticket	pasaje de avión	South America
+plane ticket	billete de avión	Spain
+book a flight	reservar un vuelo
+book a hotel	reservar un hotel
+book a hotel	reservar hotel
+check in	hacer el check-in
+check in	registrarse en el hotel
+check out	hacer el check-out
+check out	dejar la habitación
+pack my bags	hacer las maletas
+pack my bags	empacar	Latin America
+pack my bags	armar las valijas	Río de la Plata
+my luggage	mi equipaje
+my luggage	mis maletas
+the passport	el pasaporte
+take off	despegar
+land at	aterrizar en
+go sightseeing	recorrer la ciudad
+tourist attraction	atracción turística
+tourist attraction	lugar turístico
+local food	comida local
+local food	comida típica
+a souvenir	un recuerdo
+a souvenir	un souvenir
+travel abroad	viajar al extranjero
+travel abroad	viajar al exterior	South America
+a road trip	un viaje por carretera
+a road trip	un viaje en coche	Spain
+a road trip	un viaje en carro	Latin America
+visit my family	visitar a mi familia
+visit my grandparents	visitar a mis abuelos
+go back home	volver a casa
+go back home	regresar a casa
+on the plane	en el avión
+jet lag	el jet lag
+jet lag	el desfase horario
+have a safe trip	buen viaje
+have a safe trip	que tengas buen viaje
+be on vacation	estar de vacaciones
+pack	hacer la maleta	Spain
+pack	hacer la valija	Río de la Plata
+unpack	deshacer la maleta
+check in at the hotel	registrarse en el hotel
+check out of the hotel	dejar la habitación
+take a plane	tomar un avión
+take a plane	coger un avión	Spain
+catch the bus	coger el autobús	Spain
+catch the bus	tomar el bus	Latin America
+catch the bus	tomar el camión	Mexico
+catch the bus	tomar el colectivo	Argentina
+catch the bus	coger la guagua	Cuba
+miss the train	perder el tren
+miss the flight	perder el vuelo
+get on the train	subirse al tren
+get off the bus	bajarse del bus	Latin America
+get lost	perderse por la ciudad
+ask for directions	preguntar cómo llegar
+where is the bathroom?	dónde está el baño
+round-trip ticket	el billete de ida y vuelta	Spain
+round-trip ticket	el boleto de ida y vuelta	Latin America
+round-trip ticket	el pasaje de ida y vuelta	South America
+one-way ticket	el billete de ida	Spain
+one-way ticket	el boleto de ida	Latin America
+boarding pass	la tarjeta de embarque
+carry-on bag	el equipaje de mano
+the flight is delayed	el vuelo tiene retraso
+have a layover	hacer escala
+go through security	pasar el control de seguridad
+go through customs	pasar la aduana
+be jet-lagged	tener jet lag
+go abroad	ir al extranjero
+travel around the country	recorrer el país
+go backpacking	viajar de mochilero
+rent a car	alquilar un coche	Spain
+rent a car	rentar un carro	Mexico,Central America
+rent a car	alquilar un auto	Argentina,Chile,Uruguay
+go by train	ir en tren
+go by plane	ir en avión
+change money	cambiar dinero
+exchange rate	el tipo de cambio
+travel insurance	el seguro de viaje
+youth hostel	el albergue juvenil
+pick someone up at the airport	recoger a alguien en el aeropuerto
+see someone off	despedir a alguien
+
+## Talking and communication
+talk to	hablar con
+talk about	hablar de
+talk about	hablar sobre
+speak English	hablar inglés
+speak Vietnamese	hablar vietnamita
+tell me	dime
+tell me	cuéntame
+tell me	decime	Río de la Plata
+tell a story	contar una historia
+tell a story	contar un cuento
+call me	llámame
+call me	llamame	Río de la Plata
+give me a call	llámame
+give me a call	dame un toque	Spain	casual
+phone call	llamada telefónica
+phone call	una llamada
+text me	escríbeme
+text me	mándame un mensaje
+text me	mándame un whatsapp		casual
+send a message	mandar un mensaje
+send a message	enviar un mensaje
+get a message	recibir un mensaje
+let me know	avísame
+let me know	me avisas
+keep in touch	seguir en contacto
+keep in touch	mantenernos en contacto
+get in touch	ponerse en contacto
+get in touch	contactar
+catch up	ponerse al día
+have a chat	charlar un rato
+have a chat	platicar un rato	Mexico,Central America
+chat with	charlar con
+chat with	platicar con	Mexico,Central America
+make a call	hacer una llamada
+answer the phone	contestar el teléfono
+answer the phone	coger el teléfono	Spain
+answer the phone	atender el teléfono	Río de la Plata
+hang up	colgar
+hang up	cortar	Río de la Plata
+ask for help	pedir ayuda
+ask about	preguntar por
+explain to	explicarle a
+give advice	dar consejos
+give advice	aconsejar
+make a promise	hacer una promesa
+make a promise	prometer
+keep a promise	cumplir una promesa
+tell the truth	decir la verdad
+tell a lie	decir una mentira
+tell a lie	mentir
+make a joke	hacer una broma
+make a joke	contar un chiste
+just kidding	era broma
+I mean	o sea
+I mean	quiero decir
+you know	sabes
+you know	viste	Río de la Plata	casual
+by the way	por cierto
+by the way	a propósito
+speaking of	hablando de
+what happened	qué ha pasado	Spain
+what's wrong	qué pasa	Spain
+what's going on	qué está pasando
+what's going on	qué pasa	Spain
+guess what	adivina qué
+guess what	sabes qué
+listen to me	escúchame
+listen to me	escuchame	Río de la Plata
+I heard that	escuché que
+I heard that	me dijeron que
+I heard that	he oído que	Spain
+argue with	discutir con
+argue with	pelearse con
+make up	hacer las paces
+make up	reconciliarse
+apologize for	pedir perdón por
+apologize for	disculparse por
+introduce myself	presentarme
+my name is	me llamo
+my name is	mi nombre es
+I'm from	soy de
+I live in	vivo en
+talk to someone	hablar con alguien
+chat for a while	charlar un rato
+chat for a while	platicar un rato	Mexico,Central America
+tell a joke	contar un chiste
+tell someone something	contarle algo a alguien
+ask for a favor	pedir un favor
+do someone a favor	hacerle un favor a alguien
+call someone	llamar a alguien
+hang up the phone	colgar el teléfono
+talk on the phone	hablar por teléfono
+leave a message	dejar un mensaje
+get in touch with	ponerse en contacto con
+lose touch	perder el contacto
+speak louder	hablar más alto
+speak slowly	hablar despacio
+what did you say?	qué dijiste
+i didn't understand	no entendí
+what does it mean?	qué significa
+how do you say it in spanish?	cómo se dice en español
+change the subject	cambiar de tema
+get to the point	ir al grano
+beat around the bush	andarse por las ramas
+apologize	pedir perdón
+apologize	pedir disculpas
+say thank you	dar las gracias
+say goodbye	decir adiós
+say hi to her for me	dale saludos de mi parte
+complain about	quejarse de
+have an argument	tener una discusión
+raise one's voice	levantar la voz
+speak quietly	hablar en voz baja
+make oneself understood	hacerse entender
+speak fluently	hablar con fluidez
+keep a secret	guardar un secreto
+gossip	contar chismes	Latin America
+gossip	contar cotilleos	Spain
+
+## Thinking and opinions
+I think that	creo que
+I think that	pienso que
+think of	pensar en
+think of	opinar de
+make a decision	tomar una decisión
+make up my mind	decidirme
+change my mind	cambiar de opinión
+change my mind	cambiar de idea
+come up with	se me ocurrió
+come up with	idear
+remind me	recuérdame
+remember to	acordarse de
+forget to	olvidarse de
+forgot about	me olvidé de
+forgot about	se me olvidó
+I wonder if	me pregunto si
+I wonder why	me pregunto por qué
+I can't believe	no puedo creer
+I can't believe	no me lo puedo creer
+I'm sure that	estoy seguro de que
+it's important	es importante
+it's hard to	es difícil
+it's easy to	es fácil
+it's worth it	merece la pena	Spain
+not worth it	no vale la pena
+not worth it	no merece la pena	Spain
+no idea	ni idea
+have no idea	no tengo ni idea
+have no idea	no tengo idea	Latin America
+make sense	tener sentido
+point of view	punto de vista
+the main point	lo principal
+the main point	la idea principal
+it doesn't matter	no importa
+it doesn't matter	da igual
+doesn't matter	no importa
+doesn't matter	da igual
+a good point	buen punto
+a good point	buena observación
+on purpose	a propósito
+on purpose	adrede
+on purpose	aposta	Spain
+by accident	sin querer
+by accident	por accidente
+by mistake	por error
+by mistake	por equivocación
+for sure	seguro
+for sure	sin duda
+of course not	por supuesto que no
+kind of	más o menos
+kind of	un poco
+sort of	más o menos
+sort of	algo así
+a bit	un poco
+a bit	un poquito
+pretty good	bastante bien
+pretty good	bastante bueno
+not bad	no está mal
+not bad	nada mal
+so good	muy bueno
+so good	buenísimo
+really nice	muy bonito
+really nice	muy lindo	Latin America
+very interesting	muy interesante
+so boring	qué aburrido
+so boring	muy aburrido
+so boring	aburridísimo
+too difficult	demasiado difícil
+really easy	muy fácil
+really easy	facilísimo
+agree	estar de acuerdo
+agree with	estar de acuerdo con
+disagree	no estar de acuerdo
+i suppose so	supongo que sí
+i doubt it	lo dudo
+i have no idea	no tengo ni idea
+i'm sure	estoy seguro
+change one's mind	cambiar de opinión
+take into account	tener en cuenta
+keep in mind	tener presente
+what do you think of him?	qué piensas de él
+think it over	pensarlo bien
+on second thought	pensándolo bien
+let me think	déjame pensar
+let's see	a ver
+it occurs to me	se me ocurre
+have doubts	tener dudas
+it makes sense	tiene sentido
+it doesn't make sense	no tiene sentido
+it's obvious	está claro
+of course	desde luego	Spain
+be worth it	valer la pena
+it's all the same	da lo mismo
+be in favor of	estar a favor de
+be against	estar en contra de
+if i were you	yo que tú	Spain
+if i were you	yo en tu lugar
+it's up to you	como quieras
+take something seriously	tomarse algo en serio
+what a good idea	qué buena idea
+
+## Questions
+what is it	qué es
+what is this	qué es esto
+what is that	qué es eso
+what do you think	qué piensas
+what do you think	qué opinas
+what do you do	a qué te dedicas
+what do you do	a qué se dedica		formal
+what are you doing	qué estás haciendo
+what did you do	qué hiciste
+what kind of	qué tipo de
+what kind of	qué clase de
+what about you	y tú
+what about you	y vos	Río de la Plata
+how about	qué tal si
+how about	y si
+how many	cuántos
+how many	cuántas
+how much	cuánto
+how much	cuánto cuesta
+how often	cada cuánto
+how often	con qué frecuencia
+how old are you	cuántos años tiene		formal
+how old are you	cuántos años tenés	Río de la Plata
+where are you from	de dónde es usted		formal
+where are you from	de dónde sos	Río de la Plata
+where do you live	dónde vivís	Río de la Plata
+where are you going	adónde vas
+who is that	quién es ese
+who is that	quién es esa persona
+which one	cuál
+can you help me	me ayudas
+can you help me	me podría ayudar		formal
+can I have	me das
+can I have	me pones	Spain
+can I have	me regala	Colombia
+could you please	podrías, por favor
+could you please	me haría el favor de		formal
+would you like	te gustaría
+would you like	quieres
+do you want	quieres
+do you want	querés	Río de la Plata
+do you know	sabes
+do you know	conoces
+do you have	tienes
+do you have	tenés	Río de la Plata
+are you sure	estás seguro
+are you okay	estás bien
+is that right	es así
+is that right	verdad
+is it okay	está bien
+is it okay	se puede
+is it okay	vale	Spain
+have you eaten	ya comiste	Latin America
+have you eaten	has comido	Spain
+did you know	sabías que
+what's your name	cómo se llama		formal
+what's your name	cómo te llamás	Río de la Plata
+how was your day	qué tal tu día
+how was your day	cómo te fue hoy	Latin America
+how was your day	qué tal el día	Spain
+how was it	qué tal
+how was it	cómo estuvo
+how was it	cómo te fue
+what's up?	qué hubo	Colombia,Mexico,Chile	casual
+how much is it all?	cuánto es
+what's that?	qué es eso
+how come?	cómo es que
+what for?	para qué
+since when?	desde cuándo
+how long have you lived here?	cuánto tiempo llevas viviendo aquí
+how many times?	cuántas veces
+what are you up to this weekend?	qué haces este fin de semana
+what are your plans?	qué planes tienes
+do you want to come?	quieres venir
+can i ask you something?	te puedo preguntar algo
+is everything okay?	todo bien
+what time does it start?	a qué hora empieza
+who's coming?	quién viene
+whose is this?	de quién es esto
+where are we going?	adónde vamos
+how did it go?	cómo te fue
+are you serious?	lo dices en serio
+what do you feel like doing?	qué te apetece hacer	Spain
+what do you feel like doing?	qué tienes ganas de hacer
+
+## Linking phrases
+because of	por
+because of	debido a
+because of	a causa de
+in order to	para
+in order to	con el fin de		formal
+so that	para que
+as well as	así como
+as well as	además de
+in addition	además
+on top of that	encima
+on top of that	para colmo
+on top of that	además de eso
+as a result	como resultado
+as a result	como consecuencia
+because of that	por eso
+that's why	por eso
+even though	aunque
+even though	a pesar de que
+even if	aunque
+even if	incluso si
+in spite of	a pesar de
+instead of	en vez de
+instead of	en lugar de
+rather than	en vez de
+rather than	más que
+as long as	siempre que
+as long as	con tal de que
+as long as	mientras
+as if	como si
+as usual	como de costumbre
+for example	por ejemplo
+for instance	por ejemplo
+such as	como
+such as	tales como
+in fact	de hecho
+in fact	en realidad
+in general	en general
+in general	por lo general
+in other words	es decir
+in other words	o sea
+in other words	en otras palabras
+in short	en resumen
+in short	en pocas palabras
+after all	al fin y al cabo
+after all	después de todo
+first of all	antes que nada
+first of all	primero que nada
+first of all	en primer lugar
+after that	después de eso
+after that	luego
+and then	y luego
+and then	y después
+and then	y entonces
+at the end	al final
+at the beginning	al principio
+in the beginning	al principio
+in the beginning	en un principio
+in the middle of	a mitad de
+by the end of	para finales de
+by the end of	a fines de	Latin America
+apart from	aparte de
+apart from	además de
+except for	excepto
+except for	salvo
+except for	menos
+according to	según
+compared to	comparado con
+compared to	en comparación con
+the same as	igual que
+the same as	lo mismo que
+different from	diferente de
+different from	distinto de
+similar to	parecido a
+similar to	similar a
+more and more	cada vez más
+less and less	cada vez menos
+more or less	más o menos
+not only	no solo
+but also	sino también
+both of them	los dos
+both of them	las dos
+both of them	ambos
+all of them	todos
+all of them	todos ellos
+some of them	algunos
+some of them	algunos de ellos
+none of them	ninguno
+none of them	ninguno de ellos
+each other	el uno al otro
+each other	mutuamente
+one another	el uno al otro
+one another	entre sí
+by myself	solo
+by myself	yo solo
+by myself	por mi cuenta
+on my own	por mi cuenta
+on my own	solo
+at least	al menos
+at least	por lo menos
+at most	como máximo
+at most	a lo sumo
+at all	para nada
+at all	en absoluto
+a lot of	mucho
+a lot of	muchos
+a lot of	un montón de		casual
+lots of	un montón de		casual
+lots of	muchísimos
+a few	unos cuantos
+a few	algunos
+a few	unos pocos
+a little	un poco
+a little	un poquito
+plenty of	de sobra
+plenty of	bastante
+most of	la mayoría de
+most of	la mayor parte de
+kind of like	algo así como
+a couple of	un par de
+as much as	tanto como
+so much	tanto
+so much	muchísimo
+too much	demasiado
+too many	demasiados
+too many	demasiadas
+not enough	no es suficiente
+not enough	no basta
+not enough	no alcanza	Latin America
+more than	más que
+more than	más de
+less than	menos que
+less than	menos de
+better than	mejor que
+worse than	peor que
+the best	el mejor
+the best	lo mejor
+the worst	el peor
+the worst	lo peor
+almost all	casi todos
+almost all	casi todo
+pretty much	prácticamente
+pretty much	casi
+right away	enseguida
+right away	ahora mismo
+right away	ahorita	Mexico
+all of a sudden	de repente
+all of a sudden	de pronto
+at once	enseguida
+at once	de inmediato
+at once	a la vez
+over and over	una y otra vez
+again and again	una y otra vez
+again and again	repetidas veces
+little by little	poco a poco
+step by step	paso a paso
+one by one	uno por uno
+one by one	de uno en uno
+here and there	aquí y allá
+here and there	por aquí y por allá
+get used to	acostumbrarse a
+however	sin embargo
+despite	a pesar de
+even so	aun así
+anyway	de todos modos
+anyway	de todas formas
+well, anyway	en fin
+besides	además de
+what's more	es más
+that is	es decir
+thanks to	gracias a
+provided that	con tal de que
+so	así que
+therefore	por lo tanto		formal
+actually	en realidad
+unless	a menos que
+just in case	por si acaso
+in case	en caso de que
+by chance	por casualidad
+to sum up	en resumen
+in any case	en cualquier caso
+as for	en cuanto a
+
+## Common phrasal verbs
+look at	mirar
+look at	ver
+look for	buscar
+look after	cuidar
+look after	cuidar de
+look like	parecerse a
+look like	parecer
+look up	buscar
+look out	cuidado
+look out	ten cuidado
+look out	aguas	Mexico	slang
+watch out	cuidado
+watch out	ojo
+watch out	aguas	Mexico	slang
+put on	ponerse
+put away	guardar
+put down	dejar
+put down	soltar
+pick up	recoger
+pick up	levantar
+pick up	pasar a buscar	Río de la Plata
+set up	montar
+set up	instalar
+set up	configurar
+clean up	limpiar
+clean up	ordenar
+wash up	lavar los platos
+wash up	fregar los platos	Spain
+wash up	lavar los trastes	Mexico
+fill out	completar un formulario
+fill out	rellenar un formulario	Spain
+fill out	llenar un formulario	Latin America
+fill in	completar
+fill in	rellenar	Spain
+fill in	llenar	Latin America
+write down	anotar
+write down	apuntar
+sit down	sentarse
+sit down	siéntate
+stand up	levantarse
+stand up	ponerse de pie
+stand up	pararse	Latin America
+lie down	acostarse
+lie down	recostarse
+lie down	tumbarse	Spain
+slow down	ir más despacio
+slow down	bajar la velocidad
+hurry up	date prisa	Spain
+hurry up	apúrate	Latin America
+come on	vamos
+come on	venga	Spain
+come on	dale	Río de la Plata
+come out	salir
+come from	venir de
+come from	ser de
+come across	encontrarse con
+come across	toparse con
+come across	dar con
+go on	seguir
+go on	continuar
+go away	irse
+go away	vete
+go over	repasar
+go over	revisar
+go through	pasar por
+go through	atravesar
+get along	llevarse bien
+get over	superar
+get through	superar
+get through	aguantar
+get back	volver
+get back	regresar	Mexico
+get back	recuperar
+get rid of	deshacerse de
+get rid of	librarse de
+give back	devolver
+give back	regresar	Mexico
+give in	rendirse
+give in	ceder
+run out of	quedarse sin
+run into	encontrarse con
+run into	toparse con
+carry on	seguir
+carry on	continuar
+keep going	seguir adelante
+keep going	sigue
+keep up	seguir el ritmo
+keep up	mantener
+turn up	subir el volumen
+turn up	aparecer
+turn down	bajar el volumen
+turn down	rechazar
+show up	aparecer
+show up	presentarse
+break down	averiarse
+break down	descomponerse	Latin America
+break down	venirse abajo		emotional
+break up	terminar
+break up	cortar	Río de la Plata
+grow up	crecer
+grow up	criarse
+bring up	sacar un tema
+bring up	mencionar
+bring up	criar
+take care of	cuidar
+take care of	encargarse de
+take part in	participar en
+take part in	tomar parte en
+put off	posponer
+put off	aplazar
+put off	dejar para después
+call off	cancelar
+call off	suspender
+check on	ver cómo está
+check on	echar un vistazo a
+fall down	caerse
+wake me up	despiértame
+cut down on	reducir
+cut down on	recortar
+end up	terminar
+end up	acabar
+deal with	lidiar con
+deal with	ocuparse de
+deal with	encargarse de
+depend on	depender de
+belong to	pertenecer a
+belong to	ser de
+believe in	creer en
+care about	preocuparse por
+care about	importarle a uno
+wait for	esperar
+wait for	esperar a
+listen to	escuchar
+think about it	piénsalo
+think about it	pensarlo
+talk it over	hablarlo
+talk it over	conversarlo
+try out	probar
+sign up	inscribirse
+sign up	registrarse
+sign up	apuntarse	Spain
+log in	iniciar sesión
+log in	entrar
+log out	cerrar sesión
+log out	salir
+throw away	tirar
+throw away	botar	Colombia,Chile,Peru,Venezuela,Caribbean
+give away	regalar
+hand in	entregar
+point out	señalar
+point out	hacer notar
+realize	darse cuenta
+get along with	llevarse bien con
+not get along	llevarse mal
+start to	ponerse a
+stop doing	dejar de
+have just done	acabar de
+do again	volver a
+end up	acabar por
+hurry up	darse prisa
+find out about	enterarse de
+take charge of	hacerse cargo de
+put on one's coat	ponerse el abrigo
+take off one's coat	quitarse el abrigo
+try something on	probarse algo
+bump into	toparse con
+turn into	convertirse en
+go through a rough patch	pasar por un mal momento
+oversleep	quedarse dormido
+stay in	quedarse en casa
+make fun of	burlarse de
+count on	contar con
+take after someone	salir a alguien
+pick someone up	pasar a recoger a alguien
+drop someone off	dejar a alguien
+fill out a form	rellenar un formulario	Spain
+fill out a form	llenar un formulario	Latin America
+throw away	tirar a la basura
+put off until tomorrow	dejar para mañana
+set off	ponerse en camino
+turn up the volume	subir el volumen
+turn down the volume	bajar el volumen
+dare to	atreverse a
+forget about	olvidarse de
+try to	tratar de
+
+## Describing things
+very good	muy bueno
+very good	muy bien
+really good	muy bueno
+really good	buenísimo
+so beautiful	precioso
+so beautiful	qué bonito
+so beautiful	muy lindo	Latin America
+really cute	qué tierno
+really cute	muy mono	Spain
+really cute	muy lindo	Latin America
+very nice	muy bonito
+very nice	muy agradable
+very nice	muy lindo	Latin America
+very kind	muy amable
+very friendly	muy simpático
+very friendly	muy amigable
+really funny	muy gracioso
+really funny	muy divertido
+really funny	muy chistoso	Latin America
+so cool	qué genial
+so cool	qué guay	Spain
+so cool	qué padre	Mexico
+too big	demasiado grande
+too small	demasiado pequeño
+too small	demasiado chico	Latin America
+brand new	nuevo
+brand new	a estrenar
+brand new	nuevecito		casual
+a little expensive	un poco caro
+a little expensive	algo caro
+kind of boring	un poco aburrido
+kind of boring	algo aburrido
+kind of boring	medio aburrido	Latin America
+quite busy	bastante ocupado
+not easy	no es fácil
+hard to say	difícil de decir
+hard to say	es difícil decirlo
+easy to use	fácil de usar
+hard to find	difícil de encontrar
+full of	lleno de
+made of	hecho de
+famous for	famoso por
+good at	ser bueno en
+good at	se me da bien
+good at	ser bueno para	Latin America
+bad at	ser malo en
+bad at	se me da mal
+bad at	ser malo para	Latin America
+proud of	orgulloso de
+ready for	listo para
+ready for	preparado para
+ready to go	listo para salir
+ready to go	listo para irnos
+the same	lo mismo
+the same	igual
+not the same	no es lo mismo
+not the same	no es igual
+so much fun	muy divertido
+so much fun	divertidísimo
+a big deal	gran cosa
+a big deal	algo importante
+no big deal	no es para tanto
+no big deal	no pasa nada
+no big deal	no es gran cosa
+a waste of time	una pérdida de tiempo
+worth trying	vale la pena probarlo
+worth trying	vale la pena intentarlo
+crowded with	lleno de
+crowded with	repleto de
+in good condition	en buen estado
+in good condition	en buenas condiciones
+out of order	fuera de servicio
+out of order	no funciona
+out of order	averiado
+what's it like?	cómo es
+what does it look like?	qué aspecto tiene
+it looks good	tiene buena pinta	Spain	casual
+it looks good	se ve bien	Latin America
+it smells good	huele bien
+it smells bad	huele mal
+it sounds good	suena bien
+it's made of wood	es de madera
+it's made of	está hecho de
+second-hand	de segunda mano
+in fashion	de moda
+out of fashion	pasado de moda
+in bad condition	en mal estado
+packed with people	lleno de gente
+packed	a tope	Spain	casual
+what color is it?	de qué color es
+navy blue	azul marino
+light blue	azul claro
+dark green	verde oscuro
+how nice	qué bonito
+how nice	qué lindo	Latin America
+how ugly	qué feo
+how cool	qué guay	Spain	casual
+how cool	qué chévere	Colombia,Venezuela,Peru,Caribbean	casual
+how cool	qué padre	Mexico	casual
+how cool	qué bacán	Peru,Chile	casual
+how cool	qué copado	Argentina,Uruguay	casual
+how cool	qué genial
+what a pain	qué rollo	Spain	casual
+what a pain	qué lata	Mexico	casual
+it's not bad	no está mal
+it's awful	es horrible
+it's the same	es lo mismo
+bigger than	más grande que
+worth seeing	vale la pena verlo
+
+## Relationships and social life
+my best friend	mi mejor amigo
+my best friend	mi mejor amiga
+my family	mi familia
+my parents	mis padres
+my parents	mis papás	Latin America
+my husband	mi esposo
+my husband	mi marido
+my wife	mi esposa
+my wife	mi mujer
+my boyfriend	mi novio
+my girlfriend	mi novia
+my kids	mis hijos
+my kids	mis niños
+make friends	hacer amigos
+get married	casarse
+get divorced	divorciarse
+go on a date	tener una cita
+go on a date	salir con alguien
+ask someone out	invitar a salir a alguien
+ask someone out	pedirle salir a alguien	Spain
+break up with	terminar con
+break up with	cortar con
+break up with	romper con
+have a baby	tener un bebé
+have a baby	tener un hijo
+raise a family	formar una familia
+raise a family	criar a los hijos
+hang out together	salir juntos
+hang out together	pasar el rato juntos
+spend time together	pasar tiempo juntos
+have a party	hacer una fiesta
+have a party	dar una fiesta
+birthday party	fiesta de cumpleaños
+birthday party	fiesta de cumple		casual
+wedding party	la fiesta de boda
+wedding party	la fiesta de casamiento	Río de la Plata
+invite someone	invitar a alguien
+give a gift	hacer un regalo
+give a gift	dar un regalo
+give a gift	regalar
+a family dinner	una cena familiar
+a family dinner	una cena en familia
+family reunion	una reunión familiar
+family reunion	un reencuentro familiar
+Lunar New Year	el Año Nuevo Lunar
+Lunar New Year	el Año Nuevo chino
+celebrate with	celebrar con
+celebrate with	festejar con
+miss each other	extrañarse	Latin America
+miss each other	echarse de menos	Spain
+take care of each other	cuidarse mutuamente
+take care of each other	cuidarse el uno al otro
+meet new people	conocer gente nueva
+i like him	me cae bien
+i don't like him	me cae mal
+i can't stand him	me cae gordo	Mexico	casual
+fall in love with	enamorarse de
+be in love with	estar enamorado de
+be crazy about	estar loco por
+have a crush on	estar colado por	Spain	casual
+go out with someone	salir con alguien
+be seeing someone	estar saliendo con alguien
+break up with	romper con alguien
+break up with	cortar con alguien		casual
+break up with	terminar con alguien	Latin America
+get back together with	volver con alguien
+have a fight with	pelearse con
+get married to	casarse con
+have a boyfriend	tener novio
+have a girlfriend	tener novia
+be single	estar soltero
+be engaged	estar comprometido
+hang out with	quedar con alguien	Spain
+hang out with	juntarse con alguien	Río de la Plata,Chile
+meet someone	conocer a alguien
+get to know someone better	conocer mejor a alguien
+throw a party	organizar una fiesta
+have a birthday	cumplir años
+turn thirty	cumplir treinta años
+get together with the family	reunirse con la familia
+visit someone	ir a ver a alguien
+it's on me	invito yo
+introduce someone	presentar a alguien
+trust someone	confiar en alguien
+best friend	el mejor amigo
+close friend	un amigo íntimo
+my buddy	mi pana	Venezuela,Caribbean	slang
+give someone a hug	dar un abrazo
+give someone a kiss	dar un beso
+stand someone up	dejar plantado a alguien
+cheat on someone	ponerle los cuernos a alguien		casual
+blind date	una cita a ciegas
+
+## Technology
+my phone	mi teléfono
+my phone	mi móvil	Spain
+my phone	mi celular	Latin America
+cell phone	el móvil	Spain
+cell phone	el celular	Latin America
+the internet	internet
+social media	las redes sociales
+send a text	mandar un mensaje
+send a text	mandar un whatsapp		casual
+check email	revisar el correo
+check email	mirar el correo	Spain
+check email	checar el correo	Mexico
+video call	una videollamada
+download the app	descargar la aplicación
+download the app	bajar la app		casual
+log into	iniciar sesión en
+log into	entrar en
+the password	la contraseña
+the password	la clave
+my account	mi cuenta
+charge my phone	cargar el teléfono
+charge my phone	cargar el móvil	Spain
+charge my phone	cargar el celular	Latin America
+battery is dead	se me acabó la batería
+battery is dead	me quedé sin batería
+battery is dead	no tengo batería
+no signal	no hay señal
+no signal	sin señal
+no signal	no tengo cobertura	Spain
+Wi-Fi password	la contraseña del wifi
+Wi-Fi password	la clave del wifi
+online class	una clase en línea
+online class	una clase online
+online class	una clase virtual
+post a photo	subir una foto
+post a photo	publicar una foto
+take a screenshot	hacer una captura de pantalla
+take a screenshot	tomar una captura de pantalla	Latin America
+search for	buscar
+look it up	búscalo
+it's not working	no funciona
+it's not working	no anda	Río de la Plata
+restart the computer	reiniciar el ordenador	Spain
+restart the computer	reiniciar la computadora	Latin America
+restart the computer	reiniciar el computador	Chile,Colombia
+computer	el ordenador	Spain
+computer	la computadora	Latin America
+computer	el computador	Colombia,Chile
+laptop	el portátil	Spain
+laptop	la computadora portátil	Latin America
+charge one's phone	cargar el móvil	Spain
+charge one's phone	cargar el celular	Latin America
+my battery died	me quedé sin batería
+check one's email	revisar el correo
+download an app	descargar una aplicación
+download an app	bajar una app		casual
+update the app	actualizar la aplicación
+the app doesn't work	la aplicación no funciona
+create an account	crear una cuenta
+forget one's password	olvidar la contraseña
+connect to the wifi	conectarse al wifi
+there's no signal	no hay señal
+i have no reception	no tengo cobertura	Spain
+the internet is down	se cayó el internet
+take a selfie	hacerse un selfie	Spain
+take a selfie	tomarse una selfie	Latin America
+send a voice message	mandar un audio
+send a whatsapp	mandar un whatsapp
+make a video call	hacer una videollamada
+follow someone	seguir a alguien
+go viral	hacerse viral
+like a post	darle like a una publicación
+search online	buscar en internet
+google it	búscalo en Google
+browse the internet	navegar por internet
+turn on the computer	encender el ordenador	Spain
+turn on the computer	prender la computadora	Latin America
+turn off one's phone	apagar el móvil	Spain
+turn off one's phone	apagar el celular	Latin America
+the computer froze	se colgó el ordenador	Spain
+the screen is broken	la pantalla está rota
+save a file	guardar un archivo
+delete a message	borrar un mensaje
+attach a file	adjuntar un archivo
+print a document	imprimir un documento
+be online	estar en línea
+listen to a podcast	escuchar un pódcast
+phone number	el número de teléfono
+what's your number?	cuál es tu número
+
+## Plans and life
+I'm planning to	tengo pensado
+I'm planning to	estoy planeando
+I'm planning to	pienso
+have plans	tener planes
+plan to	pensar
+plan to	planear
+hope to	esperar
+hope to	ojalá pueda
+try to	intentar
+decide to	decidir
+decide to	decidirse a
+want to be	querer ser
+dream of	soñar con
+set a goal	ponerse una meta
+set a goal	fijarse un objetivo
+reach my goal	alcanzar mi meta
+reach my goal	lograr mi objetivo
+reach my goal	cumplir mi meta
+take a chance	arriesgarse
+take a chance	correr el riesgo
+make it	lograrlo
+make it	conseguirlo
+make it	llegar a tiempo
+give it a try	intentarlo
+give it a try	probar
+have a chance	tener una oportunidad
+have a chance	tener posibilidades
+just in case	por las dudas	Río de la Plata
+in case of	en caso de
+it happens	son cosas que pasan
+it happens	pasa
+what if	y si
+no matter what	pase lo que pase
+no matter what	sea como sea
+in my life	en mi vida
+for the first time	por primera vez
+since then	desde entonces
+these past few days	estos últimos días
+these past few days	estos días
+the whole day	todo el día
+the whole day	el día entero
+a busy day	un día ocupado
+a busy day	un día movido
+a busy day	un día de mucho trabajo
+a long day	un día largo
+a good day	un buen día
+a bad day	un mal día
+it was fun	fue divertido
+it was fun	estuvo divertido
+it was fun	lo pasé bien	Spain
+it was great	fue genial
+it was great	estuvo genial
+it was okay	estuvo bien
+it was okay	no estuvo mal
+it was okay	estuvo regular
+I learned that	aprendí que
+I realized that	me di cuenta de que
+I'm looking forward to	tengo muchas ganas de
+I'm looking forward to	estoy deseando	Spain
+can't wait to	tengo muchas ganas de
+can't wait to	no veo la hora de	Latin America
+can't wait to	estoy deseando	Spain
+be free	estar libre
+have a lot to do	tener mucho que hacer
+be on time	llegar a tiempo
+make an appointment	pedir cita	Spain
+make an appointment	sacar una cita	Latin America
+make an appointment	sacar turno	Río de la Plata
+quit one's job	dejar el trabajo
+lose one's job	quedarse sin trabajo
+earn money	ganar plata	South America	casual
+learn a language	aprender un idioma
+make a new year's resolution	hacer un propósito de año nuevo
+make a dream come true	cumplir un sueño
+start a new life	empezar una nueva vida
+take a day off	tomarse un día libre
+this weekend	este fin de semana
+at the end of the month	a fin de mes
+sooner or later	tarde o temprano
+day after day	día tras día
+take a risk	correr un riesgo
+it's never too late	nunca es tarde
