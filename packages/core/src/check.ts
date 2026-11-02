@@ -231,8 +231,9 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
       if (same && !top.includes(same)) top.splice(Math.min(1, top.length), 0, same)
       return top.slice(0, limit)
     }
+    // The same letters with any other accents (or none), most common first.
     const sameLetters = (u: Unit) =>
-      spellingCandidates(lowerOf(u), syllables, byPlain, { limit: 50, similar }).filter((c) => c.edits === 0).map((c) => c.word)
+      (byPlain.get(plain(lowerOf(u))) ?? []).filter((c) => c !== lowerOf(u)).sort((a, b) => syllables[b] - syllables[a]).slice(0, COMPOUND_FORMS_PER_SYLLABLE)
     // For words with neighbors, only the best-ranked candidates: "muốm ăn" mustn't become "muối ăn" (salt)
     // through a worse fix of "muốm" than "muốn" just because "muối ăn" is a dictionary word.
     const bestCandidates = (u: Unit, limit: number) => {
@@ -304,11 +305,12 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
             .sort((a, b) => b.frequency - a.frequency)
             .slice(0, 3)
         }
-        let found = await words((u) => bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE))
-        // When those make no word, the same letters with other accents may: "suỹ nghĩ" → "suy nghĩ".
-        if (!found.length && span.some((u) => unknown.has(u))) {
-          found = await words((u) => [...sameLetters(u).slice(0, 2), ...bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE - 2)])
-        }
+        // Accent slips first, then letter typos: a word made by fixing a misspelled syllable's accents
+        // ("cõ là" → "có là", "không nhừng" → "không những") beats one made by changing its letters ("cỡ",
+        // "ngừng": they keep the typed mark, so the syllable alone ranks them first).
+        const misspelled = span.some((u) => unknown.has(u))
+        let found = misspelled ? await words(sameLetters) : []
+        if (!found.length) found = await words((u) => bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE))
         if (!found.length) continue
         if (!doubtful && found.length > 1 && found[0].frequency - found[1].frequency < PLAIN_RUN_MARGIN) continue
         const at = { start: span[0].start, end: span[k - 1].end, text: ctx.text.slice(span[0].start, span[k - 1].end) }
