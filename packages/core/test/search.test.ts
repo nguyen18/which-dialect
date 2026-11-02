@@ -376,6 +376,9 @@ describe('regularBaseForms', () => {
     assert.ok(regularBaseForms('making').includes('make'))
     assert.ok(regularBaseForms('running').includes('run'))
     assert.deepEqual(regularBaseForms('go'), [])
+    // A bare "-d" isn't an ending of its own ("used", "freed" come from "-ed"): "bed" isn't a form of "be".
+    assert.ok(!regularBaseForms('bed').includes('be'))
+    assert.ok(regularBaseForms('used').includes('use'))
   })
 })
 
@@ -389,6 +392,10 @@ describe('translator (real data)', { skip: !built && 'build en and vi data first
   })
   const top = async (word: string, options: Parameters<typeof tr.translate>[1]) =>
     (await tr.translate(word, options))[0]?.translations.map((t) => t.word) ?? []
+
+  it('reads a word as itself, not a guessed form of a shorter word', async () => {
+    assert.equal((await top('bed', { from: 'en', to: 'vi' }))[0], 'giường')
+  })
 
   it('translates everyday phrases both ways through the phrasebook', async () => {
     assert.equal((await top('go home', { from: 'en', to: 'vi' }))[0], 'về nhà')

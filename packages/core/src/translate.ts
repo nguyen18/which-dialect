@@ -197,7 +197,7 @@ export function regularBaseForms(word: string): string[] {
   for (const [suffix, replacements] of [
     ['ies', ['y']], ['ied', ['y']], ['ier', ['y']], ['iest', ['y']],
     ['es', ['', 'e']], ['ing', ['', 'e']], ['ed', ['', 'e']], ['er', ['', 'e']], ['est', ['', 'e']],
-    ['s', ['']], ['d', ['']],
+    ['s', ['']],
   ] as const) {
     if (!w.endsWith(suffix) || w.length <= suffix.length + 1) continue
     const stem = w.slice(0, -suffix.length)
