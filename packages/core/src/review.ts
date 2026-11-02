@@ -69,7 +69,10 @@ export type Reviewer = {
   review(entry: string, options: ReviewOptions): Promise<Review>
 }
 
-const TERMINAL = /^[.!?…]+/
+// What a sentence keeps around its words: closing quotes and brackets with the end punctuation ('"hola".'),
+// and the opening ones right before its first word (Spanish "¡", "¿").
+const TERMINAL = /^[.!?…"”’'»)\]]+/
+const OPENING = /[¿¡"“‘'«(\[]+$/
 // Spaces after a word was left out: one between words, none before punctuation.
 const tidy = (s: string) => s.replace(/[^\S\n]+/g, ' ').replace(/ ([.,!?…])/g, '$1').trim()
 
@@ -109,7 +112,7 @@ export function createReviewer(options: TranslatorOptions = {}): Reviewer {
       }
       const drafts: Draft[] = []
       for (const list of sentencesOf(text, units(text))) {
-        const start = list[0].start
+        const start = list[0].start - (OPENING.exec(text.slice(drafts[drafts.length - 1]?.end ?? 0, list[0].start))?.[0].length ?? 0)
         const coreEnd = list[list.length - 1].end
         const end = coreEnd + (TERMINAL.exec(text.slice(coreEnd))?.[0].length ?? 0)
         const langs = base === o.lang ? list.map(() => o.lang) : await markLanguages(list, { lang: o.lang, base, target: dict(o.lang), baseDictionary: dict(base), translator })

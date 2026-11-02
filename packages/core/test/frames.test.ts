@@ -151,6 +151,12 @@ const builtEs = ['en', 'es'].every((l) => existsSync(join(root, l, 'data')))
 describe('sentence frames (real Spanish data)', { skip: !builtEs && 'build en and es data first' }, () => {
   const pb = createPhrasebook({ load })
 
+  it('keeps the punctuation around each sentence in a review ("¡", quotes)', async () => {
+    const review = await createReviewer({ load }).review('¡Fue un buen dia! Dije "hola". ¿Como estas?', { lang: 'es', region: 'Mexico' })
+    assert.deepEqual(review.sentences.map((s) => s.original), ['¡Fue un buen dia!', 'Dije "hola".', '¿Como estas?'])
+    assert.equal(review.sentences[0].corrected, '¡Fue un buen día!')
+  })
+
   it('uses vos forms and Spain\'s perfect by region, capitalized after "¿"', async () => {
     assert.equal((await pb.render('ask-want', { lang: 'es', region: 'Mexico', slots: { thing: { text: 'café' } } })).text, '¿Quieres café?')
     assert.equal((await pb.render('ask-want', { lang: 'es', region: 'Argentina', slots: { thing: { text: 'café' } } })).text, '¿Querés café?')
