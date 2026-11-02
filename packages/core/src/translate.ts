@@ -30,6 +30,7 @@ import {
   type Dictionary,
   type LoadJson,
 } from './index.ts'
+import type { Entry } from './types.ts'
 
 /** One meaning of the source word, with its own part of speech and definitions. */
 export type SourceSense = {
@@ -214,6 +215,10 @@ const BASE_FORMS: Record<string, (word: string) => string[]> = { en: regularBase
 // A variant sense whose gloss points at another word ("simple past of say", "misspelling of don't",
 // "Southern Vietnam form of không") rather than defining it. Variants with their own definition are kept.
 const FORM_GLOSS = /\b(of|for)\b/
+// English past-tense and past-participle form-of definitions ("simple past of drive").
+const PAST_FORM = /\b(simple past|past tense|past participle)\b/i
+// A grammar helper's definition ("had": "Used to form the past perfect tense").
+const HELPER_GLOSS = /^Used to form\b/
 
 // How much being a common word counts: points per Zipf step above RARE_ZIPF (so "anh", Zipf 6.3,
 // gets about +3.4 and "tía", Zipf 3.9, about +0.5). Words missing from a language's frequency list count
@@ -526,10 +531,30 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
     }
 
     const out: SourceSense[] = []
-    const sources = [
+    let sources = [
       ...entries.map((entry) => ({ entry, via })),
       ...(base?.entries ?? []).map((entry) => ({ entry, via: via ?? `form of ${base!.word}` })),
     ]
+    // English past forms are read as the verb before nouns: "drove" is drive, not a herd; "ate" eat, not an
+    // elder sister; "had" have, not the past-perfect helper; "smiled" and "exchanged" the verbs, not the
+    // nouns. Only unlabelled, untagged pasts ("book" is a dialect past of bake, "running" a Scots one of rin).
+    if (lang === 'en' && depth === 0) {
+      // Not a dialect or old past ("book", dialectal past of bake).
+      const pastSense = (s: Sense) =>
+        Boolean(s.altOf) && PAST_FORM.test(s.glosses[0] ?? '') && !s.regionTagged && !s.labels.some((l) => MARGINAL_LABELS.has(l) || LATER_LABELS.has(l))
+      // The word's own entries only: "run", the base of "running", is also a past participle of "rin".
+      const own = new Set(entries)
+      const pastOf = (e: Entry) => own.has(e) && e.pos === 'verb' && e.senses.some(pastSense)
+      const regularPast = /ed$/i.test(w) && sources.some((x) => x.via?.startsWith('form of') && x.entry.pos === 'verb')
+      // Adjectives keep their place ("excited", "tired": I'm excited); nouns and the rest go after.
+      const rank = (x: (typeof sources)[number]) =>
+        pastOf(x.entry) || x.entry.pos === 'adj' ? 0 : regularPast && x.entry.pos === 'verb' && x.via?.startsWith('form of') ? 0 : 1
+      if (sources.some((x) => pastOf(x.entry) || (regularPast && x.entry.pos === 'verb' && x.via?.startsWith('form of')))) {
+        sources = [...sources].sort((a, b) => rank(a) - rank(b))
+        // Within such an entry, its form-of senses lead ("simple past of have" before the helper verb).
+        sources = sources.map((x) => (pastOf(x.entry) ? { ...x, entry: { ...x.entry, senses: [...x.entry.senses].sort((a, b) => Number(!pastSense(a)) - Number(!pastSense(b))) } } : x))
+      }
+    }
     for (const { entry, via: entryVia } of sources) {
       for (const sense of entry.senses) {
         // Follow variants to the word they belong to (at most two hops: dont -> don't -> do not). A tagged
@@ -1150,11 +1175,17 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
       // them among themselves.
       // Only inflections ("got": simple past of get), not contractions ("kinda") or spelling variants.
       const formWithBase = ownSenses && sourceSenses.some((s) => s.via && INFLECTION_VIA.test(s.via))
+      const pastTense = from === 'en' && sourceSenses.some((s) => s.via && PAST_FORM.test(s.via) && !s.labels.some((l) => MARGINAL_LABELS.has(l) || LATER_LABELS.has(l)))
       const labelRelevance = (g: TranslationGroup) => {
         const { labels } = g.source
         const marginal = labels.length > 0 && labels.every((l) => MARGINAL_LABELS.has(l))
         const everyday = labels.length > 0 && labels.every((l) => EVERYDAY_LABELS.has(l))
-        if (formWithBase && !g.source.via && (!marginal || everyday)) {
+        // Only own meanings in the form's part of speech, and not a grammar helper: "ate" is eat before "an
+        // elder sister", "had" have before "Used to form the past perfect". A past tense's own meanings lead
+        // only when they're everyday speech ("got": "Have/has.", colloquial): "saw" is see before "To cut
+        // with a saw", "felt" feel before "To cover with felt".
+        const formPos = formWithBase && sourceSenses.some((s) => s.via && INFLECTION_VIA.test(s.via) && s.pos === g.source.pos)
+        if (formPos && !g.source.via && !HELPER_GLOSS.test(g.source.glosses.at(-1) ?? '') && (pastTense ? everyday : !marginal || everyday)) {
           return 1 - (CONSTRUCTION.test(g.source.glosses.join(' ')) ? 0.5 : 0)
         }
         return marginal ? -1 : 0

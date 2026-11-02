@@ -429,6 +429,12 @@ describe('translator (real data)', { skip: !built && 'build en and vi data first
     assert.equal((await tr.senses('walked', { from: 'en' }))[0].lemma, 'walk')
     assert.equal((await tr.senses('running', { from: 'en', pos: 'verb' }))[0].lemma, 'run')
     assert.equal((await tr.senses('dont', { from: 'en' }))[0].lemma, "don't")
+    // Past tenses are the verb before nouns spelled alike ("ate": an elder sister; "drove": a herd), and
+    // "had" is have before the past-perfect helper; adjectives keep their place ("excited", above).
+    for (const [past, base] of [['ate', 'eat'], ['drove', 'drive'], ['had', 'have'], ['saw', 'see'], ['smiled', 'smile']]) {
+      const [group] = await tr.translate(past, { from: 'en', to: 'vi' })
+      assert.equal(group.source.lemma, base, past)
+    }
   })
 
   it('follows regional variants and keeps their region', async () => {
