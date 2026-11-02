@@ -1,11 +1,13 @@
 // Measures how well the Vietnamese spellchecker fixes misspelled common multi-syllable words.
 //
-//   node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/evaluate-spelling.ts [--top N] [--verbose]
+//   node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/evaluate-spelling.ts [--top N] [--examples N] [--verbose]
 //
 // Takes the N most common accented headwords of 2–3 syllables, makes four kinds of misspelling of each
 // (all accents off; one syllable's accents off; a wrong tone; a wrong tone with the other syllables off),
 // runs the checker on each and applies its first spelling suggestions. The correct words themselves are
-// checked for false positives. Every result goes to .cache/spelling-eval.json.
+// checked for false positives, and so are the dictionary's own example sentences (of its most common
+// headwords: real Vietnamese, though some use old or regional spellings). Every result goes to
+// .cache/spelling-eval.json.
 
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, join } from 'node:path'
@@ -16,6 +18,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const LANG = 'vi'
 const DEFAULT_TOP = 300
 const MAX_FAILURES_SHOWN = 40
+// Example sentences checked for false positives (--examples N).
+const DEFAULT_EXAMPLES = 1000
 // Combining tone marks: huyền, sắc, ngã, hỏi, nặng. Tried in this order.
 const TONES = ['̀', '́', '̃', '̉', '̣']
 
@@ -35,11 +39,11 @@ type WordResult = { word: string; falsePositive: boolean; issues: CheckIssue[] }
 
 const load = (lang: string) => async (p: string) => JSON.parse(await readFile(join(ROOT, 'packages', lang, 'data', p), 'utf8'))
 
-function parseTop(): number {
-  const i = process.argv.indexOf('--top')
-  if (i < 0) return DEFAULT_TOP
+function parseCount(flag: string, fallback: number): number {
+  const i = process.argv.indexOf(flag)
+  if (i < 0) return fallback
   const n = Number(process.argv[i + 1])
-  if (!Number.isInteger(n) || n < 1) throw new Error(`--top needs a positive integer, got "${process.argv[i + 1] ?? ''}"`)
+  if (!Number.isInteger(n) || n < 1) throw new Error(`${flag} needs a positive integer, got "${process.argv[i + 1] ?? ''}"`)
   return n
 }
 
@@ -176,7 +180,7 @@ function printSummary(results: CaseResult[], words: WordResult[]) {
 
 async function main() {
   const started = performance.now()
-  const top = parseTop()
+  const top = parseCount('--top', DEFAULT_TOP)
   const verbose = process.argv.includes('--verbose')
   const checker = createChecker({ load })
   const syllables = (await load(LANG)('syllables.json')) as Record<string, number>
@@ -194,7 +198,23 @@ async function main() {
   }
 
   const rows = printSummary(results, words)
-  void rows
+
+  // The most common headwords' example sentences: any spelling error or warning on them is a false
+  // positive (or an old or regional spelling).
+  const examples = [...new Set(
+    [...headwords.values()]
+      .sort((a, b) => Math.max(-1, ...b.map((e) => e.frequency ?? -1)) - Math.max(-1, ...a.map((e) => e.frequency ?? -1)))
+      .flatMap((entries) => entries.flatMap((e) => e.senses.flatMap((s) => (s.examples ?? []).map((x) => x.text.normalize('NFC')))))
+      .filter((t) => t.length >= 8 && t.length <= 200),
+  )].slice(0, parseCount('--examples', DEFAULT_EXAMPLES))
+  const flagged: { text: string; issues: string[] }[] = []
+  for (const text of examples) {
+    const { issues } = await checker.check(text, { lang: LANG })
+    const spelling = issues.filter((i) => i.rule === 'spelling' && i.severity !== 'suggestion')
+    if (spelling.length) flagged.push({ text, issues: spelling.map((i) => `${i.text}→${i.suggestions[0] ?? '?'}`) })
+  }
+  console.log(`Example sentences flagged: ${pct(flagged.length, examples.length)} of ${examples.length}`)
+  for (const f of verbose ? flagged : flagged.slice(0, 15)) console.log(`  ${f.text}   [${f.issues.join('; ')}]`)
 
   const failures = results.filter((r) => r.outcome !== 'fixed')
   const shown = verbose ? failures : failures.slice(0, MAX_FAILURES_SHOWN)
@@ -208,7 +228,7 @@ async function main() {
   await mkdir(join(ROOT, '.cache'), { recursive: true })
   await writeFile(
     join(ROOT, '.cache', 'spelling-eval.json'),
-    JSON.stringify({ top, runtimeMs, summary: rows, words, cases: results }, null, 2) + '\n',
+    JSON.stringify({ top, runtimeMs, summary: rows, words, examples: flagged, cases: results }, null, 2) + '\n',
   )
   console.log(`\nRuntime: ${(runtimeMs / 1000).toFixed(1)}s. Full results: ${join(ROOT, '.cache', 'spelling-eval.json')}`)
 }

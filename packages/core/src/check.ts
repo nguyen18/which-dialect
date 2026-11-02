@@ -181,6 +181,11 @@ const PLAIN_RUN_MARGIN = 0.5
 // "tháng sáu", June). A run with no accents at all ("nha bang") was probably typed without them, so any of
 // its syllables may change ("nhà băng", bank), still only when one word clearly wins.
 const PLAIN_RUN_MAX_ZIPF = 5
+// Zipf points by which an accented form must be more common than a common plain-letter syllable written
+// beside accented ones for the run to change it.
+const COMMONER_ACCENTED_GAP = 0.3
+// How common (Zipf) a word must be for such a change.
+const COMMONER_MIN_WORD_ZIPF = 5
 // A plain-letter non-syllable with no accented form is checked as a typo only if a one-letter fix gives a
 // syllable at least this common (Zipf); otherwise it's probably a name or a foreign word.
 const PLAIN_TYPO_MIN_ZIPF = 4
@@ -284,14 +289,21 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
         // Next to a misspelled syllable, plain-letter syllables may be missing their accents too, however
         // common they are on their own: "suỹ nghi" → "suy nghĩ".
         const nearMisspelled = span.some((u) => unknown.has(u))
-        const mayChange = (u: Unit) => suspect(u) || rarePlain(u) || (nearMisspelled && plainWords.has(u))
-        if (!doubtful && !span.some(rarePlain)) continue
+        // Beside syllables written with accents, a common plain-letter one may still be missing its own,
+        // but only for forms clearly more common than it: "thanh công" → "thành công" (thành is more common
+        // than thanh), never "cho con" → "chó con" (cho is far more common than chó).
+        const commoner = (u: Unit) =>
+          !allPlain && plainWords.has(u)
+            ? (byPlain.get(lowerOf(u)) ?? []).filter((c) => syllables[c] >= syllables[lowerOf(u)] + COMMONER_ACCENTED_GAP)
+            : []
+        const mayChange = (u: Unit) => suspect(u) || rarePlain(u) || (nearMisspelled && plainWords.has(u)) || commoner(u).length > 0
+        if (!doubtful && !span.some((u) => rarePlain(u) || commoner(u).length)) continue
         const written = span.map(lowerOf)
         const words = async (forms: (u: Unit) => string[]) => {
           const combos = accentCombinations(written, byPlain, {
             fixed: span.map((u) => !mayChange(u)),
             // Misspelled syllables may change letters too ("cảm ơm" → "cảm ơn").
-            forms: span.map((u) => (unknown.has(u) ? forms(u) : undefined)),
+            forms: span.map((u) => (unknown.has(u) ? forms(u) : mayChange(u) && !suspect(u) && !rarePlain(u) && !nearMisspelled ? commoner(u) : undefined)),
             perUnit: COMPOUND_FORMS_PER_SYLLABLE,
             max: COMPOUND_MAX_COMBINATIONS,
           }).filter((c) => c !== written.join(' '))
@@ -312,6 +324,9 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
         let found = misspelled ? await words(sameLetters) : []
         if (!found.length) found = await words((u) => bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE))
         if (!found.length) continue
+        // Changed only for a commoner form: the word must be common too, since the written one may be a
+        // word the dictionary lacks ("kỳ thi", exam, isn't a headword; "kỳ thị", discrimination, is).
+        if (!doubtful && !span.some(rarePlain) && found[0].frequency < COMMONER_MIN_WORD_ZIPF) continue
         if (!doubtful && found.length > 1 && found[0].frequency - found[1].frequency < PLAIN_RUN_MARGIN) continue
         const at = { start: span[0].start, end: span[k - 1].end, text: ctx.text.slice(span[0].start, span[k - 1].end) }
         const suggestions = found.map((f) => matchCase(at.text, f.word))

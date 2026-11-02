@@ -251,6 +251,15 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Tôi đang suỹ nghĩ.'), ['suỹ nghĩ→suy nghĩ'])
     // Its plain-letter neighbor may be missing accents too.
     assert.deepEqual(await fixes('Tôi đang suỹ nghi.'), ['suỹ nghi→suy nghĩ'])
+    // Accent slips before letter typos: "có là", not "cỡ là"; "không những", not "không ngừng".
+    assert.deepEqual(await fixes('cõ là'), ['cõ là→có là'])
+    assert.deepEqual(await fixes('không nhừng'), ['không nhừng→không những'])
+    // A common plain syllable beside accented ones, for a clearly more common form: not "cho con" → "chó con".
+    assert.deepEqual(await fixes('Anh ấy thanh công rồi.'), ['thanh công→thành công'])
+    assert.deepEqual(await fixes('Tôi cho con ăn.'), [])
+    // English "the" next to Vietnamese that makes a word with it.
+    assert.deepEqual(await fixes('Tôi không the đi.'), ['không the→không thể'])
+    assert.deepEqual(await fixes('Tôi co the đi.'), ['co the→có thể'])
     assert.deepEqual(await fixes('Bộ GĐ-ĐT đã công bố.'), [])
     assert.deepEqual(await fixes('Chữ 詩 là thơ.'), [])
   })

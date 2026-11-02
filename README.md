@@ -299,7 +299,7 @@ npm run build:data:all               # or build every language from Kaikki, Engl
 npm run build:data -- vi             # build one language (after English); -- vi --refresh re-downloads first
 npm test                             # unit tests, plus checks against whichever languages are built
 npm run evaluate                     # translation accuracy on known-correct cases, with and without picks (-- --verbose to see every case)
-npm run evaluate:spelling            # Vietnamese spellchecker on misspelled common 2–3 syllable words (-- --top 500, -- --verbose)
+npm run evaluate:spelling            # Vietnamese spellchecker on misspelled common 2–3 syllable words (-- --top 500, -- --examples 4000 for false flags on example sentences, -- --verbose)
 npm run build:picks -- vi            # rebuild only a language's hand-picked words (after editing `picks` in languages/vi.ts)
 npm run picks-sheet -- vi            # review sheet (.cache/picks-vi.csv) of the top English words' meanings; -- --words file.txt, -- --top 500
 npm run picks-sheet -- vi --apply sheet.csv   # config rows for the rows whose your_pick is filled in
