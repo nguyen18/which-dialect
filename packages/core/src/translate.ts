@@ -185,15 +185,26 @@ export type TranslatorOptions = {
   load?: (lang: string) => LoadJson
 }
 
+// Irregular English noun plurals: the English data keeps inflections only for verbs, adjectives and the
+// like (formOfPos), not nouns, so these would be unknown words ("my feet hurt").
+const IRREGULAR_PLURALS: Record<string, string> = {
+  feet: 'foot', teeth: 'tooth', geese: 'goose', children: 'child', men: 'man', women: 'woman', mice: 'mouse',
+  oxen: 'ox', dice: 'die', knives: 'knife', wives: 'wife', lives: 'life', leaves: 'leaf', halves: 'half',
+  wolves: 'wolf', shelves: 'shelf', loaves: 'loaf', thieves: 'thief', selves: 'self', calves: 'calf',
+}
+
 /**
  * Possible base words for a regularly inflected English word, most likely first: "walked" -> walk,
  * "cities" -> city, "making" -> make, "stopped" -> stop. The English data package only stores irregular
- * forms ("said", "went"), so regular ones are undone here.
+ * forms ("said", "went"), so regular ones are undone here, and common irregular noun plurals ("feet").
  */
 export function regularBaseForms(word: string): string[] {
   const w = word.toLowerCase()
   const out: string[] = []
   const add = (base: string) => base.length > 1 && base !== w && !out.includes(base) && out.push(base)
+  if (IRREGULAR_PLURALS[w]) add(IRREGULAR_PLURALS[w])
+  // Compounds too: "firemen", "housewives".
+  for (const [plural, single] of Object.entries(IRREGULAR_PLURALS)) if (w.length > plural.length + 2 && w.endsWith(plural)) add(w.slice(0, -plural.length) + single)
   const undouble = (stem: string) => (/([bdfgklmnprstvz])\1$/.test(stem) ? stem.slice(0, -1) : null)
   for (const [suffix, replacements] of [
     ['ies', ['y']], ['ied', ['y']], ['ier', ['y']], ['iest', ['y']],
@@ -217,6 +228,8 @@ const BASE_FORMS: Record<string, (word: string) => string[]> = { en: regularBase
 const FORM_GLOSS = /\b(of|for)\b/
 // English past-tense and past-participle form-of definitions ("simple past of drive").
 const PAST_FORM = /\b(simple past|past tense|past participle)\b/i
+// How well an untagged phrasebook row fits a wanted region (tagged rows: 1 + shared / union of regions).
+const UNTAGGED_FIT = 1.4
 // A grammar helper's definition ("had": "Used to form the past perfect tense").
 const HELPER_GLOSS = /^Used to form\b/
 
@@ -535,6 +548,8 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
       ...entries.map((entry) => ({ entry, via })),
       ...(base?.entries ?? []).map((entry) => ({ entry, via: via ?? `form of ${base!.word}` })),
     ]
+    // An irregular plural is its singular first ("teeth": tooth, before the plural's own slang entries).
+    if (lang === 'en' && base && IRREGULAR_PLURALS[w.toLowerCase()] === base.word) sources = [...sources.slice(entries.length), ...sources.slice(0, entries.length)]
     // English past forms are read as the verb before nouns: "drove" is drive, not a herd; "ate" eat, not an
     // elder sister; "had" have, not the past-perfect helper; "smiled" and "exchanged" the verbs, not the
     // nouns. Only unlabelled, untagged pasts ("book" is a dialect past of bake, "running" a Scots one of rin).
@@ -804,12 +819,15 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
     // Mexico, Mexico's "tomar el camión" before Latin America's "tomar el autobús"; into Latin America, its
     // "en la mañana" before Río de la Plata's "a la mañana"), and phrases tagged only for other regions are
     // left out; rows with a usage note ("to a friend") come after plain ones.
+    // An untagged row counts as a bit under half a match (UNTAGGED_FIT), so a row tagged for a small part of
+    // the wanted regions doesn't beat it (into Latin America, "enseguida" before Mexico's "ahorita"), and one
+    // tagged for the wanted region's own group does (into Argentina, Río de la Plata's "a la mañana").
     const fit = (regions: string[], wanted: Set<string>) => {
       const shared = regions.filter((r) => wanted.has(r)).length
       return shared ? 1 + shared / (regions.length + wanted.size - shared) : -1
     }
     const ranked = rows
-      .map((r, i) => ({ r, i, region: !toEnglish && toWanted && r.regionTagged ? fit(r.regions, toWanted) : 0 }))
+      .map((r, i) => ({ r, i, region: !toEnglish && toWanted ? (r.regionTagged ? fit(r.regions, toWanted) : UNTAGGED_FIT) : 0 }))
       .filter((x) => x.region >= 0)
       .sort((a, b) => b.region - a.region || (toEnglish ? 0 : Number(Boolean(a.r.note)) - Number(Boolean(b.r.note))) || a.i - b.i)
     const seen = new Set<string>()
@@ -896,8 +914,10 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
 
     async translate(word, { from, to, fromRegion, toRegion, pos, meaning, register: wantedRegister, listener, about, speaker, exclude = DEFAULT_EXCLUDED_LABELS, limit = 5, allSenses = false, picks: usePicks = true }) {
       const [found, toMeta, fromMeta] = await Promise.all([senses(word, { from, fromRegion, pos }), dict(to).meta(), dict(from).meta()])
-      // Punctuation around the word ("really?", "¡genial!") when the dictionary has no entry with it ("etc.").
-      const bare = phraseKey(word) !== word.trim().toLowerCase() ? word.trim().replace(OUTER_PUNCTUATION, '') : ''
+      // Punctuation around the word ("really?", "¡genial!") when the dictionary has no entry with it ("etc."),
+      // and an English possessive ("friend's": friend).
+      const trimmed = word.trim().replace(OUTER_PUNCTUATION, '')
+      const bare = from === 'en' && /['’]s$/i.test(trimmed) ? trimmed.slice(0, -2) : trimmed !== word.trim() ? trimmed : ''
       const sourceSenses = found.length || !bare ? found : await senses(bare, { from, fromRegion, pos })
       // The target language's hand-picked words for English meanings (picks.json), when it has any.
       const pickRows: PickRow[] = usePicks && to !== 'en' && toMeta.picks ? await dict(to).picks() : []
@@ -1184,7 +1204,9 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
         // elder sister", "had" have before "Used to form the past perfect". A past tense's own meanings lead
         // only when they're everyday speech ("got": "Have/has.", colloquial): "saw" is see before "To cut
         // with a saw", "felt" feel before "To cover with felt".
-        const formPos = formWithBase && sourceSenses.some((s) => s.via && INFLECTION_VIA.test(s.via) && s.pos === g.source.pos)
+        // The link must be the dictionary's ("simple past of get"), not one undone here ("teeth": form of tooth,
+        // whose own entries are slang).
+        const formPos = formWithBase && sourceSenses.some((s) => s.via && INFLECTION_VIA.test(s.via) && !s.via.startsWith('form of ') && s.pos === g.source.pos)
         if (formPos && !g.source.via && !HELPER_GLOSS.test(g.source.glosses.at(-1) ?? '') && (pastTense ? everyday : !marginal || everyday)) {
           return 1 - (CONSTRUCTION.test(g.source.glosses.join(' ')) ? 0.5 : 0)
         }

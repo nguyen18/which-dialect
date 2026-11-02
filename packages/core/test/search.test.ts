@@ -571,6 +571,9 @@ describe('translator with Spanish (real data)', { skip: !builtEs && 'build en, v
     // Into a region group, its own row before a narrower one inside it.
     assert.equal((await top('in the morning', { from: 'en', to: 'es', toRegion: 'Latin America' }))[0], 'en la mañana')
     assert.equal((await top('in the morning', { from: 'en', to: 'es', toRegion: 'Argentina' }))[0], 'a la mañana')
+    // A row tagged for one country doesn't lead for the whole group: Mexico's "ahorita" isn't Latin America's.
+    assert.equal((await top('right away', { from: 'en', to: 'es', toRegion: 'Latin America' }))[0], 'enseguida')
+    assert.equal((await top('right away', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'ahorita')
     // English phrases with an inflected first word.
     assert.equal((await top('went to bed', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'acostarse')
     assert.ok((await top('took pictures', { from: 'en', to: 'es', toRegion: 'Mexico' })).includes('tomar fotos'))
@@ -579,6 +582,13 @@ describe('translator with Spanish (real data)', { skip: !builtEs && 'build en, v
     for (const [en, es] of [['nice', 'agradable'], ['for', 'para'], ['but', 'pero'], ['the', 'el'], ['people', 'gente'], ['miss', 'extrañar'], ['dancing', 'baile'], ['please', 'por favor']]) {
       assert.equal((await top(en, { from: 'en', to: 'es', toRegion: 'Latin America' }))[0], es, en)
     }
+    // Irregular plurals and possessives the English data has no entry for.
+    assert.equal((await top('feet', { from: 'en', to: 'es' }))[0], 'pie')
+    assert.equal((await top('teeth', { from: 'en', to: 'es' }))[0], 'diente')
+    assert.equal((await top("friend's", { from: 'en', to: 'es' }))[0], 'amigo')
+    // Days and phrases with an inflected first word.
+    assert.equal((await top('on Sunday', { from: 'en', to: 'es' }))[0], 'el domingo')
+    assert.equal((await top('went to', { from: 'en', to: 'es' }))[0], 'ir a')
     // Punctuation around a single word: "really?" is "really".
     assert.ok((await top('really?', { from: 'en', to: 'es' })).length > 0)
   })
