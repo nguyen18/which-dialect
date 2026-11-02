@@ -569,6 +569,10 @@ describe('translator with Spanish (real data)', { skip: !builtEs && 'build en, v
     assert.equal((await top('went to bed', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'acostarse')
     assert.ok((await top('took pictures', { from: 'en', to: 'es', toRegion: 'Mexico' })).includes('tomar fotos'))
     assert.equal((await top('¿En serio?', { from: 'es', to: 'en' }))[0], 'seriously?')
+    // Hand-picked words for common English words (languages/es.ts picks).
+    for (const [en, es] of [['nice', 'agradable'], ['for', 'para'], ['but', 'pero'], ['the', 'el'], ['people', 'gente'], ['miss', 'extrañar'], ['dancing', 'baile'], ['please', 'por favor']]) {
+      assert.equal((await top(en, { from: 'en', to: 'es', toRegion: 'Latin America' }))[0], es, en)
+    }
     // Punctuation around a single word: "really?" is "really".
     assert.ok((await top('really?', { from: 'en', to: 'es' })).length > 0)
   })
