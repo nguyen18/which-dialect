@@ -416,8 +416,10 @@ function overlap(a: Set<string>, text: string): number {
 
 // How a phrase is matched: case, curly apostrophes, spacing and surrounding punctuation don't count
 // ("Have you eaten?" is "have you eaten").
+const OUTER_PUNCTUATION = /^[\s"“”«».,!?¿¡…;:]+|[\s"“”«».,!?¿¡…;:]+$/g
+
 export function phraseKey(text: string): string {
-  return text.normalize('NFC').toLowerCase().replace(/[’‘]/g, "'").replace(/^[\s"“”.,!?…;:]+|[\s"“”.,!?…;:]+$/g, '').replace(/\s+/g, ' ')
+  return text.normalize('NFC').toLowerCase().replace(/[’‘]/g, "'").replace(OUTER_PUNCTUATION, '').replace(/\s+/g, ' ')
 }
 
 function intersects(regions: string[], wanted: Set<string> | null): boolean {
@@ -761,10 +763,11 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
     const toEnglish = to === 'en'
     const rows = (await dict(lang).phrases()).filter((r) => phraseKey(toEnglish ? r.text : r.en) === key)
     if (!rows.length) return null
-    // Into the language: with a target region, phrases tagged for it lead and phrases tagged only for
-    // other regions are left out; rows with a usage note ("to a friend") come after plain ones.
+    // Into the language: with a target region, phrases tagged for it lead (the narrowest tag first: Mexico's
+    // "tomar el camión" before Latin America's "tomar el autobús") and phrases tagged only for other regions
+    // are left out; rows with a usage note ("to a friend") come after plain ones.
     const ranked = rows
-      .map((r, i) => ({ r, i, region: !toEnglish && toWanted && r.regionTagged ? (intersects(r.regions, toWanted) ? 1 : -1) : 0 }))
+      .map((r, i) => ({ r, i, region: !toEnglish && toWanted && r.regionTagged ? (intersects(r.regions, toWanted) ? 1 + 1 / r.regions.length : -1) : 0 }))
       .filter((x) => x.region >= 0)
       .sort((a, b) => b.region - a.region || (toEnglish ? 0 : Number(Boolean(a.r.note)) - Number(Boolean(b.r.note))) || a.i - b.i)
     const seen = new Set<string>()
@@ -850,7 +853,10 @@ export function createTranslator(options: TranslatorOptions = {}): Translator {
     senses,
 
     async translate(word, { from, to, fromRegion, toRegion, pos, meaning, register: wantedRegister, listener, about, speaker, exclude = DEFAULT_EXCLUDED_LABELS, limit = 5, allSenses = false, picks: usePicks = true }) {
-      const [sourceSenses, toMeta, fromMeta] = await Promise.all([senses(word, { from, fromRegion, pos }), dict(to).meta(), dict(from).meta()])
+      const [found, toMeta, fromMeta] = await Promise.all([senses(word, { from, fromRegion, pos }), dict(to).meta(), dict(from).meta()])
+      // Punctuation around the word ("really?", "¡genial!") when the dictionary has no entry with it ("etc.").
+      const bare = phraseKey(word) !== word.trim().toLowerCase() ? word.trim().replace(OUTER_PUNCTUATION, '') : ''
+      const sourceSenses = found.length || !bare ? found : await senses(bare, { from, fromRegion, pos })
       // The target language's hand-picked words for English meanings (picks.json), when it has any.
       const pickRows: PickRow[] = usePicks && to !== 'en' && toMeta.picks ? await dict(to).picks() : []
       // Senses whose pick row asks to come first when the caller gives no pos or meaning.

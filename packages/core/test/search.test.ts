@@ -557,6 +557,15 @@ describe('translator with Spanish (real data)', { skip: !builtEs && 'build en, v
     assert.ok((await top('coche', { from: 'es', fromRegion: 'Spain', to: 'es', toRegion: 'Mexico' })).includes('carro'))
   })
 
+  it('translates everyday phrases through the Spanish phrasebook, by region', async () => {
+    assert.equal((await top('take the bus', { from: 'en', to: 'es', toRegion: 'Spain' }))[0], 'coger el autobús')
+    // A row tagged for the country comes before one tagged for its region group (Latin America).
+    assert.equal((await top('take the bus', { from: 'en', to: 'es', toRegion: 'Mexico' }))[0], 'tomar el camión')
+    assert.equal((await top('miss you', { from: 'en', to: 'es', toRegion: 'Colombia' }))[0], 'te extraño')
+    assert.equal((await top('¿En serio?', { from: 'es', to: 'en' }))[0], 'seriously?')
+    // Punctuation around a single word: "really?" is "really".
+    assert.ok((await top('really?', { from: 'en', to: 'es' })).length > 0)
+  })
 
   it('ranks the everyday word first', async () => {
     assert.equal((await top('cerdo', { from: 'es', to: 'vi', toRegion: 'Southern', pos: 'noun' }))[0], 'heo')
