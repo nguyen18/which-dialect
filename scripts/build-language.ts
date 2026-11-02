@@ -5,7 +5,7 @@
 // Downloads kaikki.org's JSONL for the language (cached in .cache/, --refresh re-downloads), keeps the
 // fields a learner needs, and writes packages/<lang>/data/: meta.json, words/<shard>.json (by headword),
 // en/<shard>.json (English term -> words) and, when the config has them, pronouns.json (see pronouns.ts)
-// and picks.json (see picks.ts).
+// picks.json (see picks.ts) and phrases.json (see phrases.ts).
 // The data is CC BY-SA 4.0 (see packages/<lang>/LICENSE).
 
 import { createReadStream, existsSync } from 'node:fs'
@@ -31,6 +31,7 @@ import {
 } from '../packages/core/src/types.ts'
 import { recordDataUpdate } from './data-updates.ts'
 import { buildFrames } from './frames.ts'
+import { writePhrases } from './phrases.ts'
 import { writePicks } from './picks.ts'
 import { buildPronounTable } from './pronouns.ts'
 import { loadFrequencies, WORDFREQ_CREDIT } from './frequency.ts'
@@ -510,6 +511,7 @@ async function main() {
   }
   await writeFile(join(outDir, 'meta.json'), JSON.stringify(meta, null, 2))
   await writePicks(config)
+  await writePhrases(config)
   await recordDataUpdate(ROOT, { lang: config.lang, name: config.name, lastModified: source.lastModified, retrieved: source.retrieved, entries: entries.length })
 
   let bytes = 0

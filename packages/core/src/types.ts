@@ -99,6 +99,8 @@ export type LanguageMeta = {
   syllables?: boolean
   /** true when the language has sentence frames (frames.json, see FramesData). */
   frames?: boolean
+  /** true when the language has an everyday phrasebook (phrases.json, see PhraseRow). */
+  phrases?: boolean
   /**
    * The language's inflected forms are in a compact index (forms/<shard>.json, see FormShard) rather than
    * stored as entries: Spanish's conjugations and plurals are most of its source and would triple its
@@ -200,6 +202,31 @@ export type CheckerConfig = {
    * workers). `pos` lists the parts of speech (Entry.pos) the words point to.
    */
   posCues?: { before: string[]; pos: string[] }[]
+}
+
+/**
+ * One everyday phrase and an English way to say it (phrases.json): a speaker-written phrasebook of common
+ * multi-word phrases ("ở nhà" "at home", "have you eaten?" "ăn cơm chưa"), read in both directions. A
+ * phrase or an English phrase can have several rows; earlier rows are preferred.
+ */
+export type PhraseRow = {
+  /** The English, e.g. "at home". */
+  en: string
+  /** The phrase in the language, e.g. "ở nhà". */
+  text: string
+  /** Where the phrase is said; every region when untagged. */
+  regions: string[]
+  regionTagged: boolean
+  /** When it's used or what it adds, e.g. "polite", "to a friend". */
+  note?: string
+  /** The phrasebook topic, e.g. "Daily routine". */
+  topic: string
+}
+
+/** PhraseRow as stored: topics are indexes into `topics`, untagged rows have no `regions`. */
+export type StoredPhrases = {
+  topics: string[]
+  rows: { en: string; text: string; topic: number; regions?: string[]; note?: string }[]
 }
 
 /**

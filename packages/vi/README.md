@@ -15,6 +15,7 @@ await vi.searchEnglish('pig', { region: 'Southern' }) // heo, …
 - `data/meta.json`: regions, source, license, counts, and the list of files.
 - `data/words/<xx>.json`: entries by Vietnamese headword, split by the first two letters without diacritics (`không` → `kh`).
 - `data/en/<xx>.json`: English search terms → Vietnamese words.
+- `data/phrases.json`: an everyday phrasebook, about 2,400 common Vietnamese phrases paired with English (*ở nhà* "at home", *ăn cơm chưa* "have you eaten?"), written for which-dialect and released under the same license.
 
 About 35,000 entries; roughly 1,300 senses carry a region tag (Southern, Central or Northern). North Central Vietnamese counts as Central. Chinese-character (chữ Hán/chữ Nôm) entries and romanizations are left out.
 

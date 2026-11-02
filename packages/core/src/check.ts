@@ -442,9 +442,10 @@ async function wordSpelling(ctx: Context): Promise<CheckIssue[]> {
 }
 
 // Words in the learner's own language (English by default), with the target-language word to use: "market"
-// → "chợ". Runs of base units are split into the longest phrases the base dictionary knows ("ice cream"),
-// each translated in the region and register. Words the language usually has no word for
-// (CheckerConfig.leaveOut: Vietnamese has no articles) are suggested to be left out.
+// → "chợ". Runs of base units are split into the longest phrases the language's phrasebook has or the base
+// dictionary knows ("wash the dishes", "ice cream"), each translated in the region and register. Words the
+// language usually has no word for (CheckerConfig.leaveOut: Vietnamese has no articles) are suggested to
+// be left out.
 async function foreignWord(ctx: Context): Promise<CheckIssue[]> {
   const base = ctx.base
   if (!base) return []
@@ -469,10 +470,13 @@ async function foreignWord(ctx: Context): Promise<CheckIssue[]> {
             found = { k, words: [], leave: true }
             break
           }
-          if (k > 1 && !(await ctx.translator.senses(phrase, { from: base }).catch(() => [])).length) continue
           const [group] = await ctx.translator.translate(phrase, {
             from: base, to: ctx.options.lang, toRegion: ctx.options.region, register: ctx.options.register, listener: ctx.options.listener, limit: 3,
           }).catch(() => [])
+          // A phrase of several words counts when the language's phrasebook has it ("wash the dishes") or
+          // the base dictionary knows it ("ice cream").
+          const inPhrasebook = group?.translations[0]?.bridge === 'phrasebook'
+          if (k > 1 && !inPhrasebook && !(await ctx.translator.senses(phrase, { from: base }).catch(() => [])).length) continue
           const words = unique((group?.translations ?? []).map((t) => t.word))
           if (words.length || k === 1) found = { k, words, leave: false }
         }

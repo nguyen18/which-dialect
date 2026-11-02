@@ -25,6 +25,8 @@ scripts/build-all.ts         npm run build:data:all: every language, English fir
 scripts/fetch-data.ts        npm run fetch:data: quick start, published data from npm (+ picks rebuilt from configs)
 scripts/data-updates.ts      keeps DATA_UPDATES.md (Wiktionary dump dates per language) current on each build
 scripts/picks.ts             hand-picked words: checks config rows, writes picks.json (npm run build:picks)
+scripts/phrases.ts           everyday phrasebook: languages/phrases/<lang>.tsv → phrases.json (npm run build:phrases)
+languages/phrases/<lang>.tsv the phrasebook source, English<TAB>phrase<TAB>regions<TAB>note, "## Topic" sections
 scripts/picks-sheet.ts       review sheet for picks (CSV, or --html review page), --apply / --apply-decisions to turn it into config rows
 scripts/picks-review.html    the review page's template (any language)
 .claude/skills/word-review/  Claude Code skill: /word-review <language> <N> [apply]
@@ -187,6 +189,16 @@ A speaker's first choice for common English meanings, where the ranking puts ano
   6. **Survives data refreshes:** rows match by word + pos + definition pattern, and the build warns per language when one stops matching.
   7. **Measured per language:** `npm run evaluate` with and without picks, broken down by target language.
   8. **Upstream when possible:** Wiktionary's table format, so good picks can go into Wiktionary's translation tables.
+
+## Everyday phrasebook (added 2026-11-02)
+
+The owner's alternative to a licensed corpus (Leipzig forbids commercial use without permission; subtitle corpora have no licence): a speaker-written list of common phrases per language, paired with English, that the project owns and ships under the data package's CC BY-SA.
+
+- **Source:** `languages/phrases/vi.tsv`, merged from two drafts in `~/dev` (outside the repo): `vietnamese-everyday-phrases.txt` (≈1,350 Vietnamese phrases → English) and `english-everyday-phrases.txt` (≈1,100 English phrases → Vietnamese). English-list rows come first in each topic: their Vietnamese is the chosen natural translation of the English. Alternatives became separate rows; "(northern)"/"(southern)" became region tags, other parentheses notes. Region tags were copied to every row with the same phrase, and Southern rows added for *wash/do the dishes* (*rửa chén*) and *pass the exam* (*thi đậu*). 40 bare grammar openers from the English list were removed (*it was* → *nó đã là*, *there are* → *có*, *I want to* → *tôi muốn*…): they're better translated word by word, and *it was* broke the checker's "…but it was very expensive" case. 2368 pairs in 32 topics; the TSV is now the source (the two drafts aren't kept in sync). **Not yet reviewed by a native speaker.**
+- **Build** (`scripts/phrases.ts`, also run by `build-language.ts` and `fetch-data.ts`): checks regions against the config, reports repeated pairs, and lists syllables missing from `syllables.json` (only loanwords: email, taxi, gym, podcast, karaoke, internet, Wi-Fi). Stored as `{ topics, rows: [{ en, text, topic, regions?, note? }] }` (≈150 kB for vi); `meta.phrases: true`. A new optional file and flag, so older APIs ignore it: no `DATA_VERSION` change.
+- **Translator** (`phrasebookGroup` in `src/translate.ts`): only between English and the phrasebook's language, only for multi-word input (single words stay with the dictionary, so the evaluation is unchanged). Matching uses `phraseKey` (NFC, lower case, straight apostrophes, outer punctuation and quotes trimmed, spaces collapsed). Into the language: rows tagged for `toRegion` first, rows tagged only for other regions dropped, rows with a note after plain ones, then file order; into English: file order. The group (`pos: 'phrase'`, `bridge: 'phrasebook'`) goes before the dictionary's groups, so a dictionary sense giving the same words is dropped as a repeat. *go home* → *về nhà* (the dictionary's sense is "to die": *tử*, *chết*).
+- **Checker:** `foreign-word` now also takes an English run of 2–3 words when the phrasebook has it, not only when the English dictionary knows it: "Tôi rất thích wash the dishes." → *rửa bát* / *rửa chén* (before: *wash*, *the* and *dishes* separately), *watch a movie* → *xem phim*, *I'm hungry* → *Tôi đói*. Runs only include units marked English, so *go home* isn't caught (*go* reads as Vietnamese, and only *home* is flagged).
+- **Not done:** the spellchecker doesn't use the phrasebook yet (planned: treat phrases as known words, so *kỳ thi* and *ở nhà* are recognised and *ở nha* → *ở nhà*); a native-speaker review of the file.
 
 ## Grammar checker (added 2026-10-01)
 

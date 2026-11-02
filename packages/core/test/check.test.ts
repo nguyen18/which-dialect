@@ -226,6 +226,8 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
       'Toi→Tôi', 'muon→muốn', 'an→ăn', 'the→', 'ice cream→kem', 'but→nhưng', 'it→nó', 'was→là', 'very→rất', 'expensive→mắc',
     ])
     assert.deepEqual(await fixes('Hôm nay tôi đi market.'), ['market→chợ'])
+    // English phrases from the phrasebook are translated whole, in the region's words.
+    assert.deepEqual(await fixes('Tôi rất thích wash the dishes.', { region: 'Southern' }), ['wash the dishes→rửa chén'])
     // The region's word: "expensive" is đắt in the North.
     assert.deepEqual(await fixes('Nó expensive.', { region: 'Northern' }), ['expensive→đắt'])
     // "but" is English here, not a misspelled "bút"; regions and pronouns aren't checked by default.

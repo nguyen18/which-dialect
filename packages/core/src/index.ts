@@ -14,6 +14,8 @@ import {
   type Hit,
   type LanguageMeta,
   type PickRow,
+  type PhraseRow,
+  type StoredPhrases,
   type StoredPronounRow,
   type WordShard,
 } from './types.ts'
@@ -132,6 +134,8 @@ export type Dictionary = {
   syllables(): Promise<Record<string, number>>
   /** The language's sentence frames and frame words, unfilled (see FramesData); empty without frames. */
   frames(): Promise<FramesData>
+  /** The language's everyday phrasebook, in file order (see PhraseRow); empty without one. */
+  phrases(): Promise<PhraseRow[]>
   /**
    * The text split into the language's words: at each point, the longest run of units (syllables or
    * words, up to the checker's `maxWordUnits`, default 3) that's a headword, so Vietnamese "hôm nay" is one
@@ -373,6 +377,15 @@ export function createDictionary(options: DictionaryOptions): Dictionary {
     async picks() {
       const m = await meta()
       return m.picks ? loadOnce<PickRow[]>('picks.json') : []
+    },
+
+    async phrases() {
+      const m = await meta()
+      if (!m.phrases) return []
+      const stored = await loadOnce<StoredPhrases>('phrases.json')
+      return stored.rows.map(({ topic, regions, ...r }) => ({
+        ...r, topic: stored.topics[topic], regions: regions ?? m.regions, regionTagged: Boolean(regions),
+      }))
     },
 
     async frames() {

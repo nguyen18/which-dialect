@@ -10,6 +10,7 @@ import {
   createDictionary,
   createTranslator,
   normalizeEnglish,
+  phraseKey,
   posName,
   regularBaseForms,
   shardKey,
@@ -315,6 +316,51 @@ describe('hand-picked words (fake data)', () => {
   })
 })
 
+describe('phrasebook (fake data)', () => {
+  // English has no entries for the phrases; the target language (xx) has a phrasebook with a regional pair.
+  const en = { 'meta.json': { name: 'English', regions: ['US', 'UK'], shards: { words: [], en: [] } } }
+  const xx = {
+    'meta.json': { name: 'Target', regions: ['North', 'South'], shards: { words: [], en: [] }, phrases: true },
+    'phrases.json': {
+      topics: ['Home', 'Food'],
+      rows: [
+        { en: 'at home', text: 'by house', topic: 0 },
+        { en: 'stay home', text: 'by house', topic: 0 },
+        { en: 'wash the dishes', text: 'wash bowl', topic: 0, regions: ['North'] },
+        { en: 'wash the dishes', text: 'wash cup', topic: 0, regions: ['South'] },
+        { en: 'have you eaten?', text: 'eat rice yet', topic: 1, note: 'a greeting' },
+        { en: 'have you eaten?', text: 'eat yet', topic: 1 },
+        { en: 'rice', text: 'grain rice', topic: 1 },
+      ],
+    },
+  }
+  const files: Record<string, Record<string, unknown>> = { en, xx }
+  const tr = createTranslator({ load: (lang) => async (p) => files[lang][p] })
+  const words = async (word: string, opts: { from: string; to: string; toRegion?: string }) =>
+    (await tr.translate(word, opts)).map((g) => g.translations.map((t) => `${t.word}${t.bridge === 'phrasebook' ? '*' : ''}`))
+
+  it('translates phrases both ways, ignoring case and surrounding punctuation', async () => {
+    assert.deepEqual(await words('At home', { from: 'en', to: 'xx' }), [['by house*']])
+    assert.deepEqual(await words('By house!', { from: 'xx', to: 'en' }), [['at home*', 'stay home*']])
+    assert.deepEqual(phraseKey('  “Have  you eaten?” '), 'have you eaten')
+  })
+
+  it('puts the target region\'s phrase first and leaves out other regions\' phrases', async () => {
+    assert.deepEqual(await words('wash the dishes', { from: 'en', to: 'xx' }), [['wash bowl*', 'wash cup*']])
+    assert.deepEqual(await words('wash the dishes', { from: 'en', to: 'xx', toRegion: 'South' }), [['wash cup*']])
+  })
+
+  it('puts plain phrases before ones with a usage note, and keeps the note in the gloss', async () => {
+    const [group] = await tr.translate('Have you eaten?', { from: 'en', to: 'xx' })
+    assert.deepEqual(group.translations.map((t) => [t.word, t.gloss]), [['eat yet', 'have you eaten?'], ['eat rice yet', 'have you eaten? (a greeting)']])
+    assert.equal(group.source.pos, 'phrase')
+  })
+
+  it('leaves single words to the dictionary', async () => {
+    assert.deepEqual(await words('rice', { from: 'en', to: 'xx' }), [])
+  })
+})
+
 describe('parts of speech', () => {
   it('names codes and maps English parts of speech to compatible ones', () => {
     assert.equal(posName('adj'), 'Adjective')
@@ -343,6 +389,12 @@ describe('translator (real data)', { skip: !built && 'build en and vi data first
   })
   const top = async (word: string, options: Parameters<typeof tr.translate>[1]) =>
     (await tr.translate(word, options))[0]?.translations.map((t) => t.word) ?? []
+
+  it('translates everyday phrases both ways through the phrasebook', async () => {
+    assert.equal((await top('go home', { from: 'en', to: 'vi' }))[0], 'về nhà')
+    assert.deepEqual(await top('wash the dishes', { from: 'en', to: 'vi', toRegion: 'Southern' }), ['rửa chén'])
+    assert.equal((await top('Ăn cơm chưa?', { from: 'vi', to: 'en' }))[0], 'have you eaten?')
+  })
 
   it('follows irregular and regular English forms to the base word', async () => {
     const [said] = await tr.translate('said', { from: 'en', to: 'vi', toRegion: 'Southern' })

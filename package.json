@@ -13,6 +13,7 @@
     "build:data:all": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/build-all.ts",
     "fetch:data": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/fetch-data.ts",
     "build:picks": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/picks.ts",
+    "build:phrases": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/phrases.ts",
     "picks-sheet": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/picks-sheet.ts",
     "build": "npm run build -w which-dialect",
     "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test packages/core/test/*.test.ts",
