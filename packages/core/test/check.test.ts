@@ -249,6 +249,8 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     // A mark that shouldn't be there: dropping it is offered too, and makes the word with a neighbor.
     assert.deepEqual((await spell('suỹ')).issues[0]?.suggestions, ['quỹ', 'suy', 'sỹ'])
     assert.deepEqual(await fixes('Tôi đang suỹ nghĩ.'), ['suỹ nghĩ→suy nghĩ'])
+    // Its plain-letter neighbor may be missing accents too.
+    assert.deepEqual(await fixes('Tôi đang suỹ nghi.'), ['suỹ nghi→suy nghĩ'])
     assert.deepEqual(await fixes('Bộ GĐ-ĐT đã công bố.'), [])
     assert.deepEqual(await fixes('Chữ 詩 là thơ.'), [])
   })

@@ -280,7 +280,10 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
         const doubtful = span.some(suspect)
         const allPlain = span.every(isPlain)
         const rarePlain = (u: Unit) => plainWords.has(u) && (allPlain || (syllables[lowerOf(u)] ?? 0) < PLAIN_RUN_MAX_ZIPF)
-        const mayChange = (u: Unit) => suspect(u) || rarePlain(u)
+        // Next to a misspelled syllable, plain-letter syllables may be missing their accents too, however
+        // common they are on their own: "suỹ nghi" → "suy nghĩ".
+        const nearMisspelled = span.some((u) => unknown.has(u))
+        const mayChange = (u: Unit) => suspect(u) || rarePlain(u) || (nearMisspelled && plainWords.has(u))
         if (!doubtful && !span.some(rarePlain)) continue
         const written = span.map(lowerOf)
         const words = async (forms: (u: Unit) => string[]) => {
