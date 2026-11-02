@@ -145,6 +145,18 @@ const config: LanguageConfig = {
       // "của" (of) before its owner: a noun or a pronoun ("của chúng mình", not "của chứng minh").
       { before: ['của'], pos: ['noun', 'pron'] },
     ],
+    // Forms decided by the next word: "lúc" (at the time) before a number or a time word, not "lực"
+    // (force); "nhưng" (but) before a pronoun or a verb particle, not "những" (plural, before nouns).
+    nextCues: [
+      { forms: ['lúc'], before: ['#number', 'đó', 'này', 'nào', 'ấy', 'nãy', 'sáng', 'trưa', 'chiều', 'tối', 'đêm', 'nhỏ', 'trước', 'sau'] },
+      { forms: ['nhưng'], before: ['tôi', 'tui', 'tớ', 'mình', 'nó', 'họ', 'chúng', 'tụi', 'không', 'chẳng', 'chưa', 'vẫn', 'lại', 'cũng', 'mà', 'vì', 'nếu', 'đã', 'sẽ', 'đang', 'thì', 'rất', 'hơi', 'khi', 'sau'] },
+    ],
+    // Classifiers, before a noun: "cái áo" (a shirt), "con mèo" (a cat), "chiếc xe" (a vehicle).
+    classifiers: ['cái', 'con', 'chiếc', 'quyển', 'cuốn', 'tờ', 'bức', 'trái', 'quả', 'cây', 'đôi', 'bộ', 'căn', 'ngôi', 'tấm', 'bài', 'bát', 'chén', 'ly', 'cốc', 'tách'],
+    // English loanwords with a narrower meaning in Vietnamese.
+    falseFriends: [
+      { word: 'hot', means: 'popular or trending (bài hát hot, a hit song)', say: ['nóng'], for: 'temperature or weather' },
+    ],
   },
   // How to say "I", "you", "he/she", "we", plural "you" and "they" depending on who you're talking to
   // (or about). Picks with a `gloss` are pronoun definitions from the data ("you, my father"); rules are

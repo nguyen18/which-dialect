@@ -202,6 +202,22 @@ export type CheckerConfig = {
    * workers). `pos` lists the parts of speech (Entry.pos) the words point to.
    */
   posCues?: { before: string[]; pos: string[] }[]
+  /**
+   * Forms a syllable takes by the word after it, when its accents are missing or wrong: Vietnamese "luc" is
+   * "lúc" (time) before a number ("luc 8 gio"), not "lực" (force); "nhung" is "nhưng" (but) before a
+   * pronoun ("nhung tôi"), not "những" (plural). `before` lists the next words; "#number" is any number.
+   */
+  nextCues?: { forms: string[]; before: string[] }[]
+  /**
+   * Classifiers: a classifier and a noun count as a word when fixing accents ("cai ao" → "cái áo", shirt,
+   * not the dictionary's "cài áo", to button up), though the dictionary doesn't list such pairs.
+   */
+  classifiers?: string[]
+  /**
+   * Words the language borrowed from the learner's with a narrower meaning: written in the language's text,
+   * they get a hint (severity 'suggestion'), e.g. Vietnamese "hot" means popular, not warm ("nóng").
+   */
+  falseFriends?: { word: string; means: string; say: string[]; for: string }[]
 }
 
 /**

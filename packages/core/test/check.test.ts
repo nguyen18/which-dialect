@@ -319,6 +319,15 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Mẹ tôi nau cơm.'), ['nau→nấu'])
     assert.deepEqual(await fixes('Tôi thích màu nau.'), ['nau→nâu'])
     assert.deepEqual(await fixes('Du kích đã lam chu thị trấn.'), ['lam chu→làm chủ'])
+    // The next word decides: "lúc" (at) before a time, "nhưng" (but) before a pronoun, "những" before a noun.
+    assert.deepEqual(await fixes('Tôi thức dậy luc 8 giờ.'), ['luc→lúc'])
+    assert.deepEqual(await fixes('Tôi muốn đi nhung tôi bận.'), ['nhung→nhưng'])
+    assert.deepEqual(await fixes('Tôi thích nhung con mèo.'), ['nhung→những'])
+    // After "một", a classifier and a noun: "cái áo" (a shirt), not the dictionary's "cài áo" (button up).
+    assert.deepEqual(await fixes('Tôi mua một cai ao mới.'), ['cai ao→cái áo'])
+    // "hot" is Vietnamese for popular: a hint, never a change.
+    const [hot] = (await spell('Trời hot quá.')).issues
+    assert.deepEqual([hot.severity, hot.suggestions], ['suggestion', ['nóng']])
     // Common words written without accents stay ("cho con" isn't "chó con"), and so do runs that could be
     // two words equally ("ban an": bản án or bàn ăn).
     assert.deepEqual(await fixes('Mẹ cho con đi chơi.'), [])
