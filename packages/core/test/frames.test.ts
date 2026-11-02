@@ -151,6 +151,12 @@ const builtEs = ['en', 'es'].every((l) => existsSync(join(root, l, 'data')))
 describe('sentence frames (real Spanish data)', { skip: !builtEs && 'build en and es data first' }, () => {
   const pb = createPhrasebook({ load })
 
+  it('reads "I" and English plurals as English in Spanish text', async () => {
+    const review = await createReviewer({ load }).review('Tomé el autobús y I was late. Me duelen los feet.', { lang: 'es', region: 'Mexico' })
+    assert.deepEqual(review.sentences.map((s) => s.parts.map((p) => p.lang)), [['es', 'en'], ['es', 'en']])
+    assert.equal(review.sentences[1].corrected, 'Me duelen los pie.')
+  })
+
   it('keeps the punctuation around each sentence in a review ("¡", quotes)', async () => {
     const review = await createReviewer({ load }).review('¡Fue un buen dia! Dije "hola". ¿Como estas?', { lang: 'es', region: 'Mexico' })
     assert.deepEqual(review.sentences.map((s) => s.original), ['¡Fue un buen dia!', 'Dije "hola".', '¿Como estas?'])

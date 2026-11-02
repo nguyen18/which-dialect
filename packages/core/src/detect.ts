@@ -2,6 +2,7 @@
 // English by default), from the two languages' data alone. Shared by the checker and the journal review.
 
 import type { Dictionary } from './index.ts'
+import type { Entry } from './types.ts'
 import { plain, syllablesByPlain, type Unit } from './text.ts'
 import { phraseKey, type Translator } from './translate.ts'
 
@@ -66,6 +67,9 @@ export async function markLanguages(
   const baseKnows = async (u: Unit) => (await o.translator.senses(u.text, { from: o.base }).catch(() => [])).length > 0
   const marks = await Promise.all(list.map(async (u) => {
     if (/\d/.test(u.text)) return '?'
+    // English only: a capital "I" on its own is the pronoun, not another language's letter "i" (Spanish
+    // "i", 5.4, isn't 2 Zipf below "I", 7.1, so frequency alone leaves it to its neighbors).
+    if (o.base === 'en' && u.text === 'I') return o.base
     const [t, b] = await Promise.all([targetKnows(u), baseKnows(u)])
     if (t === 'exact') return b ? 'both' : o.lang
     if (b) return t === 'accents' ? 'accents' : o.base
@@ -77,13 +81,21 @@ export async function markLanguages(
     const forms = byPlain.get(plain(u.text.toLowerCase()))
     return forms ? Math.max(0, syllables[forms[0]]) : 0
   }
-  // How common a word is in each language (Zipf; 0 when unknown).
+  // How common a word is in each language (Zipf; 0 when unknown): its most common entry ("i" the letter has
+  // none in English, "I" the pronoun does). A base form the base dictionary leaves out (English "friends")
+  // counts as its lemma ("friend"), so a loanword the target lists ("friends", Spanish 3.6) doesn't win.
+  const most = (entries: Entry[]) => Math.max(0, ...entries.map((e) => e.frequency ?? 0))
   const targetFrequency = async (u: Unit) => {
     const lower = u.text.toLowerCase()
     if (syllableLanguage) return syllables[lower] ?? 0
-    return (await o.target.lookup(lower))[0]?.frequency ?? 0
+    return most(await o.target.lookup(lower))
   }
-  const baseFrequency = async (u: Unit) => (await o.baseDictionary.lookup(u.text.toLowerCase()))[0]?.frequency ?? 0
+  const baseFrequency = async (u: Unit) => {
+    const own = most([...(await o.baseDictionary.lookup(u.text)), ...(await o.baseDictionary.lookup(u.text.toLowerCase()))])
+    if (own) return own
+    const lemmas = new Set((await o.translator.senses(u.text, { from: o.base }).catch(() => [])).map((s) => s.lemma))
+    return Math.max(0, ...(await Promise.all([...lemmas].map(async (l) => most(await o.baseDictionary.lookup(l))))))
+  }
   // Words both languages know, decided by frequency when it's clear. Base words that are target words with
   // accents added use that form's frequency, and close calls are marked '?accents' (decided by neighbors,
   // more strictly).
