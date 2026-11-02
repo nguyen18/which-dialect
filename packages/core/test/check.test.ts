@@ -313,6 +313,12 @@ describe('checker (real Vietnamese data)', { skip: !built && 'build en and vi da
     assert.deepEqual(await fixes('Tôi đi nha bang.'), ['nha bang→nhà băng'])
     assert.deepEqual(await fixes('Tôi đi nha hang với má.'), ['nha hang→nhà hàng'])
     assert.deepEqual(await fixes('Tôi đi nha tho.'), ['nha tho→nhà thờ'])
+    // "nau" is a Vietnamese syllable never seen as written (an obsolete word) and a rare English word: it's
+    // Vietnamese without its accents, "nấu" (cook), or "nâu" in the phrasebook's "màu nâu" (brown); a
+    // one-syllable phrase fix waits for the words around it ("đã lam chu" is "làm chủ", not "đã làm").
+    assert.deepEqual(await fixes('Mẹ tôi nau cơm.'), ['nau→nấu'])
+    assert.deepEqual(await fixes('Tôi thích màu nau.'), ['nau→nâu'])
+    assert.deepEqual(await fixes('Du kích đã lam chu thị trấn.'), ['lam chu→làm chủ'])
     // Common words written without accents stay ("cho con" isn't "chó con"), and so do runs that could be
     // two words equally ("ban an": bản án or bàn ăn).
     assert.deepEqual(await fixes('Mẹ cho con đi chơi.'), [])

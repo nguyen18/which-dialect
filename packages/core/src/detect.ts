@@ -57,7 +57,10 @@ export async function markLanguages(
       if ((await o.target.lookup(lower)).length > 0) return 'exact'
       return (await o.target.variants(lower, { limit: 1 })).length > 0 ? 'accents' : false
     }
-    if (lower in syllables || lower !== plain(lower)) return 'exact'
+    if (lower !== plain(lower)) return 'exact'
+    // A plain-letter syllable never seen as written (Zipf 0: "nau", an obsolete word for pain) is a word only
+    // with accents added, as far as text goes ("nấu", to cook).
+    if (lower in syllables && (syllables[lower] > 0 || (byPlain.get(lower) ?? []).every((f) => f === lower))) return 'exact'
     return byPlain.has(lower) ? 'accents' : false
   }
   const baseKnows = async (u: Unit) => (await o.translator.senses(u.text, { from: o.base }).catch(() => [])).length > 0

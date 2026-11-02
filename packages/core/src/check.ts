@@ -299,6 +299,40 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
       }
       return undefined
     }
+    // The issue for a run's fixes (best first), and its units marked as covered.
+    // A phrase only the phrasebook has may include syllables that are right as written, as context:
+    // "chẳng the nao" is "chẳng thể nào" (can't possibly), not "thế nào" (how). Those stay out of the
+    // issue, which covers what changes: "the nao" → "thể nào". (A dictionary word is suggested whole:
+    // "Hom nay" → "Hôm nay".)
+    const emit = async (span: Unit[], written: string[], found: { word: string; phraseOnly: boolean }[], plainOnly: boolean) => {
+      const k = span.length
+      const fixes = found.map((f) => f.word.split(' '))
+      const same = (j: number) => fixes.every((f) => f[j]?.toLowerCase() === written[j])
+      let first = 0
+      let last = k - 1
+      if (found[0].phraseOnly) {
+        while (first < last && same(first)) first++
+        while (last > first && same(last)) last--
+        // But not into a word: "đi mua sam" is "mua sam" → "mua sắm", "Cảm ơm bạn" is "Cảm ơm" → "Cảm ơn".
+        const isWord = async (from: number, to: number) => (await ctx.dict.lookup(fixes[0].slice(from, to + 1).join(' '))).length > 0
+        while (first > 0 && (await isWord(first - 1, first))) first--
+        while (last < k - 1 && (await isWord(last, last + 1))) last++
+      }
+      const at = { start: span[first].start, end: span[last].end, text: ctx.text.slice(span[first].start, span[last].end) }
+      const suggestions = unique(fixes.map((f) => matchCase(at.text, f.slice(first, last + 1).join(' '))))
+      const quoted = listOf(suggestions.map(quote), 'or')
+      issues.push({
+        rule: 'spelling', severity: 'warning', ...at, suggestions,
+        message: plainOnly
+          ? `${quote(at.text)} looks typed without accents. Did you mean ${quoted}?`
+          : `${quote(at.text)} isn't spelled right. Did you mean ${quoted}?`,
+      })
+      span.forEach((u) => covered.add(u))
+    }
+    // Phrasebook phrases that change one syllable beside syllables kept as written wait until every run has
+    // been tried: they apply only if no word fixed that syllable ("màu nau" → "màu nâu", but "đã lam chu" is
+    // "làm chủ", not the phrase "đã làm").
+    const deferred: { span: Unit[]; written: string[]; found: { word: string; phraseOnly: boolean }[]; plainOnly: boolean }[] = []
     for (let i = 0; i < sentence.units.length; i++) {
       for (let k = Math.min(maxUnits, sentence.units.length - i); k >= 2; k--) {
         const span = sentence.units.slice(i, i + k)
@@ -341,16 +375,6 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
           // but "hoa lan" (orchid, every syllable a word) isn't "Hòa Lan" (the Netherlands).
             .map((f) => ({ ...f, entries: doubtful ? f.entries : f.entries.filter((e) => e.word === e.word.toLowerCase()) }))
             .filter((f) => f.entries.length || f.phrase)
-            // A phrase only the phrasebook has, with syllables right as written at an end, gives those as
-            // context for a fix of two or more ("chẳng the nao": thể nào, not thế nào). For one it would only
-            // get in the way of the word the syllable makes on the other side ("đã lam chu" is "làm chủ", not
-            // the phrase "đã làm").
-            .filter((f) => {
-              if (f.entries.length) return true
-              const fixed = f.word.split(' ')
-              const edges = fixed[0] === written[0] || fixed[k - 1] === written[k - 1]
-              return !edges || fixed.filter((x, j) => x !== written[j]).length >= 2
-            })
             // Spelled as the phrasebook or the headword has it: names keep their capitals ("nhat ban" → "Nhật Bản").
             .map((f) => ({
               word: f.phrase ?? (f.entries[0].word.toLowerCase() === f.word ? f.entries[0].word : f.word),
@@ -358,6 +382,9 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
               pos: new Set(f.entries.map((e) => e.pos)),
               phrase: Boolean(f.phrase),
               phraseOnly: Boolean(f.phrase) && !f.entries.length,
+              // A phrase only the phrasebook has that changes one syllable, keeping its neighbors as written
+              // ("màu nau" → "màu nâu"): see `deferred`.
+              contextOne: !f.entries.length && f.word.split(' ').filter((x, j) => x !== written[j]).length === 1,
             }))
             // Everyday phrases first: "gia dinh" is "gia đình", not the place Gia Định; "noi tieng viet" is
             // "nói tiếng Việt", not "nổi tiếng" (famous) + Việt.
@@ -370,6 +397,11 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
         const misspelled = span.some((u) => unknown.has(u))
         let found = misspelled ? await words(sameLetters) : []
         if (!found.length) found = await words((u) => bestCandidates(u, COMPOUND_FORMS_PER_SYLLABLE))
+        if (found.length && found.every((f) => f.contextOne)) {
+          deferred.push({ span, written, found, plainOnly: span.filter(mayChange).every(isPlain) })
+          continue
+        }
+        found = found.filter((f) => !f.contextOne)
         if (!found.length) continue
         // Fixes that differ in part of speech: the word before tells which ("đã cong nhan": công nhận, a
         // verb; "các cong nhan": công nhân, a noun). The ones it points to come first, and a single one is
@@ -384,34 +416,14 @@ async function spelling(ctx: Context): Promise<CheckIssue[]> {
         // word the dictionary lacks ("kỳ thi", exam, isn't a headword; "kỳ thị", discrimination, is).
         if (!doubtful && !span.some(rarePlain) && found[0].frequency < COMMONER_MIN_WORD_ZIPF) continue
         if (!doubtful && !decided && found.length > 1 && found[0].frequency - found[1].frequency < PLAIN_RUN_MARGIN) continue
-        // A phrase only the phrasebook has may include syllables that are right as written, as context:
-        // "chẳng the nao" is "chẳng thể nào" (can't possibly), not "thế nào" (how). Those stay out of the
-        // issue, which covers what changes: "the nao" → "thể nào". (A dictionary word is suggested whole:
-        // "Hom nay" → "Hôm nay".)
-        const fixes = found.map((f) => f.word.split(' '))
-        const same = (j: number) => fixes.every((f) => f[j]?.toLowerCase() === written[j])
-        let first = 0
-        let last = k - 1
-        if (found[0].phraseOnly) {
-          while (first < last && same(first)) first++
-          while (last > first && same(last)) last--
-          // But not into a word: "đi mua sam" is "mua sam" → "mua sắm", "Cảm ơm bạn" is "Cảm ơm" → "Cảm ơn".
-          const isWord = async (from: number, to: number) => (await ctx.dict.lookup(fixes[0].slice(from, to + 1).join(' '))).length > 0
-          while (first > 0 && (await isWord(first - 1, first))) first--
-          while (last < k - 1 && (await isWord(last, last + 1))) last++
-        }
-        const at = { start: span[first].start, end: span[last].end, text: ctx.text.slice(span[first].start, span[last].end) }
-        const suggestions = unique(fixes.map((f) => matchCase(at.text, f.slice(first, last + 1).join(' '))))
-        const quoted = listOf(suggestions.map(quote), 'or')
-        issues.push({
-          rule: 'spelling', severity: 'warning', ...at, suggestions,
-          message: span.filter(mayChange).every(isPlain)
-            ? `${quote(at.text)} looks typed without accents. Did you mean ${quoted}?`
-            : `${quote(at.text)} isn't spelled right. Did you mean ${quoted}?`,
-        })
-        span.forEach((u) => covered.add(u))
+        await emit(span, written, found, span.filter(mayChange).every(isPlain))
         break
       }
+    }
+    // Then the deferred phrases, for syllables no run fixed.
+    for (const d of deferred) {
+      const changed = d.span.filter((_, j) => d.found[0].word.split(' ')[j] !== d.written[j])
+      if (!changed.some((u) => covered.has(u))) await emit(d.span, d.written, d.found, d.plainOnly)
     }
 
     // Then each remaining syllable on its own.
